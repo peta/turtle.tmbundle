@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
+@prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
+@prefix : &lt;http://github.com/peta/turtle.tmbundle#&gt;.
+</string>
+	<key>name</key>
+	<string>Prefixes_Basic</string>
+	<key>tabTrigger</key>
+	<string>pref_base</string>
+	<key>uuid</key>
+	<string>D7346290-2C45-4D52-BD1B-7DE7744A404E</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>contactEmailRot13</key>
+	<string>choyvp@crgretrvy.anzr</string>
+	<key>contactName</key>
+	<string>Peter Geil</string>
+	<key>description</key>
+	<string>Totally awesome bundle for Turtle – the terse RDF Triple Language.</string>
+	<key>name</key>
+	<string>Turtle</string>
+	<key>uuid</key>
+	<string>A340B95F-EF97-4A2C-AFF2-2EA197837BD0</string>
+</dict>
+</plist>
