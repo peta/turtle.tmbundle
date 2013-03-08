@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Turtle settings</string>
+	<key>scope</key>
+	<string>source.ttl</string>
+	<key>settings</key>
+	<dict>
+		<key>foldingStartMarker</key>
+		<string>[\[\(\"\{\&lt;]</string>
+		<key>foldingStopMarker</key>
+		<string>[\]\)\"\}\&gt;]</string>
+		<key>highlightPairs</key>
+		<array>
+			<array>
+				<string>[</string>
+				<string>]</string>
+			</array>
+			<array>
+				<string>(</string>
+				<string>)</string>
+			</array>
+			<array>
+				<string>"</string>
+				<string>"</string>
+			</array>
+			<array>
+				<string>{</string>
+				<string>}</string>
+			</array>
+			<array>
+				<string>&lt;</string>
+				<string>&gt;</string>
+			</array>
+		</array>
+		<key>increaseIndentPattern</key>
+		<string>^\s*[\[\(\"\{\&lt;]</string>
+		<key>smartTypingPairs</key>
+		<array>
+			<array>
+				<string>[</string>
+				<string>]</string>
+			</array>
+			<array>
+				<string>(</string>
+				<string>)</string>
+			</array>
+			<array>
+				<string>"</string>
+				<string>"</string>
+			</array>
+			<array>
+				<string>{</string>
+				<string>}</string>
+			</array>
+			<array>
+				<string>&lt;</string>
+				<string>&gt;</string>
+			</array>
+		</array>
+	</dict>
+	<key>uuid</key>
+	<string>4DCE5FA1-8BBE-4A24-8507-A21AAD9E03BD</string>
+</dict>
+</plist>
