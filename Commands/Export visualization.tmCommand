@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+[[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
+
+"$TMTOOLS" show saveAsPanel 
+
+set -o pipefail
+
+cd "$TM_DIRECTORY"
+
+target_file=$(CocoaDialog filesave --title "Save visualization" \
+    --text "Select where Graphviz should save the generated PDF file:" \
+	--with‑directory "$TM_DIRECTORY" --with-file "$TM_FILENAME.pdf" \
+    --button1 "Save" --button2 "Cancel")
+
+if [[ ${#target_file} == 0 ]]; then
+	echo "ABORTED  (No output file selected)"
+	exit
+fi
+
+# Partytime
+"${TM_RAPPER:-rapper}" -i turtle -o dot "$TM_FILEPATH" \
+	    -f 'resourceFill="#ff0000"' \
+		-f 'literalFill="#00ff00"' \
+		-f 'bnodeFill="#0000ff"' \
+		-f 'resourceBorder="#ffffff"' \
+		-f 'bnodeBorder="#ffffff"' \
+	    -f 'literalBorder="#ffffff"' \
+	| sed 's|(Unknown)|'$TM_FILEPATH'|g' \
+	| "${TM_DOT:-dot}" -Tpdf -o "$target_file"
+
+status=$? 
+echo "-------"
+if [[ $status == 0 ]] ; then
+    echo "SUCCESS"
+else
+	"ERROR"
+fi
+	
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>~@S</string>
+	<key>name</key>
+	<string>Export visualization</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>toolTip</string>
+	<key>scope</key>
+	<string>source.ttl</string>
+	<key>semanticClass</key>
+	<string>process.external.save</string>
+	<key>uuid</key>
+	<string>C2509D61-BA70-4202-AD5A-9307266295C5</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>

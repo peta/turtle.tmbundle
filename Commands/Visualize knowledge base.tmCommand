@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env bash
+[[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
+
+. "${TM_SUPPORT_PATH}/lib/html.sh"
+. "${TM_SUPPORT_PATH}/lib/webpreview.sh"
+
+# Prepare output window
+html_header "Visualization of \"$TM_FILENAME\"" "$FILE"
+SRC=${TM_FILENAME:-untitled.dot}
+DST="${TMPDIR:-/tmp}/dot_${SRC%.*}.pdf"
+ERR="${TMPDIR:-/tmp}/dot_errors"
+
+# Partytime
+if "${TM_RAPPER:-rapper}" -i turtle -o dot /dev/stdin \
+      -f 'resourceFill="#ff0000"' \
+		  -f 'literalFill="#00ff00"' \
+		  -f 'bnodeFill="#0000ff"' \
+		  -f 'resourceBorder="#ffffff"' \
+		  -f 'bnodeBorder="#ffffff"' \
+      -f 'literalBorder="#ffffff"' \
+    | sed "s/(Unknown)/${SRC%.*}/g" \
+    | "${TM_DOT:-dot}" -Tpdf -o "$DST" &amp;&gt;"$ERR"; then
+  echo "&lt;meta http-equiv='refresh' content='0; file://$DST'&gt;"
+else
+  pre &lt;"$ERR"
+fi
+rm -f "$ERR"
+html_footer
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Visualize knowledge base</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>html</string>
+	<key>outputLocation</key>
+	<string>newWindow</string>
+	<key>scope</key>
+	<string>source.ttl</string>
+	<key>semanticClass</key>
+	<string>process.run.ttl</string>
+	<key>uuid</key>
+	<string>2D08ACD4-99AF-46C6-B62A-FEE1CCB5A278</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
