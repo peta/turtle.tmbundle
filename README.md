@@ -1,5 +1,5 @@
 # turtle.tmbundle #
-===============
+---------------------------------------------------------------------
 
 Totally awesome bundle for Turtle – the terse RDF triple language.
 
@@ -31,7 +31,9 @@ By hitting `CMD + R` the active TTL document will be visualized on-the-fly in a 
 
 By hitting `SHIFT + ALT + CMD + S` the active TTL document will be visualized and saved to a PDF document.
 
+## Installation ##
 
+Just download/clone this repository, and assert that the "parent" directory (which contains all folders/files of this repo) is named "turtle.tmbundle". Double click it and Textmate should know what to do. Alternatively just open the `turtle.tmbundle` package with Textmate. 
 
 
 
