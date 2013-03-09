@@ -49,7 +49,7 @@ html_footer
 	<key>outputLocation</key>
 	<string>newWindow</string>
 	<key>scope</key>
-	<string>source.ttl</string>
+	<string>source.turtle</string>
 	<key>semanticClass</key>
 	<string>process.run.ttl</string>
 	<key>uuid</key>

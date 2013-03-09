@@ -287,8 +287,10 @@
 			<string>("[^"\\]*(?:\\.[^"\\]*)*")(\^\^[\w^:]*:[\w\-]+)</string>
 		</dict>
 	</dict>
+	<key>scope</key>
+	<string>source.turtle</string>
 	<key>scopeName</key>
-	<string>source.ttl</string>
+	<string>source.turtle</string>
 	<key>uuid</key>
 	<string>3EB8C7E3-67FD-41FF-A257-6466443C6503</string>
 </dict>
