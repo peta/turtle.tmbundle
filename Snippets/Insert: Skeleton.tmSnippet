@@ -14,7 +14,7 @@
 
 $1</string>
 	<key>name</key>
-	<string>Insert: Document Skeleton</string>
+	<string>Document Skeleton</string>
 	<key>scope</key>
 	<string>source.turtle</string>
 	<key>tabTrigger</key>

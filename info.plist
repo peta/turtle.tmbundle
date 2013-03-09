@@ -8,6 +8,39 @@
 	<string>Peter Geil</string>
 	<key>description</key>
 	<string>Totally awesome bundle for Turtle – the terse RDF Triple Language.</string>
+	<key>mainMenu</key>
+	<dict>
+		<key>items</key>
+		<array>
+			<string>C2509D61-BA70-4202-AD5A-9307266295C5</string>
+			<string>2D08ACD4-99AF-46C6-B62A-FEE1CCB5A278</string>
+			<string>------------------------------------</string>
+			<string>14F0FEA7-EE05-4445-8C09-A5E3CF3F0C46</string>
+			<string>------------------------------------</string>
+		</array>
+		<key>submenus</key>
+		<dict>
+			<key>14F0FEA7-EE05-4445-8C09-A5E3CF3F0C46</key>
+			<dict>
+				<key>items</key>
+				<array>
+					<string>8AEC30D0-7C48-435E-A9DB-B5BB3C550905</string>
+					<string>A436E557-CB60-4F4E-8EAA-BE129339E5BA</string>
+				</array>
+				<key>name</key>
+				<string>Insert Snippets</string>
+			</dict>
+			<key>8AEC30D0-7C48-435E-A9DB-B5BB3C550905</key>
+			<dict>
+				<key>items</key>
+				<array>
+					<string>D7346290-2C45-4D52-BD1B-7DE7744A404E</string>
+				</array>
+				<key>name</key>
+				<string>Prefix directives</string>
+			</dict>
+		</dict>
+	</dict>
 	<key>name</key>
 	<string>Turtle</string>
 	<key>uuid</key>
