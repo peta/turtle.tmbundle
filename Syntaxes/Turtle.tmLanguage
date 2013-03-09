@@ -7,6 +7,8 @@
 		<string>ttl</string>
 		<string>turtle</string>
 	</array>
+	<key>keyEquivalent</key>
+	<string>^~T</string>
 	<key>name</key>
 	<string>Turtle</string>
 	<key>patterns</key>
@@ -14,17 +16,33 @@
 		<dict>
 			<key>begin</key>
 			<string>"</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.turtle</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>"</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.turtle</string>
+				</dict>
+			</dict>
 			<key>name</key>
-			<string>string.quoted</string>
+			<string>string.quoted.double.turtle</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>.*</string>
 					<key>name</key>
-					<string>constant.character.escape.untitled</string>
+					<string>constant.character.escape.turtle</string>
 				</dict>
 			</array>
 		</dict>
@@ -34,14 +52,14 @@
 			<key>end</key>
 			<string>\s*.$</string>
 			<key>name</key>
-			<string>meta.directive.prefix</string>
+			<string>meta.directive.prefix.turtle</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>match</key>
 					<string>([\w\-]*:)</string>
 					<key>name</key>
-					<string>constant.other.prefix</string>
+					<string>constant.other.prefix.turtle</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -54,20 +72,41 @@
 			<string>#spo_stmt</string>
 		</dict>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.comment.turtle</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>^#.*$</string>
+			<string>^(#).*$\n?</string>
 			<key>name</key>
-			<string>comment</string>
+			<string>comment.line.number-sign.turtle</string>
 		</dict>
 	</array>
 	<key>repository</key>
 	<dict>
 		<key>IRI</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.begin.turtle</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.entity.end.turtle</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>(\&lt;.+\&gt;)</string>
+			<string>(\&lt;).+(\&gt;)</string>
 			<key>name</key>
-			<string>entity.name.IRI</string>
+			<string>entity.name.type.iri.turtle</string>
 		</dict>
 		<key>blank_node</key>
 		<dict>
@@ -151,10 +190,23 @@
 		</dict>
 		<key>literal</key>
 		<dict>
+			<key>captures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.begin.turtle</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.turtle</string>
+				</dict>
+			</dict>
 			<key>match</key>
-			<string>"[^"\\]*(?:\\.[^"\\]*)*"(?!\^\^)</string>
+			<string>(")[^"\\]*(?:\\.[^"\\]*)*(")(?!\^\^)</string>
 			<key>name</key>
-			<string>string.quoted.double</string>
+			<string>string.quoted.double.turtle</string>
 		</dict>
 		<key>po_stmt</key>
 		<dict>
@@ -165,12 +217,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.prefix</string>
+					<string>constant.other.prefix.turtle</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control</string>
+					<string>keyword.control.turtle</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -180,7 +232,7 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.triple.terminator</string>
+					<string>keyword.other.triple.terminator.turtle</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -220,12 +272,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.prefix</string>
+					<string>constant.other.prefix.turtle</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control</string>
+					<string>keyword.control.turtle</string>
 				</dict>
 			</dict>
 			<key>match</key>
@@ -240,12 +292,12 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>constant.other.prefix</string>
+					<string>constant.other.prefix.turtle</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.control</string>
+					<string>keyword.control.turtle</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -275,20 +327,28 @@
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>string.quoted.double</string>
+					<string>string.quoted.double.turtle</string>
 				</dict>
 				<key>2</key>
 				<dict>
 					<key>name</key>
-					<string>storage.type</string>
+					<string>punctuation.definition.string.begin.turtle</string>
+				</dict>
+				<key>3</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.string.end.turtle</string>
+				</dict>
+				<key>4</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.datatype.turtle</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>("[^"\\]*(?:\\.[^"\\]*)*")(\^\^[\w^:]*:[\w\-]+)</string>
+			<string>((")[^"\\]*(?:\\.[^"\\]*)*("))(\^\^[\w^:]*:[\w\-]+)</string>
 		</dict>
 	</dict>
-	<key>scope</key>
-	<string>source.turtle</string>
 	<key>scopeName</key>
 	<string>source.turtle</string>
 	<key>uuid</key>
