@@ -6,32 +6,32 @@
 	<string>nop</string>
 	<key>command</key>
 	<string>#!/usr/bin/env bash
-[[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
+[[ -f &quot;${TM_SUPPORT_PATH}/lib/bash_init.sh&quot; ]] &amp;&amp; . &quot;${TM_SUPPORT_PATH}/lib/bash_init.sh&quot;
 
-. "${TM_SUPPORT_PATH}/lib/html.sh"
-. "${TM_SUPPORT_PATH}/lib/webpreview.sh"
+. &quot;${TM_SUPPORT_PATH}/lib/html.sh&quot;
+. &quot;${TM_SUPPORT_PATH}/lib/webpreview.sh&quot;
 
 # Prepare output window
-html_header "Visualization of \"$TM_FILENAME\"" "$FILE"
+html_header &quot;Visualization of \&quot;$TM_FILENAME\&quot;&quot; &quot;$FILE&quot;
 SRC=${TM_FILENAME:-untitled.dot}
-DST="${TMPDIR:-/tmp}/dot_${SRC%.*}.pdf"
-ERR="${TMPDIR:-/tmp}/dot_errors"
+DST=&quot;${TMPDIR:-/tmp}/dot_${SRC%.*}.pdf&quot;
+ERR=&quot;${TMPDIR:-/tmp}/dot_errors&quot;
 
 # Partytime
-if "${TM_RAPPER:-rapper}" -i turtle -o dot /dev/stdin \
-      -f 'resourceFill="#ff0000"' \
-		  -f 'literalFill="#00ff00"' \
-		  -f 'bnodeFill="#0000ff"' \
-		  -f 'resourceBorder="#ffffff"' \
-		  -f 'bnodeBorder="#ffffff"' \
-      -f 'literalBorder="#ffffff"' \
-    | sed "s/(Unknown)/${SRC%.*}/g" \
-    | "${TM_DOT:-dot}" -Tpdf -o "$DST" &amp;&gt;"$ERR"; then
-  echo "&lt;meta http-equiv='refresh' content='0; file://$DST'&gt;"
+if &quot;${TM_RAPPER:-rapper}&quot; -i turtle -o dot /dev/stdin \
+      -f &apos;resourceFill=&quot;#ff0000&quot;&apos; \
+		  -f &apos;literalFill=&quot;#00ff00&quot;&apos; \
+		  -f &apos;bnodeFill=&quot;#0000ff&quot;&apos; \
+		  -f &apos;resourceBorder=&quot;#ffffff&quot;&apos; \
+		  -f &apos;bnodeBorder=&quot;#ffffff&quot;&apos; \
+      -f &apos;literalBorder=&quot;#ffffff&quot;&apos; \
+    | sed &quot;s/(Unknown)/${SRC%.*}/g&quot; \
+    | &quot;${TM_DOT:-dot}&quot; -Tpdf -o &quot;$DST&quot; &amp;&gt;&quot;$ERR&quot;; then
+  echo &quot;&lt;meta http-equiv=&apos;refresh&apos; content=&apos;0; file://$DST&apos;&gt;&quot;
 else
-  pre &lt;"$ERR"
+  pre &lt;&quot;$ERR&quot;
 fi
-rm -f "$ERR"
+rm -f &quot;$ERR&quot;
 html_footer
 </string>
 	<key>input</key>
@@ -56,5 +56,32 @@ html_footer
 	<string>2D08ACD4-99AF-46C6-B62A-FEE1CCB5A278</string>
 	<key>version</key>
 	<integer>2</integer>
+	<key>requiredCommands</key>
+	<array>
+		<dict>
+			<key>command</key>
+			<string>dot</string>
+			<key>variable</key>
+			<string>TM_DOT</string>
+			<key>locations</key>
+			<array>
+				<string>/usr/local/bin/dot</string>
+				<string>/opt/local/bin/dot</string>
+				<string>/usr/bin/dot</string>
+			</array>
+		</dict>
+		<dict>
+			<key>command</key>
+			<string>rapper</string>
+			<key>variable</key>
+			<string>TM_RAPPER</string>
+			<key>locations</key>
+			<array>
+				<string>/usr/local/bin/rapper</string>
+				<string>/opt/local/bin/rapper</string>
+				<string>/usr/bin/rapper</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>
