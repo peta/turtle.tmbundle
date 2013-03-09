@@ -35,5 +35,6 @@ By hitting `SHIFT + ALT + CMD + S` the active TTL document will be visualized an
 
 Just download/clone this repository, and assert that the "parent" directory (which contains all folders/files of this repo) is named "turtle.tmbundle". Double click it and Textmate should know what to do. Alternatively just open the `turtle.tmbundle` package with Textmate. 
 
+## Meta ##
 
-
+Turtle.tmbundle was created by [Peter Geil](http://github.com/peta). Feedback is highly welcome – if you find a bug, have a feature request or simply want to contribute something, please visit the official GitHub repository at [https://github.com/peta/turtle.tmbundle](https://github.com/peta/turtle.tmbundle)
