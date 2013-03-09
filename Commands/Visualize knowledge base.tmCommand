@@ -41,7 +41,7 @@ html_footer
 	<key>keyEquivalent</key>
 	<string>@r</string>
 	<key>name</key>
-	<string>Visualize knowledge base</string>
+	<string>Visualize Knowledge Base</string>
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>

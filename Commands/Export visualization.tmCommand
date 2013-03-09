@@ -52,7 +52,7 @@ fi
 	<key>keyEquivalent</key>
 	<string>~@S</string>
 	<key>name</key>
-	<string>Export visualization</string>
+	<string>Export Visualization</string>
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
