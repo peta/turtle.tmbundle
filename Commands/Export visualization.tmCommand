@@ -8,19 +8,19 @@
 	<string>#!/usr/bin/env bash
 [[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
 
-"$TMTOOLS" show saveAsPanel 
-
 set -o pipefail
 
-cd "$TM_DIRECTORY"
+dlg_result=$("$DIALOG" filepanel --isSavePanel --title "Save visualization" \
+	--label "Select where Graphviz should save the generated PDF file:" \
+	--defaultDirectory "$TM_DIRECTORY" --filename "$TM_FILENAME.pdf")
 
-target_file=$(CocoaDialog filesave --title "Save visualization" \
-    --text "Select where Graphviz should save the generated PDF file:" \
-	--with‑directory "$TM_DIRECTORY" --with-file "$TM_FILENAME.pdf" \
-    --button1 "Save" --button2 "Cancel")
-
-if [[ ${#target_file} == 0 ]]; then
+if [[ "$dlg_result" == *"&lt;dic/&gt;"* ]]; then
 	echo "ABORTED  (No output file selected)"
+	exit
+elif [[ "$dlg_result" =~ \&lt;string\&gt;([^\&lt;]+)\&lt;/string\&gt; ]]; then
+	target_file=${BASH_REMATCH[1]}
+else
+	echo "ABORTED  (Dialog filepanel error)"
 	exit
 fi
 
@@ -35,12 +35,13 @@ fi
 	| sed 's|(Unknown)|'$TM_FILEPATH'|g' \
 	| "${TM_DOT:-dot}" -Tpdf -o "$target_file"
 
+# Some final status info so that user can see at first glance if everything went fine or not
 status=$? 
 echo "-------"
 if [[ $status == 0 ]] ; then
     echo "SUCCESS"
 else
-	"ERROR"
+	echo "ERROR"
 fi
 	
 </string>
@@ -59,7 +60,7 @@ fi
 	<key>outputLocation</key>
 	<string>toolTip</string>
 	<key>scope</key>
-	<string>source.ttl</string>
+	<string>source.turtle</string>
 	<key>semanticClass</key>
 	<string>process.external.save</string>
 	<key>uuid</key>
