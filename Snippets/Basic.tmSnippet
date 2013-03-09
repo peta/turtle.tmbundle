@@ -6,10 +6,12 @@
 	<string>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
 @prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
-@prefix : &lt;http://github.com/peta/turtle.tmbundle#&gt;.
-</string>
+@prefix $2: &lt;${3:http://github.com/peta/turtle.tmbundle#}&gt;.
+$1</string>
 	<key>name</key>
 	<string>Insert Prefixes: Basic</string>
+	<key>scope</key>
+	<string>source.turtle</string>
 	<key>tabTrigger</key>
 	<string>pref_base</string>
 	<key>uuid</key>

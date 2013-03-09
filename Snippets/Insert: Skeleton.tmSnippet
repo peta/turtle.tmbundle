@@ -6,14 +6,17 @@
 	<string>@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
 @prefix xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;.
-@prefix : &lt;http://github.com/peta/turtle.tmbundle#&gt;.
+@prefix $2: &lt;${3:http://github.com/peta/turtle.tmbundle#}&gt;.
 
-# Created: ${TM_DATE}
 # Author: ${TM_FULLNAME}
+# Created: `date +"%Y-%m-%d %H:%M"`
+# Description: ${4:N/A}
 
-</string>
+$1</string>
 	<key>name</key>
 	<string>Insert: Document Skeleton</string>
+	<key>scope</key>
+	<string>source.turtle</string>
 	<key>tabTrigger</key>
 	<string>doc_skel</string>
 	<key>uuid</key>
