@@ -26,6 +26,8 @@ html_footer
 	<string>html</string>
 	<key>outputLocation</key>
 	<string>newWindow</string>
+	<key>scope</key>
+	<string>source.turtle</string>
 	<key>uuid</key>
 	<string>72E360B7-71C7-4E4C-B78A-A106FB618FF2</string>
 	<key>version</key>
