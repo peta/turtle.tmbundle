@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>name</key>
+	<string>Completion: literal type</string>
+	<key>scope</key>
+	<string>L: meta.uri.prefix.xsd.turtle</string>
+	<key>settings</key>
+	<dict>
+		<key>completions</key>
+		<array>
+			<string>string</string>
+			<string>boolean</string>
+			<string>decimal</string>
+			<string>float</string>
+			<string>double</string>
+			<string>duration</string>
+			<string>dateTime</string>
+			<string>time</string>
+			<string>date</string>
+			<string>gYearMonth</string>
+			<string>gYear</string>
+			<string>gMonthDay</string>
+			<string>gDay</string>
+			<string>gMonth</string>
+			<string>hexBinary</string>
+			<string>base64Binary</string>
+			<string>anyURI</string>
+			<string>normalizedString</string>
+			<string>token</string>
+			<string>language</string>
+			<string>NMTOKEN</string>
+			<string>NMTOKENS</string>
+			<string>Name</string>
+			<string>NCName</string>
+			<string>ID</string>
+			<string>IDREF</string>
+			<string>IDREFS</string>
+			<string>ENTITY</string>
+			<string>ENTITIES</string>
+			<string>integer</string>
+			<string>nonPositiveInteger</string>
+			<string>negativeInteger</string>
+			<string>long</string>
+			<string>int</string>
+			<string>short</string>
+			<string>byte</string>
+			<string>nonNegativeInteger</string>
+			<string>unsignedLong</string>
+			<string>unsignedInt</string>
+			<string>unsignedShort</string>
+			<string>unsignedByte</string>
+			<string>positiveInteger</string>
+		</array>
+	</dict>
+	<key>uuid</key>
+	<string>16202143-1C61-4FE4-9FFB-EA45E7EB1942</string>
+</dict>
+</plist>
