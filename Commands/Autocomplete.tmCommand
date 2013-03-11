@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+###!/usr/bin/env ruby
+require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
+TextmateCodeCompletion.go!
+
+
+#require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
+#require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+
+#puts 'TM_SCOPE: '+ENV['TM_SCOPE']
+#puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT']
+#puts 'TM_SELECTION: '+ENV['TM_SELECTION']
+
+#puts 'TM_SCOPE: '+ENV['TM_SCOPE'].class.name
+#puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT'].class.name
+#puts 'TM_SELECTION: '+ENV['TM_SELECTION'].class.name
+
+
+
+#choices = OSX::PropertyList.load(File.read(ENV['TM_BUNDLE_SUPPORT'] + '/functions.plist'))
+#TextMate::UI.complete(choices, :initial_filter =&gt; ENV['TM_CURRENT_WORD'], :extra_chars =&gt; '_')
+</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>^ </string>
+	<key>name</key>
+	<string>Autocomplete</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>toolTip</string>
+	<key>scope</key>
+	<string>source.turtle</string>
+	<key>uuid</key>
+	<string>5B3DDC52-4AF7-45E5-AC26-837BF81208FE</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
