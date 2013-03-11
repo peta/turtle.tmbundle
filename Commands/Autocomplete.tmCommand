@@ -8,16 +8,24 @@
 	<string>#!/usr/bin/env ruby -wKU
 
 ###!/usr/bin/env ruby
-require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-TextmateCodeCompletion.go!
+#require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
+#TextmateCodeCompletion.go!
 
 
 #require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 #require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
-#puts 'TM_SCOPE: '+ENV['TM_SCOPE']
-#puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT']
-#puts 'TM_SELECTION: '+ENV['TM_SELECTION']
+puts 'TM_SCOPE: '+ENV['TM_SCOPE']
+puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT'] if not ENV['TM_SCOPE_LEFT'].nil?
+puts 'TM_SELECTION: '+ENV['TM_SELECTION']
+
+scope = ENV['TM_SCOPE']
+
+# Should we do a prefix lookup?
+if not scope.index('variable.other.prefix.turtle').nil?
+  
+  puts "PREFIX"
+end
 
 #puts 'TM_SCOPE: '+ENV['TM_SCOPE'].class.name
 #puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT'].class.name

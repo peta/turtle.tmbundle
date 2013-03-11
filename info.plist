@@ -17,6 +17,9 @@
 			<string>------------------------------------</string>
 			<string>14F0FEA7-EE05-4445-8C09-A5E3CF3F0C46</string>
 			<string>------------------------------------</string>
+			<string>5B3DDC52-4AF7-45E5-AC26-837BF81208FE</string>
+			<string>------------------------------------</string>
+			<string>72E360B7-71C7-4E4C-B78A-A106FB618FF2</string>
 		</array>
 		<key>submenus</key>
 		<dict>
@@ -25,7 +28,11 @@
 				<key>items</key>
 				<array>
 					<string>8AEC30D0-7C48-435E-A9DB-B5BB3C550905</string>
+					<string>------------------------------------</string>
 					<string>A436E557-CB60-4F4E-8EAA-BE129339E5BA</string>
+					<string>------------------------------------</string>
+					<string>5556B1D0-1E0F-4299-B8F3-15C7C843B61D</string>
+					<string>7EECA379-154D-49A2-9863-BB8F262ADA9F</string>
 				</array>
 				<key>name</key>
 				<string>Insert Snippets</string>
