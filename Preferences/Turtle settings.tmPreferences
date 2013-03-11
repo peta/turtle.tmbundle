@@ -9,9 +9,9 @@
 	<key>settings</key>
 	<dict>
 		<key>foldingStartMarker</key>
-		<string>[\[\(\"\{\&lt;]</string>
+		<string>\s*([\[\(\{]|^(\s*\w*:\w|\&lt;[^\&gt;]+\&gt;)(?=\b|\s*))</string>
 		<key>foldingStopMarker</key>
-		<string>[\]\)\"\}\&gt;]</string>
+		<string>\s*([\]\)\}]|[.]\s*$)</string>
 		<key>highlightPairs</key>
 		<array>
 			<array>
@@ -36,7 +36,7 @@
 			</array>
 		</array>
 		<key>increaseIndentPattern</key>
-		<string>^\s*[\[\(\"\{\&lt;]</string>
+		<string>^\s*([\[\(\"\{\&lt;]|(\w*:\w)|\&lt;[^\&gt;]+\&gt;).+[^.,;]$</string>
 		<key>smartTypingPairs</key>
 		<array>
 			<array>
