@@ -219,21 +219,10 @@
 		</dict>
 		<key>literal_datatype</key>
 		<dict>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>(?&lt;=xsd:)(\w*)</string>
-					<key>name</key>
-					<string>meta.uri.prefix.xsd.turtle</string>
-				</dict>
-				<dict>
-					<key>match</key>
-					<string>(\^\^[^:]*:\w*)</string>
-					<key>name</key>
-					<string>storage.type.datatype.turtle</string>
-				</dict>
-			</array>
+			<key>match</key>
+			<string>\^\^\w*:\w*|\&lt;[^\&gt;]+\&gt;</string>
+			<key>name</key>
+			<string>storage.type.datatype.turtle</string>
 		</dict>
 		<key>literal_double</key>
 		<dict>
@@ -269,7 +258,7 @@
 		<key>literal_langtag</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=["'])@[a-z]{2}(?:-[a-z0-9]{2})?</string>
+			<string>(?&lt;=["'])@(?:[a-z]{2}(?:-[a-z0-9]{2})*)?</string>
 			<key>name</key>
 			<string>constant.language.language_tag.turtle</string>
 		</dict>
@@ -289,7 +278,7 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(')[^'\\]*(?:\.[^'\\]*)*(').*(?:\b|\s)?</string>
+			<string>(')[^'\\]*(?:\.[^'\\]*)*(').*(?=\b|\s)?</string>
 			<key>name</key>
 			<string>string.quoted.single.turtle</string>
 			<key>patterns</key>
@@ -317,7 +306,7 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(\1)(?=@[a-z]{2}(?:-[a-z0-9]{2})?|\^\^.+?|$)</string>
+			<string>(\1)</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
