@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>isDisabled</key>
-	<true/>
+	<false/>
 	<key>name</key>
 	<string>Completion: literal language tags</string>
 	<key>scope</key>
-	<string>constant.language.language_tab.turtle</string>
+	<string>L: constant.language.language_tag.turtle</string>
 	<key>settings</key>
 	<dict>
 		<key>completions</key>
@@ -18,7 +18,6 @@
 			<string>@de</string>
 			<string>@de-at</string>
 			<string>@de-de</string>
-			<string>@de-mannemerisch</string>
 		</array>
 	</dict>
 	<key>uuid</key>

@@ -5,53 +5,55 @@
 	<key>name</key>
 	<string>Completion: literal type</string>
 	<key>scope</key>
-	<string>L: meta.uri.prefix.xsd.turtle</string>
+	<string>L: storage.type.datatype.turtle</string>
 	<key>settings</key>
 	<dict>
+		<key>comment</key>
+		<string>I gave up. No elegant way to offer autocompletion for type annotation. (multiple scopes + scope completion = not possible</string>
 		<key>completions</key>
 		<array>
-			<string>string</string>
-			<string>boolean</string>
-			<string>decimal</string>
-			<string>float</string>
-			<string>double</string>
-			<string>duration</string>
-			<string>dateTime</string>
-			<string>time</string>
-			<string>date</string>
-			<string>gYearMonth</string>
-			<string>gYear</string>
-			<string>gMonthDay</string>
-			<string>gDay</string>
-			<string>gMonth</string>
-			<string>hexBinary</string>
-			<string>base64Binary</string>
-			<string>anyURI</string>
-			<string>normalizedString</string>
-			<string>token</string>
-			<string>language</string>
-			<string>NMTOKEN</string>
-			<string>NMTOKENS</string>
-			<string>Name</string>
-			<string>NCName</string>
-			<string>ID</string>
-			<string>IDREF</string>
-			<string>IDREFS</string>
-			<string>ENTITY</string>
-			<string>ENTITIES</string>
-			<string>integer</string>
-			<string>nonPositiveInteger</string>
-			<string>negativeInteger</string>
-			<string>long</string>
-			<string>int</string>
-			<string>short</string>
-			<string>byte</string>
-			<string>nonNegativeInteger</string>
-			<string>unsignedLong</string>
-			<string>unsignedInt</string>
-			<string>unsignedShort</string>
-			<string>unsignedByte</string>
-			<string>positiveInteger</string>
+			<string>^^xsd:string</string>
+			<string>^^xsd:boolean</string>
+			<string>^^xsd:decimal</string>
+			<string>^^xsd:float</string>
+			<string>^^xsd:double</string>
+			<string>^^xsd:duration</string>
+			<string>^^xsd:dateTime</string>
+			<string>^^xsd:time</string>
+			<string>^^xsd:date</string>
+			<string>^^xsd:gYearMonth</string>
+			<string>^^xsd:gYear</string>
+			<string>^^xsd:gMonthDay</string>
+			<string>^^xsd:gDay</string>
+			<string>^^xsd:gMonth</string>
+			<string>^^xsd:hexBinary</string>
+			<string>^^xsd:base64Binary</string>
+			<string>^^xsd:anyURI</string>
+			<string>^^xsd:normalizedString</string>
+			<string>^^xsd:token</string>
+			<string>^^xsd:language</string>
+			<string>^^xsd:NMTOKEN</string>
+			<string>^^xsd:NMTOKENS</string>
+			<string>^^xsd:Name</string>
+			<string>^^xsd:NCName</string>
+			<string>^^xsd:ID</string>
+			<string>^^xsd:IDREF</string>
+			<string>^^xsd:IDREFS</string>
+			<string>^^xsd:ENTITY</string>
+			<string>^^xsd:ENTITIES</string>
+			<string>^^xsd:integer</string>
+			<string>^^xsd:nonPositiveInteger</string>
+			<string>^^xsd:negativeInteger</string>
+			<string>^^xsd:long</string>
+			<string>^^xsd:int</string>
+			<string>^^xsd:short</string>
+			<string>^^xsd:byte</string>
+			<string>^^xsd:nonNegativeInteger</string>
+			<string>^^xsd:unsignedLong</string>
+			<string>^^xsd:unsignedInt</string>
+			<string>^^xsd:unsignedShort</string>
+			<string>^^xsd:unsignedByte</string>
+			<string>^^xsd:positiveInteger</string>
 		</array>
 	</dict>
 	<key>uuid</key>
