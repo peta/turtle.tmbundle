@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>@prefix ${1:my}: &lt;${2:http://github.com/peta/turtle.tmbundle#}&gt;.$3</string>
+	<key>name</key>
+	<string>@prefix Directive</string>
+	<key>scope</key>
+	<string>source.turtle</string>
+	<key>tabTrigger</key>
+	<string>pref</string>
+	<key>uuid</key>
+	<string>5556B1D0-1E0F-4299-B8F3-15C7C843B61D</string>
+</dict>
+</plist>
