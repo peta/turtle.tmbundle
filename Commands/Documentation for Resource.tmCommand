@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require ENV['TM_BUNDLE_SUPPORT']+'/lib/turtle'
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+
+scope = ENV['TM_SCOPE'] || ''
+left_scope = ENV['TM_SCOPE_LEFT'] || ''
+
+if (not left_scope.index('entity.name.fragment.turtle').nil?) or
+      (not left_scope.index('variable.other.prefix.turtle').nil?)
+    frags = Word::current_word('(\w*:\w*)(.*$)').split(':')
+    if 2 == frags.length
+      model = Turtle::Model.new(frags[0])
+      if model.available?
+        docu = model.explain(frags[1])        
+        TextMate::UI.simple_notification(
+          :title   =&gt; "Documentation",
+          :summary =&gt; model.prefix + ':' + (docu['label'] || frags[1]),
+          :log     =&gt; docu['description'] || 'Sorry, no documentation available.'
+        )
+      end      
+    end
+end</string>
+	<key>input</key>
+	<string>line</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string></string>
+	<key>name</key>
+	<string>Documentation for Resource</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>toolTip</string>
+	<key>scope</key>
+	<string>source.turtle meta.triple.spo</string>
+	<key>uuid</key>
+	<string>533BE8C9-42EF-48EF-A1FC-5E831DC46059</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
