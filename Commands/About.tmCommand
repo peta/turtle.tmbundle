@@ -19,7 +19,7 @@ html_footer
 	<key>inputFormat</key>
 	<string>text</string>
 	<key>name</key>
-	<string>Help</string>
+	<string>About</string>
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
