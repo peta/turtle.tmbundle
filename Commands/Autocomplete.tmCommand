@@ -5,39 +5,75 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -wKU
+	<string>#!/usr/bin/env ruby
 
-###!/usr/bin/env ruby
-#require "#{ENV['TM_SUPPORT_PATH']}/lib/codecompletion"
-#TextmateCodeCompletion.go!
+# My first Ruby scripts, so don't blame me
 
+# Prevent that input data causes trouble in shell commands
+STDIN.read(nil)
 
-#require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
-#require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
-
-puts 'TM_SCOPE: '+ENV['TM_SCOPE']
-puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT'] if not ENV['TM_SCOPE_LEFT'].nil?
-puts 'TM_SELECTION: '+ENV['TM_SELECTION']
+require ENV['TM_BUNDLE_SUPPORT']+'/lib/turtle'
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 
 scope = ENV['TM_SCOPE']
+left_scope = ENV['TM_SCOPE_LEFT']
+done = false
 
-# Should we do a prefix lookup?
-if not scope.index('variable.other.prefix.turtle').nil?
-  
-  puts "PREFIX"
+# Autocompletion @prefix directives
+if not scope.index('meta.directive.prefix.turtle').nil?
+  given_pref = Word::current_word '(\w*)(.*$)'
+  #choices = OSX::PropertyList.load(File.read(ENV['TM_BUNDLE_SUPPORT'] + '/functions.plist'))
+  choices = []
+  prefixes = Turtle::Prefixes.get_all()
+  maxlen = prefixes.keys.max.length
+  prefixes.sort.each do |pair|
+    pref = pair[0]
+    uri = pair[1]    
+    choices.push({
+      "display" =&gt; '%s: %s' % [pref.ljust(maxlen + 8), uri],
+      "insert" =&gt; ': &lt;%s&gt;.' % [uri],
+      "match" =&gt; pref
+    })      
+  end
+  TextMate::UI.complete(choices, :case_insensitive =&gt; true, :extra_chars=&gt;'_&lt;&gt;:.@')
+  done = true
 end
 
-#puts 'TM_SCOPE: '+ENV['TM_SCOPE'].class.name
-#puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT'].class.name
-#puts 'TM_SELECTION: '+ENV['TM_SELECTION'].class.name
+# Autocompletion for prefixed resource QNames
+if (not left_scope.index('entity.name.fragment.turtle').nil?) or
+      (not left_scope.index('variable.other.prefix.turtle').nil?)
+  word = Word::current_word '(\w*:\w*)(.*$)'
+  word_frags = word.split(':')
+  model = Turtle::Model.new(word_frags[0])
+  if (model.available?)
+    choices = []
+    model.resources.each do |rsc|
+      rsc = rsc.to_s
+      choices.push({ "display" =&gt; rsc })      
+    end
+    TextMate::UI.complete(choices, :case_insensitive =&gt; true, :initial_filter =&gt; word_frags[1], :extra_chars=&gt;'_-:')
+    TextMate::exit_discard
+  end
+  done = true  
+end
+
+# Default behaviour -- don't replace anything but show it as tooltip instead
+if not done
+  puts 'TM_SCOPE: '+ENV['TM_SCOPE']
+  if not ENV['TM_SCOPE_LEFT'].nil?
+    puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT']
+  end
+  TextMate::exit_show_tool_tip
+end
+
+  
 
 
 
-#choices = OSX::PropertyList.load(File.read(ENV['TM_BUNDLE_SUPPORT'] + '/functions.plist'))
-#TextMate::UI.complete(choices, :initial_filter =&gt; ENV['TM_CURRENT_WORD'], :extra_chars =&gt; '_')
+
 </string>
 	<key>input</key>
-	<string>selection</string>
+	<string>word</string>
 	<key>inputFormat</key>
 	<string>text</string>
 	<key>keyEquivalent</key>
@@ -47,9 +83,9 @@ end
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
-	<string>text</string>
+	<string>snippet</string>
 	<key>outputLocation</key>
-	<string>toolTip</string>
+	<string>atCaret</string>
 	<key>scope</key>
 	<string>source.turtle</string>
 	<key>uuid</key>

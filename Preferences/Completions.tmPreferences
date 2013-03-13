@@ -7,9 +7,11 @@
 	<key>name</key>
 	<string>Completions</string>
 	<key>scope</key>
-	<string>(source.turtle meta.triple.spo) - string</string>
+	<string>source.turtle (meta.triple.spo - string) </string>
 	<key>settings</key>
 	<dict>
+		<key>comment</key>
+		<string>Obsolete thanks to automagic resource extraction feature</string>
 		<key>completions</key>
 		<array>
 			<string>rdf:XMLLiteral</string>
@@ -26,7 +28,6 @@
 			<string>rdf:subject</string>
 			<string>rdf:predicate</string>
 			<string>rdf:object</string>
-			<string>rdf:_</string>
 			<string>rdfs:Resource</string>
 			<string>rdfs:Class</string>
 			<string>rdfs:Literal</string>
@@ -44,37 +45,6 @@
 			<string>rdfs:seeAlso</string>
 			<string>rdfs:isDefinedBy</string>
 			<string>rdf:value</string>
-			<string>XMLLiteral</string>
-			<string>Property</string>
-			<string>type</string>
-			<string>Bag</string>
-			<string>Seq</string>
-			<string>Alt</string>
-			<string>List</string>
-			<string>first</string>
-			<string>rest</string>
-			<string>nil</string>
-			<string>Statement</string>
-			<string>subject</string>
-			<string>predicate</string>
-			<string>object</string>
-			<string>Resource</string>
-			<string>Class</string>
-			<string>Literal</string>
-			<string>Datatype</string>
-			<string>XMLLiteral</string>
-			<string>range</string>
-			<string>domain</string>
-			<string>subClassOf</string>
-			<string>subPropertyOf</string>
-			<string>label</string>
-			<string>comment</string>
-			<string>Container</string>
-			<string>ContainerMembershipProperty</string>
-			<string>member</string>
-			<string>seeAlso</string>
-			<string>isDefinedBy</string>
-			<string>value</string>
 		</array>
 	</dict>
 	<key>uuid</key>
