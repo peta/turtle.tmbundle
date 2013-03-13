@@ -332,7 +332,7 @@
 		<key>po_stmt</key>
 		<dict>
 			<key>begin</key>
-			<string>[\b\s]?([\w\-]*:)([\w]+)[\b\s]?</string>
+			<string>[\b\s]?([\w\-]*:)([\w]*(?=[\b\s]))</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
@@ -411,7 +411,7 @@
 		<key>spo_stmt</key>
 		<dict>
 			<key>begin</key>
-			<string>\s*([\w\-]*:)([\w]+)</string>
+			<string>\s*([\w\-]*:)([\w]*)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
