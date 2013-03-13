@@ -7,23 +7,29 @@ It consists of:
 
 + Language grammar
 + Some snippets (prefixes and document skeleton)
-+ Basic auto-completion (only URIrefs from RDF/S graphs)
++ Auto-completion
+	 + literal datatypes
+	 + literal language tags
+	 + prefixed URIrefs from RDF/S graphs
 + Commands for instant graph visualization of a knowledge base (requires Graphviz and Raptor)
 
 #### Roadmap
 
 + Extend language grammar
-	+ matching the official parser spec
-	+ support for object lists (S P {O1,O...,On} )
+	+ exactly match the official parser spec
+	+ ~~support for object lists (S P {O1,O...,On} )~~
 	+ ~~@base directive~~
-	+ support full IRIs (not only URIrefs) as SPOs
-	+ multiline literals
-+ Toggle/fold for whole triple blocks and multiline literals
-+ Autocomplete (with dropdown list?)
-	+ for literal datatypes (for now only XSD)
-	+ for literal language tags
-	+ for prefixes and their according IRI (automagically fed by prefix.cc)
-	+ for resource IRIs/QNames
+	+ ~~support full IRIs (not only URIrefs) as SPOs~~
+	+ ~~multiline literals~~
++ ~~Toggle/fold for whole triple blocks and multiline literals~~
++ ~~List prefix directives in symbol table~~
++ Support 'a' verb
++ Autocomplete
+	+ ~~for literal datatypes (for now only XSD)~~
+	+ ~~for literal language tags~~
+	+ ~~for prefixes and their according IRI (automagically fed by prefix.cc)~~		
+	+ ~~for resource IRIs/QNames~~
+		+ Problem: prefix.cc dumps only contain one IRI per prefix (with highest ranking) and not every IRI offers a vocabulary/ontology document. So for certain prefixes no resources can be extracted.		
 + Quick documentation lookup for selected resource IRIs/QNames 
 
 ## Language grammar 
