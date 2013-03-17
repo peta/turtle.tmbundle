@@ -11,6 +11,8 @@ It consists of:
 + Documentation for classes, roles/properties and individuals at your fingertips (Live-aggregated)
 + Commands for instant graph visualization of a knowledge base (requires Graphviz and Raptor)
 
+See [Screenshots](#screenshots)
+
 #### Roadmap
 
 + Display documentation with links to official sources as HTML in a notification window
@@ -18,6 +20,7 @@ It consists of:
 + Add additional caching layer for speeding up things (vanilla MacOS Ruby 1.8.7 has only sloooow REXML module)
 + To be fixed
 	+ Fix PN_LOCAL pattern so that semicolons inside POLs are marked up as terminators
+	+ Extractor stylesheet fails at shortening when about attribute contains FQN instead of IRIref
 
 ## Language grammar 
 
@@ -67,6 +70,12 @@ By hitting `SHIFT + ALT + CMD + S` the active TTL document will be visualized an
 ## Installation
 
 The Turtle bundle is now officially available through the Textate bundle installer (Textmate -> Preferences -> Bundles). However, it usually takes a few days until new releases are available through the bundle installer (make sure that you enabled 'Keep bundles updated' in the application preferences). If you know what you do, you can also install bundles (like Turtle) by hand. Just download/clone this repository, and place its root directory at `~/Library/Application Support/Avian/Bundles/Turtle.tmbundle`. That way it's kept distinct from bundles installed through the bundle installer. Textmate should notice the new bundle automatically; but when in doubt, just restart Textmate (`CTRL + CMD + Q`). 
+
+## Screenshots
+
+![Screenshot of expanded bundle menu](./Support/img/screenshot-menu.png "Screenshot of expanded bundle menu")
+![Screenshot editor showing auto-completion for resource identifier and documentation](./Support/img/screenshot-editor.png "Screenshot editor showing auto-completion for resource identifier and documentation")
+![Screenshot of knowledge base visualization](./Support/img/screenshot-visu.png "Screenshot of knowledge base visualization")
 
 ## Meta
 
