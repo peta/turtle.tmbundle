@@ -9,8 +9,8 @@
 [[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
 
 . "$TM_SUPPORT_PATH/lib/webpreview.sh"
-html_header "Turtle Bundle Help" "Turtle"
-"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" "$TM_BUNDLE_SUPPORT/help.md"
+html_header "About the Turtle bundle" "Turtle"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" "$TM_BUNDLE_SUPPORT/../README.md"
 html_footer
 
 </string>
