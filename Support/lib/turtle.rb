@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+DEBUG = false
+
 SUPPORT_DIR = ENV['TM_BUNDLE_SUPPORT']
 CACHE_DIR = "#{ENV['TM_BUNDLE_SUPPORT']}/cache"
 CACHE_LIFETIME = 60*60*24
