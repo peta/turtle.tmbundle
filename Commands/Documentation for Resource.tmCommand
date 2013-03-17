@@ -7,15 +7,19 @@
 	<key>command</key>
 	<string>#!/usr/bin/env ruby -wKU
 
+# My first Ruby scripts, so don't blame me
+
 require ENV['TM_BUNDLE_SUPPORT']+'/lib/turtle'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 
 scope = ENV['TM_SCOPE'] || ''
 left_scope = ENV['TM_SCOPE_LEFT'] || ''
 
-if (not left_scope.index('entity.name.fragment.turtle').nil?) or
-      (not left_scope.index('variable.other.prefix.turtle').nil?)
-    frags = Word::current_word('(\w*:\w*)(.*$)').split(':')
+if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('support.variable.PN_LOCAL.turtle')
+    word = Word::current_word('(\S*):(\S*)')
+    # Chop of trailing dot (language grammar isn't that stable)
+    word = word[0..-2] if word.end_with? '.'
+    frags = word.split(':')
     if 2 == frags.length
       model = Turtle::Model.new(frags[0])
       if model.available?
@@ -43,7 +47,7 @@ end</string>
 	<key>outputLocation</key>
 	<string>toolTip</string>
 	<key>scope</key>
-	<string>source.turtle meta.triple.spo</string>
+	<string>source.turtle meta.spec.PNAME_LN.turtle</string>
 	<key>uuid</key>
 	<string>533BE8C9-42EF-48EF-A1FC-5E831DC46059</string>
 	<key>version</key>

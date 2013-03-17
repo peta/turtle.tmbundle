@@ -16,13 +16,12 @@ require ENV['TM_BUNDLE_SUPPORT']+'/lib/turtle'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 
 scope = ENV['TM_SCOPE']
-left_scope = ENV['TM_SCOPE_LEFT']
+left_scope = (ENV['TM_SCOPE_LEFT'].nil?) ? '' : ENV['TM_SCOPE_LEFT']
 done = false
 
 # Autocompletion @prefix directives
-if not scope.index('meta.directive.prefix.turtle').nil?
-  given_pref = Word::current_word '(\w*)(.*$)'
-  #choices = OSX::PropertyList.load(File.read(ENV['TM_BUNDLE_SUPPORT'] + '/functions.plist'))
+if not left_scope.index('meta.spec.prefixID.turtle').nil?
+  given_pref = Word::current_word '(\S*)'
   choices = []
   prefixes = Turtle::Prefixes.get_all()
   maxlen = prefixes.keys.max.length
@@ -40,10 +39,12 @@ if not scope.index('meta.directive.prefix.turtle').nil?
 end
 
 # Autocompletion for prefixed resource QNames
-if (not left_scope.index('entity.name.fragment.turtle').nil?) or
-      (not left_scope.index('variable.other.prefix.turtle').nil?)
-  word = Word::current_word '(\w*:\w*)(.*$)'
+if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('support.variable.PN_LOCAL.turtle')
+  word = Word::current_word '(\S*):(\S*)(?!\.\b)'
+  # Chop of trailing dot (language grammar isn't that stable)
+  word = word[0..-2] if word.end_with? '.'
   word_frags = word.split(':')
+  # Build model and query it
   model = Turtle::Model.new(word_frags[0])
   if (model.available?)
     choices = []
@@ -51,14 +52,14 @@ if (not left_scope.index('entity.name.fragment.turtle').nil?) or
       rsc = rsc.to_s
       choices.push({ "display" =&gt; rsc })      
     end
-    TextMate::UI.complete(choices, :case_insensitive =&gt; true, :initial_filter =&gt; word_frags[1], :extra_chars=&gt;'_-:')
+    TextMate::UI.complete(choices, :case_insensitive =&gt; false, :initial_filter =&gt; word_frags[1], :extra_chars=&gt;'_-.:\\')
     TextMate::exit_discard
   end
   done = true  
 end
 
 # Default behaviour -- don't replace anything but show it as tooltip instead
-if not done
+if DEBUG and not done
   puts 'TM_SCOPE: '+ENV['TM_SCOPE']
   if not ENV['TM_SCOPE_LEFT'].nil?
     puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT']
