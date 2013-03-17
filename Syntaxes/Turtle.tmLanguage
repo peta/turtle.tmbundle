@@ -14,99 +14,60 @@
 	<key>patterns</key>
 	<array>
 		<dict>
-			<key>begin</key>
-			<string>^@prefix\s</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.directive.turtle</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\s*(\.)(\b|$)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.terminator.expression.turtle</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.directive.prefix.turtle</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>match</key>
-					<string>([\w\-]*:)</string>
-					<key>name</key>
-					<string>variable.other.prefix.turtle</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#IRI</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
-			<key>begin</key>
-			<string>^@base\s</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>keyword.directive.turtle</string>
-				</dict>
-			</dict>
-			<key>end</key>
-			<string>\s*(\.)(\b|$)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>0</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.terminator.expression.turtle</string>
-				</dict>
-			</dict>
-			<key>name</key>
-			<string>meta.directive.base.turtle</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#IRI</string>
-				</dict>
-			</array>
-		</dict>
-		<dict>
 			<key>include</key>
-			<string>#spo_stmt</string>
+			<string>#turtleDoc</string>
 		</dict>
+	</array>
+	<key>repository</key>
+	<dict>
+		<key>ANON</key>
+		<dict>
+			<key>match</key>
+			<string>\[[\u20\u9\uD\uA]*\]</string>
+			<key>name</key>
+			<string>meta.spec.ANON.turtle</string>
+		</dict>
+		<key>BLANK_NODE_LABEL</key>
 		<dict>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.comment.turtle</string>
+					<string>keyword.other.BLANK_NODE_LABEL.turtle</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>variable.other.BLANK_NODE_LABEL.turtle</string>
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>^(#).*$\n?</string>
+			<string>(?x)
+			(?&lt;PN_CHARS_U&gt;[\p{L}\p{M}_]){0}
+			(?&lt;PN_CHARS&gt;[\p{L}\p{M}_\-0-9\u00B7\u0300-\u036F\u203F-\u2040]){0}
+				(?&lt;=\b|^)(_:) ((?:\g&lt;PN_CHARS_U&gt;|[0-9]) (?: (?:\g&lt;PN_CHARS&gt;|\.)* \g&lt;PN_CHARS&gt; )?)
+			</string>
 			<key>name</key>
-			<string>comment.line.number-sign.turtle</string>
+			<string>meta.spec.BLANK_NODE_LABEL.turtle</string>
 		</dict>
+		<key>BlankNode</key>
 		<dict>
-			<key>include</key>
-			<string>#IRI</string>
+			<key>name</key>
+			<string>meta.spec.BlankNode.turtle</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#BLANK_NODE_LABEL</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#ANON</string>
+				</dict>
+			</array>
 		</dict>
-	</array>
-	<key>repository</key>
-	<dict>
-		<key>IRI</key>
+		<key>IRIREF</key>
 		<dict>
 			<key>captures</key>
 			<dict>
@@ -122,107 +83,364 @@
 				</dict>
 			</dict>
 			<key>match</key>
-			<string>(\&lt;)[^\&gt;]+(\&gt;)</string>
+			<string>(?x) (\&lt;) (?:[^\x00-\x20\&lt;\&gt;\\\"\{\}\|\^`] | (?:\\u[0-9A-Fa-f]{4}|\\U[0-9A-Fa-f]{8}))* (\&gt;)</string>
 			<key>name</key>
-			<string>entity.name.type.iri.turtle</string>
+			<string>entity.name.type.IRIREF.turtle</string>
 		</dict>
-		<key>blank_node</key>
+		<key>PNAME_LN</key>
 		<dict>
-			<key>begin</key>
-			<string>(\[)</string>
-			<key>beginCaptures</key>
+			<key>captures</key>
 			<dict>
-				<key>1</key>
+				<key>PNAME_NS</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.bnode.open</string>
+					<string>variable.other.PNAME_NS.turtle</string>
 				</dict>
-			</dict>
-			<key>end</key>
-			<string>(\])</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
+				<key>PN_LOCAL</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.bnode.close</string>
+					<string>support.variable.PN_LOCAL.turtle</string>
 				</dict>
 			</dict>
+			<key>match</key>
+			<string>(?x)
+				(?&lt;PNAME_NS&gt; (?: (?: [\p{L}\p{M}] (?:(?:[\p{L}\p{M}_.\-0-9\u00B7\u0300-\u036F\u203F-\u2040])* [\p{L}\p{M}_\-0-9\u00B7\u0300-\u036F\u203F-\u2040] )? )? | _) \: )
+				(?&lt;PN_LOCAL&gt;
+					(?# Should I include \p{M}?)
+					(?:
+						(?: [\p{L}_] | [:0-9] | %[0-9A-Fa-f]{2} | \\[_~\-!$&amp;'\(\)*+=/?#@%.,;] )
+						(?:
+							(?: [\p{L}_\-0-9\u00B7\u0300-\u036F\u203F-\u2040] | [:.] | \%[0-9A-Fa-f]{2} | \\ [_~\-!$&amp;'\(\)*+=/?#@%.,;] )*
+							(?: [\p{L}_\-0-9\u00B7\u0300-\u036F\u203F-\u2040] | : | \%[0-9A-Fa-f]{2} | \\ [_~\-!$&amp;'\(\)*+=/?#@%.,;] )
+						)
+					)?
+				)
+			</string>
 			<key>name</key>
-			<string>meta.triple.node.blank</string>
+			<string>meta.spec.PNAME_LN.turtle</string>
+		</dict>
+		<key>PNAME_NS</key>
+		<dict>
+			<key>match</key>
+			<string>(?x)((?&lt;=\s|^|_)(?:[\p{L}\p{M}] (?:(?:[\p{L}\p{M}_.\-0-9\u00B7\u0300-\u036F\u203F-\u2040])* [\p{L}\p{M}_\-0-9\u00B7\u0300-\u036F\u203F-\u2040] )? )? : )</string>
+			<key>name</key>
+			<string>variable.other.PNAME_NS.turtle</string>
+		</dict>
+		<key>PN_LOCAL</key>
+		<dict>
+			<key>match</key>
+			<string>(?x)(
+				(?: [\p{L}\p{M}] | [:0-9] | %[0-9A-Fa-f]{2} | \\[_~\-!$&amp;'\(\)*+=/?#@%.,;] )
+				(?: 
+					(?:[\p{L}\p{M}_\-0-9\u00B7\u0300-\u036F\u203F-\u2040] | [:.] | %[0-9A-Fa-f]{2} | \\[_~\-!$&amp;'\(\)*+=/?#@%.,;] )* 
+					(?:[\p{L}\p{M}_\-0-9\u00B7\u0300-\u036F\u203F-\u2040] | : | %[0-9A-Fa-f]{2} | \\[_~\-!$&amp;'\(\)*+=/?#@%.,;] )
+				)				
+			)?</string>
+			<key>name</key>
+			<string>support.variable.PN_LOCAL.turtle</string>
+		</dict>
+		<key>PrefixedName</key>
+		<dict>
+			<key>name</key>
+			<string>meta.spec.PrefixedName.turtle</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#po_stmt</string>
+					<string>#PNAME_LN</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#PNAME_NS</string>
 				</dict>
 			</array>
 		</dict>
-		<key>collection_short</key>
+		<key>blankNodePropertyList</key>
 		<dict>
 			<key>begin</key>
-			<string>(\()</string>
-			<key>beginCaptures</key>
+			<string>\b(\[)\b</string>
+			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.collection.open</string>
+					<string>punctuation.terminator.blankNodePropertyList.turtle</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(\))</string>
-			<key>endCaptures</key>
+			<string>\b(\])(?=\b|\s|[.;,])</string>
+			<key>name</key>
+			<string>meta.spec.blankNodePropertyList.turtle</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>((?&lt;=\s)[.;,](?=\b))</string>
+					<key>name</key>
+					<string>punctuation.terminator.stmt.turtle</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#literal</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#blankNodePropertyList</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#iri</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#BlankNode</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#collection</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=[ ])(a)(?=[ ])</string>
+					<key>name</key>
+					<string>keyword.other.typeOf.turtle</string>
+				</dict>
+			</array>
+		</dict>
+		<key>collection</key>
+		<dict>
+			<key>begin</key>
+			<string>(\b\(\b)</string>
+			<key>captures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>keyword.other.collection.close</string>
+					<string>punctuation.terminator.collection.turtle</string>
 				</dict>
 			</dict>
+			<key>comment</key>
+			<string>TODO: Make match patterns more stable</string>
+			<key>end</key>
+			<string>(\b\)\b)</string>
 			<key>name</key>
-			<string>meta.triple.node.collection.short</string>
+			<string>meta.spec.collection.turtle</string>
 			<key>patterns</key>
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#literal_triple</string>
+					<string>#literal</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#literal_single</string>
+					<string>#iri</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#literal_double</string>
+					<string>#BlankNode</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#blank_node</string>
+					<string>#collection</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=[ ])(a)(?=[ ])</string>
+					<key>name</key>
+					<string>keyword.other.typeOf.turtle</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#collection_short</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#IRI</string>
+					<string>#blankNodePropertyList</string>
 				</dict>
 			</array>
 		</dict>
-		<key>directives</key>
+		<key>directive</key>
 		<dict>
-			<key>match</key>
-			<string>^@(base|prefix)</string>
+			<key>begin</key>
+			<string>(?i)(^(?=@prefix|@base|PREFIX|BASE))</string>
+			<key>end</key>
+			<string>($)</string>
 			<key>name</key>
-			<string>keyword.directive.turtle</string>
+			<string>meta.spec.directive.turtle</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>begin</key>
+					<string>^(@prefix)(?=\s)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.directive.prefix.turtle</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\.?)$</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.directive.turtle</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.spec.prefixID.turtle</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#IRIREF</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#PNAME_NS</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^(@base)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.directive.base.turtle</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>(\.?)$</string>
+					<key>endCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.terminator.directive.turtle</string>
+						</dict>
+					</dict>
+					<key>name</key>
+					<string>meta.spec.base.turtle</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#IRIREF</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^(?i)(PREFIX)(?=\b)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.directive.sparqlPrefix.turtle</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>$</string>
+					<key>name</key>
+					<string>meta.spec.sparqlPrefix.turtle</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#IRIREF</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#PNAME_NS</string>
+						</dict>
+					</array>
+				</dict>
+				<dict>
+					<key>begin</key>
+					<string>^(?i)(BASE)(?=\b)</string>
+					<key>beginCaptures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>keyword.directive.sparqlBase.turtle</string>
+						</dict>
+					</dict>
+					<key>end</key>
+					<string>$</string>
+					<key>name</key>
+					<string>meta.spec.sparqlBase.turtle</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#IRIREF</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
 		</dict>
-		<key>literal_datatype</key>
+		<key>iri</key>
 		<dict>
-			<key>match</key>
-			<string>\^\^\w*:\w*|\&lt;[^\&gt;]+\&gt;</string>
 			<key>name</key>
-			<string>storage.type.datatype.turtle</string>
+			<string>meta.spec.iri.turtle</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#IRIREF</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#PrefixedName</string>
+				</dict>
+			</array>
+		</dict>
+		<key>literal</key>
+		<dict>
+			<key>name</key>
+			<string>meta.spec.literal.turtle</string>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>match</key>
+					<string>(?x)
+						(?&lt;=\s)[+-]?						
+						( (?: \d+?\.?\d*[eE][+-]?\d+) | \d*\.\d+ | \d+)
+						(?=[ ]*[,.;]?)
+					</string>
+					<key>name</key>
+					<string>constant.numeric.turtle</string>
+				</dict>
+				<dict>
+					<key>match</key>
+					<string>(?&lt;=\s)(true|false)(?=[ ]*[,.;]?)</string>
+					<key>name</key>
+					<string>constant.language.boolean.turtle</string>
+				</dict>
+				<dict>
+					<key>name</key>
+					<string>meta.spec.RDFLiteral.turtle</string>
+					<key>patterns</key>
+					<array>
+						<dict>
+							<key>include</key>
+							<string>#literal_triple</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#literal_double</string>
+						</dict>
+						<dict>
+							<key>include</key>
+							<string>#literal_single</string>
+						</dict>
+					</array>
+				</dict>
+			</array>
 		</dict>
 		<key>literal_double</key>
 		<dict>
@@ -238,29 +456,25 @@
 					<key>name</key>
 					<string>punctuation.definition.string.end.turtle</string>
 				</dict>
+				<key>dt</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.datatype.turtle</string>
+				</dict>
+				<key>lang</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.language_tag.turtle</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>(")[^"\\]*(?:\\.[^"\\]*)*(").*(?=\b|\s)?</string>
+			<string>(?x)
+				(")[^"\\]*(?:\\.[^"\\]*)*(")
+				(?&lt;lang&gt;@(?:[a-z]{2}(?:-[a-z0-9]{2})*)?)?
+				(?&lt;dt&gt;\^\^\w*:\w*|\&lt;[^\&gt;]+\&gt;)?
+			</string>
 			<key>name</key>
 			<string>string.quoted.double.turtle</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#literal_datatype</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#literal_langtag</string>
-				</dict>
-			</array>
-		</dict>
-		<key>literal_langtag</key>
-		<dict>
-			<key>match</key>
-			<string>(?&lt;=["'])@(?:[a-z]{2}(?:-[a-z0-9]{2})*)?</string>
-			<key>name</key>
-			<string>constant.language.language_tag.turtle</string>
 		</dict>
 		<key>literal_single</key>
 		<dict>
@@ -276,22 +490,25 @@
 					<key>name</key>
 					<string>punctuation.definition.string.end.turtle</string>
 				</dict>
+				<key>dt</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.datatype.turtle</string>
+				</dict>
+				<key>lang</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.language_tag.turtle</string>
+				</dict>
 			</dict>
 			<key>match</key>
-			<string>(')[^'\\]*(?:\.[^'\\]*)*(').*(?=\b|\s)?</string>
+			<string>(?x)
+				(')[^'\\]*(?:\.[^'\\]*)*(')
+				(?&lt;lang&gt;@(?:[a-z]{2}(?:-[a-z0-9]{2})*)?)?
+				(?&lt;dt&gt;\^\^\w*:\w*|\&lt;[^\&gt;]+\&gt;)?
+			</string>
 			<key>name</key>
 			<string>string.quoted.single.turtle</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#literal_datatype</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#literal_langtag</string>
-				</dict>
-			</array>
 		</dict>
 		<key>literal_triple</key>
 		<dict>
@@ -306,7 +523,12 @@
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(\1)</string>
+			<string>(?x)
+				(\1)
+				(?&lt;lang&gt;@(?:[a-z]{2}(?:-[a-z0-9]{2})*)?)?
+				(?&lt;dt&gt;\^\^\w*:\w*|\&lt;[^\&gt;]+\&gt;)?
+				(?=[ ]*[.;,]?)
+			</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
@@ -314,138 +536,137 @@
 					<key>name</key>
 					<string>punctuation.definition.string.end.turtle</string>
 				</dict>
+				<key>dt</key>
+				<dict>
+					<key>name</key>
+					<string>storage.type.datatype.turtle</string>
+				</dict>
+				<key>lang</key>
+				<dict>
+					<key>name</key>
+					<string>constant.language.language_tag.turtle</string>
+				</dict>
 			</dict>
 			<key>name</key>
 			<string>string.quoted.triple.turtle</string>
-			<key>patterns</key>
-			<array>
-				<dict>
-					<key>include</key>
-					<string>#literal_datatype</string>
-				</dict>
-				<dict>
-					<key>include</key>
-					<string>#literal_langtag</string>
-				</dict>
-			</array>
 		</dict>
-		<key>po_stmt</key>
+		<key>triples</key>
 		<dict>
 			<key>begin</key>
-			<string>[\b\s]?([\w\-]*:)([\w]*(?=[\b\s]))</string>
+			<string>(?i)^(?!@|\#|PREFIX|BASE)</string>
 			<key>beginCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>variable.other.prefix.turtle</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.fragment.turtle</string>
+					<string>meta.spec.triples.turtle</string>
 				</dict>
 			</dict>
 			<key>end</key>
-			<string>(;|$)</string>
+			<string>([.;,]?)$</string>
 			<key>endCaptures</key>
 			<dict>
 				<key>1</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.terminator.predicate_list.turtle</string>
+					<string>punctuation.terminator.triple.turtle</string>
 				</dict>
 			</dict>
 			<key>name</key>
-			<string>meta.triple.stmt</string>
+			<string>meta.spec.triples.turtle</string>
 			<key>patterns</key>
 			<array>
 				<dict>
-					<key>include</key>
-					<string>#qname</string>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.turtle</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Allow inline comments</string>
+					<key>match</key>
+					<string>(?&lt;=\s)(#.+$)</string>
+					<key>name</key>
+					<string>comment.line.number-sign.turtle</string>
+				</dict>
+				<dict>
+					<key>comment</key>
+					<string>Trying to eat up terminators before anything else (seems to work)</string>
+					<key>match</key>
+					<string>[.;,](?=\s|\b)</string>
+					<key>name</key>
+					<string>punctuation.terminator.stmt.turtle</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#literal_triple</string>
+					<string>#literal</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#literal_single</string>
+					<string>#blankNodePropertyList</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#literal_double</string>
+					<string>#iri</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#blank_node</string>
+					<string>#BlankNode</string>
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#collection_short</string>
+					<string>#collection</string>
 				</dict>
 				<dict>
-					<key>include</key>
-					<string>#IRI</string>
+					<key>match</key>
+					<string>(?&lt;=[ ])(a)(?=[ ])</string>
+					<key>name</key>
+					<string>keyword.other.typeOf.turtle</string>
 				</dict>
 			</array>
 		</dict>
-		<key>qname</key>
-		<dict>
-			<key>captures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>variable.other.prefix.turtle</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.fragment.turtle</string>
-				</dict>
-			</dict>
-			<key>match</key>
-			<string>[\b\s]?([\w\-]*:)([\w]+)[\b\s]?</string>
-		</dict>
-		<key>spo_stmt</key>
+		<key>turtleDoc</key>
 		<dict>
 			<key>begin</key>
-			<string>\s*([\w\-]*:)([\w]*)</string>
-			<key>beginCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>variable.other.prefix.turtle</string>
-				</dict>
-				<key>2</key>
-				<dict>
-					<key>name</key>
-					<string>entity.name.fragment.turtle</string>
-				</dict>
-			</dict>
+			<string>^</string>
 			<key>end</key>
-			<string>(\.)</string>
-			<key>endCaptures</key>
-			<dict>
-				<key>1</key>
-				<dict>
-					<key>name</key>
-					<string>punctuation.terminator.expression.turtle</string>
-				</dict>
-			</dict>
+			<string>\z</string>
 			<key>name</key>
-			<string>meta.triple.spo</string>
+			<string>meta.spec.turtleDoc.turtle</string>
 			<key>patterns</key>
 			<array>
 				<dict>
+					<key>captures</key>
+					<dict>
+						<key>1</key>
+						<dict>
+							<key>name</key>
+							<string>punctuation.definition.comment.turtle</string>
+						</dict>
+					</dict>
+					<key>comment</key>
+					<string>Allow comment lines</string>
+					<key>match</key>
+					<string>^(#).+$</string>
+					<key>name</key>
+					<string>comment.line.number-sign.turtle</string>
+				</dict>
+				<dict>
 					<key>include</key>
-					<string>#po_stmt</string>
+					<string>#directive</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#triples</string>
 				</dict>
 			</array>
 		</dict>
 	</dict>
+	<key>scope</key>
+	<string>source.turtle</string>
 	<key>scopeName</key>
 	<string>source.turtle</string>
 	<key>uuid</key>
