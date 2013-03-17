@@ -26,7 +26,7 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
         docu = model.explain(frags[1])        
         TextMate::UI.simple_notification(
           :title   =&gt; "Documentation",
-          :summary =&gt; model.prefix + ':' + (docu['label'] || frags[1]),
+          :summary =&gt; (model.prefix+':'+frags[1]) + ((docu['label']) ? ' — "'+docu['label']+'"' : ''),
           :log     =&gt; docu['description'] || 'Sorry, no documentation available.'
         )
       end      
