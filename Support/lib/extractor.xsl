@@ -8,19 +8,24 @@
 	
 	<xsl:output method="xml" indent="yes" cdata-section-elements="label description" />
 	
+	<xsl:param name="base-uri"/>	
+	
 	<xsl:variable name="chars_upper" select="'ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ'"/>
 	<xsl:variable name="chars_lower" select="'abcdefghijklmnopqrstuvwxyzäöü'"/>
 	
 	<xsl:template match="/rdf:RDF">
 		<model>
+			<xsl:attribute name="base-uri-passed">
+				<xsl:value-of select="$base-uri"/>
+			</xsl:attribute>
 			<xsl:apply-templates select="rdfs:Class|rdf:Property|rdfs:Datatype|rdf:List"/>
-			<xsl:apply-templates select="rdf:Description"/>
+			<xsl:apply-templates select="rdf:Description[@rdf:about != $base-uri]"/>
 		</model>
 	</xsl:template>
 	
 	<xsl:template match="rdf:Description[string-length(rdf:type/@rdf:resource)>0]">
 		<xsl:variable name="resource_type" select="rdf:type/@rdf:resource"/>
-		<resource>
+		<resource>			
 			<xsl:attribute name="prefix">
 				<xsl:for-each select="namespace::*">
 					<xsl:if test="starts-with($resource_type, .)">
@@ -44,19 +49,7 @@
 				</xsl:variable>
 				<xsl:value-of select="translate($tmp_type, $chars_upper, $chars_lower)"/>
 			</xsl:attribute>
-			<xsl:attribute name="id">
-				<!-- Determine if value is fully qualified URIrefs -->				
-				<xsl:variable name="tmp_id" select="substring-after(@rdf:about, '#')"/>
-				<xsl:choose>
-					<xsl:when test="string-length($tmp_id) > 0">
-						<!-- and shorten it if so -->
-						<xsl:value-of select="$tmp_id"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="@rdf:about"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
+			<xsl:call-template name="id-attrib"/>
 			<xsl:call-template name="docu"/>
 		</resource>		
 	</xsl:template>
@@ -69,21 +62,28 @@
 			<xsl:attribute name="type">
 				<xsl:value-of select="translate(local-name(.), $chars_upper, $chars_lower)"/>
 			</xsl:attribute>
-			<xsl:attribute name="id">
-				<xsl:variable name="tmp_id">
-					<xsl:value-of select="substring-after(@rdf:about, '#')"/>	
-				</xsl:variable>					
-				<xsl:choose>
-					<xsl:when test="string-length($tmp_id) > 0">
-						<xsl:value-of select="$tmp_id"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="@rdf:about"/>
-					</xsl:otherwise>
-				</xsl:choose>
-			</xsl:attribute>
+			<xsl:call-template name="id-attrib"/>
 			<xsl:call-template name="docu"/>
 		</resource>		
+	</xsl:template>
+	
+	<xsl:template name="id-attrib">
+		<xsl:attribute name="id">
+			<!-- Determine if value is fully qualified URIrefs -->				
+			<xsl:choose>
+				<xsl:when test="starts-with(@rdf:about, $base-uri)">
+					<!-- and shorten it if so -->
+					<xsl:value-of select="substring-after(@rdf:about, $base-uri)"/>
+				</xsl:when>
+				<xsl:when test="string-length(substring-after(@rdf:about, '#')) > 0">
+					<!-- and shorten it if so -->
+					<xsl:value-of select="substring-after(@rdf:about, '#')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="@rdf:about"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:attribute>
 	</xsl:template>
 	
 	<xsl:template name="docu">

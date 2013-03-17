@@ -81,7 +81,7 @@ class Model
     bash;
     set -o pipefail;
     curl -s -L -A 'Turtle.tmBundle' -H 'Accept: application/rdf+xml, application/owl+xml' '%s' \
-      | xsltproc '%s' - >'%s' 2>/dev/null
+      | xsltproc --stringparam 'base-uri' '%s' '%s' - >'%s' 2>/dev/null
   SH
   
   attr_accessor :prefix, :uri
@@ -107,7 +107,7 @@ class Model
             ((not File.file? fpath) or 
             (Time.now - File.mtime(fpath)) > CACHE_LIFETIME or
              File.size(fpath).zero?)
-           if system "#{CMD_TPL % [@uri, XSL_FPATH, fpath]}"
+           if system "#{CMD_TPL % [@uri, @uri, XSL_FPATH, fpath]}"
              # Cache successfully generated => inform user
              TextMate::UI.tool_tip "<p style=\"padding:3px 4px;background-color:#008800;color:#fff;font-family:'Lucida Grande';\">Resources for prefix <span style=\"font-weight:bold;text-decoration:underline;\">#{@prefix}:</span> sucessfully extracted</h3>", :format => 'html', :transparent => true 
            else
