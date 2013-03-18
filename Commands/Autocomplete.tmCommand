@@ -41,11 +41,13 @@ end
 # Autocompletion for prefixed resource QNames
 if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('support.variable.PN_LOCAL.turtle')
   word = Word::current_word '(\S*):(\S*)(?!\.\b)'
-  # Chop of trailing dot (language grammar isn't that stable)
+  # Chop off trailing dot (you got it ... language grammar isn't that solid)
   word = word[0..-2] if word.end_with? '.'
   word_frags = word.split(':')
+  # Try to determine the IRI associated with prefix in current document
+  iri = resolve_URI word_frags[0], ENV['TM_FILEPATH']
   # Build model and query it
-  model = Turtle::Model.new(word_frags[0])
+  model = Turtle::Model.new(word_frags[0], iri)
   if (model.available?)
     choices = []
     model.resources.each do |rsc|

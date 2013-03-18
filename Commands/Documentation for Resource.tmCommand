@@ -20,8 +20,10 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
     # Chop of trailing dot (language grammar isn't that stable)
     word = word[0..-2] if word.end_with? '.'
     frags = word.split(':')
+    # Try to determine the IRI associated with prefix in current document
+    iri = resolve_URI frags[0], ENV['TM_FILEPATH']
     if 2 == frags.length
-      model = Turtle::Model.new(frags[0])
+      model = Turtle::Model.new(frags[0], iri)
       if model.available?
         docu = model.explain(frags[1])        
         TextMate::UI.simple_notification(
@@ -45,7 +47,7 @@ end</string>
 	<key>outputFormat</key>
 	<string>text</string>
 	<key>outputLocation</key>
-	<string>toolTip</string>
+	<string>discard</string>
 	<key>scope</key>
 	<string>source.turtle meta.spec.PNAME_LN.turtle</string>
 	<key>uuid</key>

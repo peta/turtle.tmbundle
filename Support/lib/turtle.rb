@@ -28,6 +28,26 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
 
+def resolve_URI(of_prefix, fpath)
+  # Try to determine the IRI associated with prefix in current document
+  if not fpath.nil? and File.exists? fpath
+    cmd = <<-'CMD'
+      grep -E '@prefix %s: <([^\>]+)>\.' '%s' | sed -e 's/^[^<]*\<\([^\>]*\)\>.*$/\1/'
+    CMD
+    uri = `#{cmd % [of_prefix, fpath]} `
+    uri = uri.split("\n").first || ''
+    if (uri =~ URI::regexp).nil?
+      # Invalid URI returned => ignore it
+      uri = nil
+    end
+  else
+    # User didn't save the newly created file he is working with
+    # => ignore prefix directives and use the IRI prefix.cc gave us
+    uri = nil
+  end  
+  return uri
+end
+
 module Turtle
 # BEGIN MODULE
 
@@ -87,15 +107,14 @@ class Model
   attr_accessor :prefix, :uri
     
   def initialize(prefix, uri = nil, force_reload = false)
-    @prefix, @uri, @url = prefix, uri, nil
+    @prefix, @uri = prefix, uri
     if @uri.nil?
       @uri = Prefixes.lookup(@prefix) 
     end
     @loaded = false
     # Load model
     if not @uri.nil?
-      @url = (@uri.end_with? '#') ? @uri[0..-2] : @uri      
-      fpath = MODEL_FPATH_TPL % prefix
+      fpath = MODEL_FPATH_TPL % mk_filename
       # Dummy file is used to keep track of vocabs/ontos 
       # for which no machine readable representation exists.
       # That way we don't try to fetch useless data over and over again 
@@ -156,7 +175,16 @@ class Model
     end
     return doc
   end
-   
+  
+  private
+  
+  def mk_filename
+    (@prefix+'_'+@uri).
+      gsub(/[^\w\s_-]+/, '').
+      gsub(/(^|\b\s)\s+($|\s?\b)/, '\\1\\2').
+      gsub(/\s+/, '_')
+  end
+  
 end
   
 # END MODULE
