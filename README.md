@@ -8,23 +8,26 @@ It consists of:
 + Language grammar
 + Some snippets (prefixes and document skeleton)
 + Powerful (!) auto-completion (Live-aggregated)
-+ Documentation for classes, roles/properties and individuals at your fingertips (Live-aggregated)
++ Documentation for classes and roles/properties at your fingertips (Live-aggregated)
++ Solid syntax validation 
 + Commands for instant graph visualization of a knowledge base (requires Graphviz and Raptor)
 
 See [Screenshots](#screenshots)
 
 #### Roadmap
 
-+ Display documentation with links to official sources as HTML in a notification window
++ Extract individuals (for both, autocompletion and documentation)
++ Work out documentation component
+	+ Display resource documentation as HTML text (with clickable links to official sources) in a notification window
 + Polish language grammar
 + Add additional caching layer for speeding up things (vanilla MacOS Ruby 1.8.7 has only sloooow REXML module)
++ Convert RDF/S and OWL documents from XML into Turtle and "link" resource identifiers to them, so that users can jump/navigate across all involved documents
 + To be fixed
 	+ Fix PN_LOCAL pattern so that semicolons inside POLs are marked up as terminators
-	+ Extractor stylesheet fails at shortening when about attribute contains FQN instead of IRIref
 
 ## Language grammar 
 
-The language grammar now covers the official W3C parser spec (as proposed in the latest CR released on Feb 19th 2013). However, there are still one/two particularities that differ, but you shouldn't notice them during your daily work. Should you notice some weird behaviour (results in broken syntax highlighting), please file a bug in the [project's issue tracker](https://github.com/peta/turtle.tmbundle/issues "Here at GitHub").
+The language grammar now covers the official W3C parser spec (as proposed in the latest CR released on Feb 19th 2013). However, there are still one/two particularities that differ, but you shouldn't notice them during your daily work. In the case you notice some weird behaviour (most obvious sign: broken syntax highlighting), please file a bug in the [project's issue tracker](https://github.com/peta/turtle.tmbundle/issues "Here at GitHub").
 
 ## Snippets
 
@@ -32,21 +35,25 @@ Right now the following snippets are included:
 
 + Basic document skeleton
 + "Smart" prefix/base directives (hit tab to see it work)
-+ A set of basic prefix directives
++ A set of basic prefix directives (Boring! The cool kids make instead use of the fancy auto-completion)
 
 ## Powerful auto-completion
 
 The Turtle bundle offers auto-completion at two levels:
 
+__NOTE: *When determining IRIs associated with a given QName prefix, local prefix declarations always have precedence over those given by prefix.cc. So when you mess up IRIs in your @prefix directives, auto-completion might not work as expected.*__
+
 ### Auto-completion when declaring prefixes
 
-When you invoke the `Autocomplete` command (CTRL + SPACE) within the scope of a prefix directive (right after the `@prefix ` keyword), the Turtle bundle fetches a list of all prefixes registered at [prefix.cc](http://prefix.cc) and displays them nicely in a auto-complete dropdown box. Once you have chosen an and confirmed your selection with f.e. `RETURN` the prefix directive is automagically updated with the prefix and its according URI. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Autocomplete` command (CTRL + SPACE) within the scope of a prefix directive (right after the `@prefix ` keyword), the Turtle bundle fetches a list of all prefixes registered at [prefix.cc](http://prefix.cc) and displays them nicely in a auto-complete dropdown box. Once you have chosen an and confirmed your selection, the prefix directive is automagically updated with the prefix and its according URI. (Note: the fetched data is locally cached for 24h)
 
-### Auto-completion for prefixed QNames (a.k.a. resource identifiers)
+__NOTE: *Auto-completion for prefix declarations is case-insensitive*__
 
-When you invoke the `Autocomplete` command (CTRL + SPACE) within the scope of a prefixed QName (e.g. `my:Dog`), the Turtle bundle determines the actual URI that is abbreviated by the prefix (in this case `my`) and checks if there is a machine readable Vocabulary/Ontology description available (currently only RDF/S and OWL documents in the XML serialization format are supported). When one is found, it is live-aggregated and all of its Classes, Roles/Properties and Individuals are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
+### Auto-completion for prefixed names (a.k.a. resource identifiers)
 
-__NOTE: *Auto-completion is case-sensitive*__
+When you invoke the `Autocomplete` command (CTRL + SPACE) within the scope of a prefixed name (e.g. right after `my:` or at `my:a...`), the Turtle bundle determines the actual URI that is abbreviated by the prefix and checks if there is a machine readable Vocabulary/Ontology document available (currently only RDF/S and OWL documents in the XML serialization format are supported). When one is found, it is live-aggregated and all of its Classes and Roles/Properties are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
+
+__NOTE: *Auto-completion for prefixed names is case-sensitive*__
 
 ### Known issues
 
@@ -55,6 +62,14 @@ For now, the Turtle bundle relies on [prefix.cc](http://prefix.cc) for mapping p
 ## Documentation for classes, roles/properties and individuals
 
 When you invoke the `Documentation for Resource` command (F1) within the scope of a prefixed QName (e.g. `my:Dog`), the Turtle bundle looks up if there are any informal descriptions available (like description texts, HTTP URLs to human-readable docs, asf.) and if so, displays them to the user. (Note: the fetched data is locally cached for 24h)
+
+## Syntax validation
+
+You can trigger a syntax validation of your Turtle by pressing `CTRL + SHIFT + V`. In order to make use of syntax validation you must a have a working installation of the [Raptor RDF syntax library](http://librdf.org/raptor/). For detailed instructions about wiring up Raptor with Textmate, see the [#graph-visualization](section below).
+
+![Screenshot of syntax validation error message](./Support/img/screenshot-syntaxval-error.png "Screenshot of syntax validation error message")
+
+![Screenshot of syntax validation success message](./Support/img/screenshot-syntaxval-success.png "Screenshot of syntax validation success message")
 
 ## Graph visualization
 
@@ -74,7 +89,9 @@ The Turtle bundle is now officially available through the Textate bundle install
 ## Screenshots
 
 ![Screenshot of expanded bundle menu](./Support/img/screenshot-menu.png "Screenshot of expanded bundle menu")
+
 ![Screenshot editor showing auto-completion for resource identifier and documentation](./Support/img/screenshot-editor.png "Screenshot editor showing auto-completion for resource identifier and documentation")
+
 ![Screenshot of knowledge base visualization](./Support/img/screenshot-visu.png "Screenshot of knowledge base visualization")
 
 ## Meta
