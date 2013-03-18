@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Symbol list: Shown</string>
 	<key>scope</key>
-	<string>meta.directive</string>
+	<string>meta.spec.directive.turtle</string>
 	<key>settings</key>
 	<dict>
 		<key>disableIndentCorrections</key>
