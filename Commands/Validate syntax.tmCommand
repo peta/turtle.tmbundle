@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>saveActiveFile</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+
+TextMate::require_cmd 'rapper'
+
+# Constants
+
+RAPPER_TPL = 'rapper --count -i turtle \'%s\' 2&gt;&amp;1'
+FPATH = ENV['TM_FILEPATH']
+FPATH_TOKEN = '&lt;FPATH&gt;'
+FURL = 'file://'+e_url(FPATH)
+FURL_TOKEN = '&lt;FURL&gt;'
+
+# Helpers
+
+def html(snippet, type = nil)
+  if type.nil?
+    style = 'padding:3px 4px;background-color:#ffffff;color:#333333;'
+  elsif type == 'err'
+    style = 'padding:3px 4px;background-color:#cc4444;color:#ffffff;'
+  elsif type == 'succ'
+    style = 'padding:3px 4px;background-color:#118833;color:#ffffff;'
+  end
+  '&lt;div style="font-size:1.1em; font-family:\'Lucida Grande\';'+style+'"&gt;'+snippet+'&lt;/div&gt;'
+end
+
+def msg(type, msg, plain = true)
+  TextMate::UI.tool_tip(
+    html( (plain) ?  '&lt;p style="margin:0;padding:0;"&gt;'+msg+'&lt;/p&gt;' : msg, type ),
+    :format =&gt; :html,
+    :transparent =&gt; true
+  )
+  TextMate::exit_discard
+end
+
+def is_intro?(line)
+  line == 'Parsing URI &lt;FURL&gt; with parser turtle'
+end
+def is_summary?(line)
+  0 == (line =~ /^Parsing returned (\d+) triples$/).nil? ? nil : $~[1].to_i  
+end
+
+# Extractors
+
+def n_triples_parsed(lines)
+  (lines[-1] =~ /^Parsing returned (\d+) triples$/).nil? ? nil : $~[1].to_i
+end
+
+def errors_from(lines)
+  errs = { 'messages' =&gt; [], 'lines' =&gt; [] }  
+  lines.each do |line|
+    next if (line =~ /^Error - (?:URI &lt;FURL&gt;:)?(\d+)?\s?- (.+)$/).nil?
+    m = Regexp.last_match.captures
+    if m[0].nil?
+      # General error
+      errs['messages'].push m[1]
+    else
+      # Line-bound error
+      errs['lines'].push m
+    end
+  end
+  return errs
+end
+
+# Here we go
+
+output = `#{RAPPER_TPL % FPATH}`
+unless not output.empty?
+  msg 'err', 'Rapper terminated unexpectedly'
+  exit
+end
+
+lines = output.
+  sub(/^rapper:\s/, '').                       # Strip line begins
+  gsub(/\nrapper:\s/m, "\n").
+  gsub(/file\s#{FPATH}/, 'file '+FPATH_TOKEN). # Replace file paths with token
+  gsub(/URI\s#{FURL}/, 'URI '+FURL_TOKEN).     # Replace file URLs with token
+  split("\n")
+
+if $?.to_i.equal? 0
+  # Raptor didn't report errors, now find out what he wants to tell us
+  if lines.length.equal? 2
+    if is_intro? lines[0] and is_summary? lines[1]      
+      msg('succ', 'Syntax OK ('+n_triples_parsed(lines).to_s+' triples parsed)')
+    end    
+  end
+  # Dunno what else Raptor could tell us; just dump it out
+  puts lines
+  TextMate::exit_tool_tip
+else
+  # Raptor reported errors, now interpret them
+  errors = errors_from lines
+  if errors['messages'].any? or errors['lines'].any?
+    # There are obvious errors
+    html = ''
+    if errors['messages'].any?
+      # Show misc error messages
+      html += '&lt;h2 style="color:#000000;margin:0 0 5px 0;font-size:1.2em;"&gt;General&lt;/h2&gt;&lt;ul style="margin:0;padding:0 4px 0 20px;list-style-type:square;"&gt;'
+      errors['messages'].each do |msg|
+        html += '&lt;li&gt;'+msg+'&lt;/li&gt;'
+      end
+      html += '&lt;/ul&gt;'
+    end
+    if errors['lines'].any?
+      # Extract error lines
+      html += '&lt;h2 style="color:#000000;margin:3px 0 5px 0;font-size:1.2em;"&gt;Dirty lines&lt;/h2&gt;&lt;ul style="margin:0 0 3px 0;padding:0 4px 0 20px;list-style-type:square;"&gt;'
+      errors['lines'].each do |msg|
+        html += '&lt;li&gt;'+msg[0]+': '+msg[1]+'&lt;/li&gt;'
+      end
+      html += '&lt;/ul&gt;'    
+    end
+  else
+    html += '&lt;h2 style="color:#000000;margin:0 0 5px 0;font-size:1.2em;"&gt;There are errors...&lt;/h2&gt;&lt;ul style="margin:0;padding:0 4px 0 20px;list-style-type:square;"&gt;'
+    lines.each do |line|
+      html += '&lt;li&gt;'+e_html(line)+'&lt;/li&gt;'
+    end
+    html += '&lt;/ul&gt;'
+  end
+  # Now show user the mess he caused
+  msg 'err', html, false
+end
+</string>
+	<key>input</key>
+	<string>none</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>^V</string>
+	<key>name</key>
+	<string>Validate syntax</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>html</string>
+	<key>outputLocation</key>
+	<string>toolTip</string>
+	<key>scope</key>
+	<string>source.turtle</string>
+	<key>uuid</key>
+	<string>57E5DA96-6449-43DA-84FB-C3493D13FA5B</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
