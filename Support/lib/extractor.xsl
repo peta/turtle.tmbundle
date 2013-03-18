@@ -34,20 +34,23 @@
 				</xsl:for-each>
 			</xsl:attribute>
 			<xsl:attribute name="type">
-				<xsl:variable name="tmp_short_type" select="substring-after($resource_type, '#')"/>
 				<xsl:variable name="tmp_type">
-					<!-- Determine if value is fully qualified URIrefs -->
 					<xsl:choose>
-						<xsl:when test="string-length($tmp_short_type) > 0">
-							<!-- and shorten it if so -->
-							<xsl:value-of select="$tmp_short_type"/>
+						<xsl:when test="starts-with($resource_type, $base-uri)">
+							<!-- fully qualified URIrefs -->
+							<xsl:value-of select="substring-after($resource_type, $base-uri)"/>
+						</xsl:when>
+						<xsl:when test="string-length(substring-after($resource_type, '#')) > 0">
+							<!-- relative URIrefs -->
+							<xsl:value-of select="substring-after($resource_type, '#')"/>
 						</xsl:when>
 						<xsl:otherwise>
+							<!-- URI -->
 							<xsl:value-of select="$resource_type"/>
 						</xsl:otherwise>
-					</xsl:choose>	
+					</xsl:choose>
 				</xsl:variable>
-				<xsl:value-of select="translate($tmp_type, $chars_upper, $chars_lower)"/>
+				<xsl:value-of select="translate($tmp_type, $chars_upper, $chars_lower)"/>				
 			</xsl:attribute>
 			<xsl:call-template name="id-attrib"/>
 			<xsl:call-template name="docu"/>
@@ -68,18 +71,18 @@
 	</xsl:template>
 	
 	<xsl:template name="id-attrib">
-		<xsl:attribute name="id">
-			<!-- Determine if value is fully qualified URIrefs -->				
+		<xsl:attribute name="id">			
 			<xsl:choose>
 				<xsl:when test="starts-with(@rdf:about, $base-uri)">
-					<!-- and shorten it if so -->
+					<!-- fully qualified URIrefs -->
 					<xsl:value-of select="substring-after(@rdf:about, $base-uri)"/>
 				</xsl:when>
 				<xsl:when test="string-length(substring-after(@rdf:about, '#')) > 0">
-					<!-- and shorten it if so -->
+					<!-- relative URIrefs -->
 					<xsl:value-of select="substring-after(@rdf:about, '#')"/>
 				</xsl:when>
 				<xsl:otherwise>
+					<!-- URI -->
 					<xsl:value-of select="@rdf:about"/>
 				</xsl:otherwise>
 			</xsl:choose>
