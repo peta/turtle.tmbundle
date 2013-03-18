@@ -60,6 +60,8 @@
 				<string>&gt;</string>
 			</array>
 		</array>
+		<key>zeroIndentPattern</key>
+		<string>(?i)\b((?:@|\#|PREFIX|BASE).+$)</string>
 	</dict>
 	<key>uuid</key>
 	<string>4DCE5FA1-8BBE-4A24-8507-A21AAD9E03BD</string>
