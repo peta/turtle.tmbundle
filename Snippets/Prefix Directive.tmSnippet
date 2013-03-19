@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>@prefix ${1:my}: &lt;${2:http://github.com/peta/turtle.tmbundle#}&gt;.$3</string>
+	<string>@prefix ${1:${2:my}: &lt;${3:http://github.com/peta/turtle.tmbundle#}&gt;.$4}</string>
 	<key>name</key>
 	<string>@prefix Directive</string>
 	<key>scope</key>
