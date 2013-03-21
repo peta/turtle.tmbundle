@@ -5,7 +5,7 @@
 	<key>name</key>
 	<string>Symbol list: Hidden</string>
 	<key>scope</key>
-	<string>entity.name.typ.iri.turtle</string>
+	<string>source.turtle</string>
 	<key>settings</key>
 	<dict>
 		<key>showInSymbolList</key>

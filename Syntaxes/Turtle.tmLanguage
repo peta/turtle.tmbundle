@@ -273,7 +273,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.directive.prefix.turtle</string>
+							<string>keyword.other.directive.prefix.turtle</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -308,7 +308,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.directive.base.turtle</string>
+							<string>keyword.other.directive.base.turtle</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -339,7 +339,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.directive.sparqlPrefix.turtle</string>
+							<string>keyword.other.directive.sparqlPrefix.turtle</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -366,7 +366,7 @@
 						<key>1</key>
 						<dict>
 							<key>name</key>
-							<string>keyword.directive.sparqlBase.turtle</string>
+							<string>keyword.other.directive.sparqlBase.turtle</string>
 						</dict>
 					</dict>
 					<key>end</key>
@@ -665,8 +665,6 @@
 			</array>
 		</dict>
 	</dict>
-	<key>scope</key>
-	<string>source.turtle</string>
 	<key>scopeName</key>
 	<string>source.turtle</string>
 	<key>uuid</key>

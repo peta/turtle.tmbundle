@@ -8,9 +8,11 @@
 	<string>#!/usr/bin/env bash
 [[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
 
+cd "$TM_BUNDLE_SUPPORT/.."
+
 . "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "About the Turtle bundle" "Turtle"
-"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" "$TM_BUNDLE_SUPPORT/../README.md"
+"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" "README.md"
 html_footer
 
 </string>
@@ -19,7 +21,7 @@ html_footer
 	<key>inputFormat</key>
 	<string>text</string>
 	<key>name</key>
-	<string>About</string>
+	<string>Help</string>
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
@@ -28,6 +30,8 @@ html_footer
 	<string>newWindow</string>
 	<key>scope</key>
 	<string>source.turtle</string>
+	<key>semanticClass</key>
+	<string>action.turtle.help</string>
 	<key>uuid</key>
 	<string>72E360B7-71C7-4E4C-B78A-A106FB618FF2</string>
 	<key>version</key>

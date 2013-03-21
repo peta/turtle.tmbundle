@@ -39,7 +39,7 @@ end</string>
 	<key>inputFormat</key>
 	<string>text</string>
 	<key>keyEquivalent</key>
-	<string></string>
+	<string>^h</string>
 	<key>name</key>
 	<string>Documentation for Resource</string>
 	<key>outputCaret</key>
