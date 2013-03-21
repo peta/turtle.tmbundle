@@ -8,6 +8,7 @@ CACHE_LIFETIME = 60*60*24
 IMG_DIR = "#{ENV['TM_BUNDLE_SUPPORT']}/img"
 
 ICONS = {
+  "Prefix" => "#{IMG_DIR}/item-icons/p_red.png",
   "M"      => "#{IMG_DIR}/item-icons/Macros.png",
   "L"   => "#{IMG_DIR}/item-icons/Languages.png",
   "Doc"   => "#{IMG_DIR}/item-icons/Template Files.png",

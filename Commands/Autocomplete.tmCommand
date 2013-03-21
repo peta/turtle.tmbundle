@@ -29,12 +29,15 @@ if not left_scope.index('meta.spec.prefixID.turtle').nil?
     pref = pair[0]
     uri = pair[1]    
     choices.push({
-      "display" =&gt; '%s: %s' % [pref.ljust(maxlen + 8), uri],
+      "display" =&gt; '%s %s' % [(pref+':').ljust(maxlen + 8), uri],
       "insert" =&gt; ': &lt;%s&gt;.' % [uri],
-      "match" =&gt; pref
+      "match" =&gt; pref,
+      "image" =&gt; 'Prefix'
     })      
   end
-  TextMate::UI.complete(choices, :case_insensitive =&gt; true, :extra_chars=&gt;'_&lt;&gt;:.@')
+    
+  TextMate::UI.complete(choices, :case_insensitive =&gt; true, :extra_chars=&gt;'_&lt;&gt;:.@', :images=&gt;ICONS)
+  TextMate::exit_show_tool_tip
   done = true
 end
 
@@ -80,7 +83,7 @@ end
 	<key>inputFormat</key>
 	<string>text</string>
 	<key>keyEquivalent</key>
-	<string>^ </string>
+	<string>~</string>
 	<key>name</key>
 	<string>Autocomplete</string>
 	<key>outputCaret</key>
