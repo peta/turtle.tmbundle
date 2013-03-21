@@ -14,17 +14,6 @@ It consists of:
 
 See [Screenshots](#screenshots)
 
-#### Roadmap
-
-+ Extract individuals (for both, autocompletion and documentation)
-+ Work out documentation component
-	+ Display resource documentation as HTML text (with clickable links to official sources) in a notification window
-+ Polish language grammar
-+ Add additional caching layer for speeding up things (vanilla MacOS Ruby 1.8.7 has only sloooow REXML module)
-+ Convert RDF/S and OWL documents from XML into Turtle and "link" resource identifiers to them, so that users can jump/navigate across all involved documents
-+ To be fixed
-	+ Fix PN_LOCAL pattern so that semicolons inside POLs are marked up as terminators
-
 ## Language grammar 
 
 The language grammar now covers the official W3C parser spec (as proposed in the latest CR released on Feb 19th 2013). However, there are still one/two particularities that differ, but you shouldn't notice them during your daily work. In the case you notice some weird behaviour (most obvious sign: broken syntax highlighting), please file a bug in the [project's issue tracker](https://github.com/peta/turtle.tmbundle/issues "Here at GitHub").
@@ -97,3 +86,25 @@ The Turtle bundle is now officially available through the Textate bundle install
 ## Meta
 
 Turtle.tmbundle was created by [Peter Geil](http://github.com/peta). Feedback is highly welcome – if you find a bug, have a feature request or simply want to contribute something, please let me know. Just visit the official GitHub repository at [https://github.com/peta/turtle.tmbundle](https://github.com/peta/turtle.tmbundle) and open an [issue](https://github.com/peta/turtle.tmbundle/issues).
+
+### Please help making TextMate2 even more awesome!
+
+One of the features EVERY user could greatly benefit from, is a more powerful auto-completion feature. However, the implementation of such a feature takes a considerable amount of time. Unfortunately time is one of those goods, Allan (the creator of TextMate) and the other guy(s) from Macromates don't have enough from. So I had to idea to start a crowdfunding initiative for raising enough budget for hiring a competent Objecttive-C/Cocoa developer that will implement the following features:
+
++ [Issue #12 – Add advanced formatting and allow additional info/documentation for list items/suggestions](https://github.com/textmate/dialog/issues/12)
++ [Add flag that determines if given search string must appear at beginning or anywhere inside a suggestion](https://github.com/textmate/dialog/issues/10)
+
+If can you see the potential of such features, too, and want to contribute something, please give these issues an upvote (just type "+1" and submit) and stay tuned, because the crowdfunding initiative might start very soon.
+
+The crowdfunding idea does not reflect the opinion of Macromates, nor any associated party. I worked it out and it will also be curated by myself.
+
+## Roadmap
+
++ Extract individuals (for both, autocompletion and documentation)
++ Work out documentation component
+	+ Display resource documentation as HTML text (with clickable links to official sources) in a notification window
++ Polish language grammar
++ Add additional caching layer for speeding up things (vanilla MacOS Ruby 1.8.7 has only sloooow REXML module)
++ Convert RDF/S and OWL documents from XML into Turtle and "link" resource identifiers to them, so that users can jump/navigate across all involved documents
++ To be fixed
+	+ Fix PN_LOCAL pattern so that semicolons inside POLs are marked up as terminators

@@ -8,11 +8,15 @@
 	<string>#!/usr/bin/env bash
 [[ -f "${TM_SUPPORT_PATH}/lib/bash_init.sh" ]] &amp;&amp; . "${TM_SUPPORT_PATH}/lib/bash_init.sh"
 
-cd "$TM_BUNDLE_SUPPORT/.."
-
 . "$TM_SUPPORT_PATH/lib/webpreview.sh"
 html_header "About the Turtle bundle" "Turtle"
-"$TM_SUPPORT_PATH/lib/markdown_to_help.rb" "README.md"
+
+# Rewrite relative paths
+
+cd "$TM_BUNDLE_SUPPORT/.."
+supp_dir="`pwd | sed 's/ /%20/'`/Support"
+sed "s#(\./Support#(file://$supp_dir#" README.md | "$TM_SUPPORT_PATH/lib/markdown_to_help.rb"
+
 html_footer
 
 </string>
@@ -20,6 +24,8 @@ html_footer
 	<string>none</string>
 	<key>inputFormat</key>
 	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>@y</string>
 	<key>name</key>
 	<string>Help</string>
 	<key>outputCaret</key>
