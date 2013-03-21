@@ -3,9 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>isDisabled</key>
-	<true/>
+	<false/>
 	<key>name</key>
 	<string>Completions: XSD</string>
+	<key>scope</key>
+	<string>source.turtle</string>
 	<key>settings</key>
 	<dict>
 		<key>completions</key>
