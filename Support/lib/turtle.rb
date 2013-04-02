@@ -10,13 +10,13 @@ IMG_DIR = "#{ENV['TM_BUNDLE_SUPPORT']}/img"
 ICONS = {
   "Prefix" => "#{IMG_DIR}/item-icons/p_red.png",
   "M"      => "#{IMG_DIR}/item-icons/Macros.png",
-  "L"   => "#{IMG_DIR}/item-icons/Languages.png",
-  "Doc"   => "#{IMG_DIR}/item-icons/Template Files.png",
-  "T"  => "#{IMG_DIR}/item-icons/Templates.png",
-  "S"    => "#{IMG_DIR}/item-icons/Snippets.png",
-  "P" => "#{IMG_DIR}/item-icons/Preferences.png",
-  "D"       => "#{IMG_DIR}/item-icons/Drag Commands.png",
-  "C"    => "#{IMG_DIR}/item-icons/Commands.png"
+  "L"      => "#{IMG_DIR}/item-icons/Languages.png",
+  "Doc"    => "#{IMG_DIR}/item-icons/Template Files.png",
+  "T"      => "#{IMG_DIR}/item-icons/Templates.png",
+  "S"      => "#{IMG_DIR}/item-icons/Snippets.png",
+  "P"      => "#{IMG_DIR}/item-icons/Preferences.png",
+  "D"      => "#{IMG_DIR}/item-icons/Drag Commands.png",
+  "C"      => "#{IMG_DIR}/item-icons/Commands.png"
 }
 
 require "net/http"
