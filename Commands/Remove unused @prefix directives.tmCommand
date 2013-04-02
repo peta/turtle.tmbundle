@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+
+PATTERN = /^@prefix ([^\s:]+): &lt;[^&gt;]+&gt;\.$/
+
+doc = STDIN.read
+removed = []
+
+# Strip out unused @prefix directives
+doc.each_line do |line|
+  if line =~ PATTERN
+    prefix = Regexp.last_match.captures[0]
+    unless doc =~ /#{prefix}:[^ ]/
+      removed.push htmlize(line)
+      next
+    end   
+  end
+  puts line
+end
+
+if removed.any?
+  # Tell user what happened
+  TextMate::UI.tool_tip &lt;&lt;-HTML, :format=&gt;:html, :transparent=&gt;true
+    &lt;div style="font-size:1.1em; font-family:\'Lucida Grande\';padding:3px 4px;background-color:#ffffaa;color:#333333;"&gt;
+      &lt;h2 style="color:#000000;margin:0 0 5px 0;font-size:1.2em;"&gt;#{removed.length} directive(s) removed&lt;/h2&gt;
+      &lt;ul style="margin:0;padding:0 4px 0 20px;list-style-type:square;"&gt;
+        &lt;li&gt;#{removed.join '&lt;/li&gt;&lt;li&gt;'}&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/div&gt;
+  HTML
+end
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>~@p</string>
+	<key>name</key>
+	<string>Remove unused @prefix directives</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>replaceDocument</string>
+	<key>scope</key>
+	<string>source.turtle</string>
+	<key>uuid</key>
+	<string>EB08FE12-95D5-42DA-80DE-2B8E1D18B009</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
