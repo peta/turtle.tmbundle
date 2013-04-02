@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require 'URI'
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+
+TextMate::require_cmd 'rapper'
+
+input_doc = STDIN.read
+
+# Determine supported output formats
+formats = []
+state = :looking
+`rapper --help`.each_line do |line|
+  case state 
+  when :looking
+    if /-o FORMAT, --output FORMAT/i =~ line 
+      state = :found
+    end    
+  when :found
+    if /--/ =~ line
+      state = :done
+    elsif /^\s*([^\s]+)\s*\w/ =~ line
+      formats &lt;&lt; Regexp.last_match[1]
+    else
+      state = :done
+    end   
+  when :done
+    break
+  end
+end
+
+if ENV['TM_FILEPATH'].nil?
+  # Unsaved document -&gt; generate unique URN
+  default_base_uri = "textmate:doc:#{Time.new.to_i}#"
+else
+  # Document exists
+  # Use file URL of current document as fallback
+  default_base_uri = URI.escape('file://'+ENV['TM_FILEPATH']+'#')  
+  # when no @base directive exists that we could use
+  input_doc.each_line do |line|
+    if /^@base &lt;([^&gt;]+)&gt;\./ =~ line
+      default_base_uri = Regexp.last_match[1]
+      break
+    end
+  end  
+end
+
+# Ask user for some infos 
+TextMate::exit_discard if (
+  base_uri = TextMate::UI.request_string(
+    :title  =&gt; 'Base URI',
+    :prompt =&gt; 'Enter custom base URI or accept default',
+    :default =&gt; default_base_uri)
+).nil? or (
+  target_fmt = TextMate::UI.request_item(
+    :title  =&gt; 'Convert to format',
+    :prompt =&gt; 'Please select target format',
+    :items  =&gt; formats)
+).nil?
+
+# Conversion
+cmd = 'rapper -q -i turtle -o \'%s\' - \'%s\' 2&gt;&amp;1' % [target_fmt, base_uri]
+IO.popen(cmd, 'w+') do |io|
+  io &lt;&lt; input_doc; io.close_write
+  puts io.read
+end
+</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>^C</string>
+	<key>name</key>
+	<string>Convert to format</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>text</string>
+	<key>outputLocation</key>
+	<string>newWindow</string>
+	<key>scope</key>
+	<string>source.turtle</string>
+	<key>uuid</key>
+	<string>84B88EA7-7B67-4DC6-9014-76B52BF60CA7</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
