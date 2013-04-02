@@ -11,6 +11,8 @@ It consists of:
 + Documentation for classes and roles/properties at your fingertips (Live-aggregated)
 + Solid syntax validation 
 + Commands for instant graph visualization of a knowledge base (requires Graphviz and Raptor)
++ Automatic removal of unused prefixes
++ Conversion between all common RDF formats
 
 See [Screenshots](#screenshots)
 
@@ -24,7 +26,7 @@ Right now the following snippets are included:
 
 + Basic document skeleton
 + "Smart" prefix/base directives (hit tab to see it work)
-+ A set of basic prefix directives (Boring! The cool kids make instead use of the fancy auto-completion)
++ A set of basic prefix directives (Boring! The cool kids instead use the fancy auto-completion)
 
 ## Powerful auto-completion
 
@@ -34,13 +36,13 @@ __NOTE: *When determining IRIs associated with a given QName prefix, local prefi
 
 ### Auto-completion when declaring prefixes
 
-When you invoke the `Autocomplete` command (CTRL + SPACE) within the scope of a prefix directive (right after the `@prefix ` keyword), the Turtle bundle fetches a list of all prefixes registered at [prefix.cc](http://prefix.cc) and displays them nicely in a auto-complete dropdown box. Once you have chosen an and confirmed your selection, the prefix directive is automagically updated with the prefix and its according URI. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Autocomplete` command (ALT + ESCAPE) within the scope of a prefix directive (right after the `@prefix ` keyword), the Turtle bundle fetches a list of all prefixes registered at [prefix.cc](http://prefix.cc) and displays them nicely in a auto-complete dropdown box. Once you have chosen an and confirmed your selection, the prefix directive is automagically updated with the prefix and its according URI. (Note: the fetched data is locally cached for 24h)
 
 __NOTE: *Auto-completion for prefix declarations is case-insensitive*__
 
 ### Auto-completion for prefixed names (a.k.a. resource identifiers)
 
-When you invoke the `Autocomplete` command (CTRL + SPACE) within the scope of a prefixed name (e.g. right after `my:` or at `my:a...`), the Turtle bundle determines the actual URI that is abbreviated by the prefix and checks if there is a machine readable Vocabulary/Ontology document available (currently only RDF/S and OWL documents in the XML serialization format are supported). When one is found, it is live-aggregated and all of its Classes and Roles/Properties are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Autocomplete` command (ALT + ESCAPE) within the scope of a prefixed name (e.g. right after `my:` or at `my:a...`), the Turtle bundle determines the actual URI that is abbreviated by the prefix and checks if there is a machine readable Vocabulary/Ontology document available (currently only RDF/S and OWL documents in the XML serialization format are supported). When one is found, it is live-aggregated and all of its Classes and Roles/Properties are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
 
 __NOTE: *Auto-completion for prefixed names is case-sensitive*__
 
@@ -50,7 +52,7 @@ For now, the Turtle bundle relies on [prefix.cc](http://prefix.cc) for mapping p
 
 ## Documentation for classes, roles/properties and individuals
 
-When you invoke the `Documentation for Resource` command (F1) within the scope of a prefixed QName (e.g. `my:Dog`), the Turtle bundle looks up if there are any informal descriptions available (like description texts, HTTP URLs to human-readable docs, asf.) and if so, displays them to the user. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Documentation for Resource` command (CTRL + H) within the scope of a prefixed QName (e.g. `my:Dog`), the Turtle bundle looks up if there are any informal descriptions available (like description texts, HTTP URLs to human-readable docs, asf.) and if so, displays them to the user. (Note: the fetched data is locally cached for 24h)
 
 ## Syntax validation
 
@@ -64,12 +66,18 @@ You can trigger a syntax validation of your Turtle by pressing `CTRL + SHIFT + V
 
 In order to use this functionality you must have a working installation of [Graphviz](http://graphviz.org) (especially the dot command) and the [Raptor RDF syntax library](http://librdf.org/raptor/). When properly installed (locatable through PATHs) everything should work fine ootb. However, in some cases you must explicitly tell Textmate where to find them. You can do this by introducing two configuration variables (Textmate -> Preferences -> Variables):
 
-+ `TM_DOT` absolute path to the dot binary (part of Graphviz)
++ `TM_DOT` absolute path to the dot binary (part of Graphviz)  
 + `TM_RAPPER` absoluter path to the rapper binary (part of Raptor)
 
 By hitting `CMD + R` the active TTL document will be visualized on-the-fly in a Textmate HTML preview window. Because these preview windows are driven by Safari's WebKit rendering engine, PDF documents will be rendered right in-line. That way your "edit knowledge base --> visualize" workflow will be super intuitive and wont get interrupted by switching to separate PDF viewer app for viewing the visualization.
 
 By hitting `SHIFT + ALT + CMD + S` the active TTL document will be visualized and saved to a PDF document.
+
+## Conversion between all common RDF formats
+
+In order to make use of the converter functionality, you must a have a working installation of the [Raptor RDF syntax library](http://librdf.org/raptor/). For detailed instructions about wiring up Raptor with Textmate, see the [#graph-visualization](section above).
+
+![Screenshot showing list of available target formats the user may choose from](./Support/img/screenshot-converter.png "Screenshot showing list of available target formats the user may choose from")
 
 ## Installation
 
@@ -89,14 +97,7 @@ Turtle.tmbundle was created by [Peter Geil](http://github.com/peta). Feedback is
 
 ### Please help making TextMate2 even more awesome!
 
-One of the features EVERY user could greatly benefit from, is a more powerful auto-completion feature. However, the implementation of such a feature takes a considerable amount of time. Unfortunately time is one of those goods, Allan (the creator of TextMate) and the other guy(s) from Macromates don't have enough from. So I had to idea to start a crowdfunding initiative for raising enough budget for hiring a competent Objecttive-C/Cocoa developer that will implement the following features:
-
-+ [Issue #12 – Add advanced formatting and allow additional info/documentation for list items/suggestions](https://github.com/textmate/dialog/issues/12)
-+ [Add flag that determines if given search string must appear at beginning or anywhere inside a suggestion](https://github.com/textmate/dialog/issues/10)
-
-If can you see the potential of such features, too, and want to contribute something, please give these issues an upvote (just type "+1" and submit) and stay tuned, because the crowdfunding initiative might start very soon.
-
-The crowdfunding idea does not reflect the opinion of Macromates, nor any associated party. I worked it out and it will also be curated by myself.
+One of the features EVERY user could greatly benefit from, is a more powerful auto-completion feature. However, the implementation of such a feature takes a considerable amount of time. Unfortunately time is one of those goods, Allan (the creator of TextMate) and the other guy(s) from Macromates don't have enough from. So I had to idea to start a crowdfunding campaign to raising enough funds for working two months as full-time contributor to the TextMate 2 project. [Visit my campaign page and contribute!](http://www.indiegogo.com/projects/textmate-dialog2-sprint).
 
 ## Roadmap
 
