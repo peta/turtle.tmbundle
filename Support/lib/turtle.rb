@@ -1,24 +1,5 @@
 #!/usr/bin/env ruby
 
-DEBUG = false
-
-SUPPORT_DIR = ENV['TM_BUNDLE_SUPPORT']
-CACHE_DIR = "#{ENV['TM_BUNDLE_SUPPORT']}/cache"
-CACHE_LIFETIME = 60*60*24
-IMG_DIR = "#{ENV['TM_BUNDLE_SUPPORT']}/img"
-
-ICONS = {
-  "Prefix" => "#{IMG_DIR}/item-icons/p_red.png",
-  "M"      => "#{IMG_DIR}/item-icons/Macros.png",
-  "L"      => "#{IMG_DIR}/item-icons/Languages.png",
-  "Doc"    => "#{IMG_DIR}/item-icons/Template Files.png",
-  "T"      => "#{IMG_DIR}/item-icons/Templates.png",
-  "S"      => "#{IMG_DIR}/item-icons/Snippets.png",
-  "P"      => "#{IMG_DIR}/item-icons/Preferences.png",
-  "D"      => "#{IMG_DIR}/item-icons/Drag Commands.png",
-  "C"      => "#{IMG_DIR}/item-icons/Commands.png"
-}
-
 require "net/http"
 require "uri"
 require "yaml"
@@ -29,7 +10,31 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/current_word'
 
-def resolve_URI(of_prefix, fpath)
+module Turtle
+# BEGIN MODULE
+
+DEBUG = false
+SUPPORT_DIR = ENV['TM_BUNDLE_SUPPORT']
+CACHE_DIR = "#{ENV['TM_BUNDLE_SUPPORT']}/cache"
+CACHE_LIFETIME = 60*60*24
+IMG_DIR = "#{ENV['TM_BUNDLE_SUPPORT']}/img"
+ICONS = {
+  "Prefix" => "#{IMG_DIR}/item-icons/p_red.png",
+  "Rsc_Class" => "#{IMG_DIR}/item-icons/upper_c_green.png",
+  "Rsc_Prop" => "#{IMG_DIR}/item-icons/upper_p_purple.png",
+=begin
+  "M"      => "#{IMG_DIR}/item-icons/Macros.png",
+  "L"      => "#{IMG_DIR}/item-icons/Languages.png",
+  "Doc"    => "#{IMG_DIR}/item-icons/Template Files.png",
+  "T"      => "#{IMG_DIR}/item-icons/Templates.png",
+  "S"      => "#{IMG_DIR}/item-icons/Snippets.png",
+  "P"      => "#{IMG_DIR}/item-icons/Preferences.png",
+  "D"      => "#{IMG_DIR}/item-icons/Drag Commands.png",
+  "C"      => "#{IMG_DIR}/item-icons/Commands.png"
+=end
+}
+
+def Turtle.resolve_URI(of_prefix, fpath)
   # Try to determine the IRI associated with prefix in current document
   if not fpath.nil? and File.exists? fpath
     cmd = <<-'CMD'
@@ -49,8 +54,9 @@ def resolve_URI(of_prefix, fpath)
   return uri
 end
 
-module Turtle
-# BEGIN MODULE
+# In order to make Dialog2 display custom icons in front of
+# list items, they must be explicitly "registered" first. This isn't obvious.
+`"$DIALOG" images --register #{e_sh ICONS.to_plist}`
 
 class Prefixes
   PREFIX_FPATH = "#{CACHE_DIR}/prefixes.yml"
@@ -156,13 +162,16 @@ class Model
     return @loaded
   end
   
+  # Return Resource element with given identifier
   def resource(id)
+    XPath.first(@xml, "//resource[@id='#{id}']")
   end
-    
+  
+  # Return all Resource defined in current Model
   def resources(type = 'all')
     return nil if not available?
-    filter = (type == 'all') ? '' : "[@type=#{type}]"
-    @xml.each_element("//resource#{filter}/@id")
+    filter = (type == 'all') ? '' : "[@type='#{type}']"
+    XPath.match(@xml, "//resource#{filter}[@id]")
   end
     
   def explain(id)
