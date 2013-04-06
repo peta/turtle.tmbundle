@@ -36,7 +36,7 @@ if not left_scope.index('meta.spec.prefixID.turtle').nil?
     })      
   end
     
-  TextMate::UI.complete(choices, :case_insensitive =&gt; true, :extra_chars=&gt;'_&lt;&gt;:.@', :images=&gt;ICONS)
+  TextMate::UI.complete(choices, :case_insensitive =&gt; true, :extra_chars=&gt;'_&lt;&gt;:.@')
   TextMate::exit_show_tool_tip
   done = true
 end
@@ -48,14 +48,21 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
   word = word[0..-2] if word.end_with? '.'
   word_frags = word.split(':')
   # Try to determine the IRI associated with prefix in current document
-  iri = resolve_URI word_frags[0], ENV['TM_FILEPATH']
+  iri = Turtle.resolve_URI word_frags[0], ENV['TM_FILEPATH']
   # Build model and query it
   model = Turtle::Model.new(word_frags[0], iri)
   if (model.available?)
-    choices = []
+    choices = []    
     model.resources.each do |rsc|
-      rsc = rsc.to_s
-      choices.push({ "display" =&gt; rsc })      
+      # TODO: Add caching layer for data used by UI.complete
+      choices.push({
+        "display" =&gt; rsc.attributes['id'].to_s,
+        'image' =&gt; case rsc.attributes['type'].to_s
+                     when 'class' then 'Rsc_Class'
+                     when 'property' then 'Rsc_Prop'
+                     else ''
+                   end
+      })      
     end
     TextMate::UI.complete(choices, :case_insensitive =&gt; false, :initial_filter =&gt; word_frags[1], :extra_chars=&gt;'_-.:\\')
     TextMate::exit_discard
@@ -64,7 +71,7 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
 end
 
 # Default behaviour -- don't replace anything but show it as tooltip instead
-if DEBUG and not done
+if Turtle::DEBUG and not done
   puts 'TM_SCOPE: '+ENV['TM_SCOPE']
   if not ENV['TM_SCOPE_LEFT'].nil?
     puts 'TM_SCOPE_LEFT: '+ENV['TM_SCOPE_LEFT']
