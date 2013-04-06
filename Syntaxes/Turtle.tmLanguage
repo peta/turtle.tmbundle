@@ -588,7 +588,7 @@
 					<key>comment</key>
 					<string>Allow inline comments</string>
 					<key>match</key>
-					<string>(?&lt;=\s)(#.+$)</string>
+					<string>(#.+$)</string>
 					<key>name</key>
 					<string>comment.line.number-sign.turtle</string>
 				</dict>
@@ -622,7 +622,7 @@
 				</dict>
 				<dict>
 					<key>match</key>
-					<string>(?&lt;=[ ])(a)(?=[ ])</string>
+					<string>\b(a)(?=[ ])</string>
 					<key>name</key>
 					<string>keyword.other.typeOf.turtle</string>
 				</dict>
