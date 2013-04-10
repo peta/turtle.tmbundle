@@ -52,16 +52,20 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
   # Build model and query it
   model = Turtle::Model.new(word_frags[0], iri)
   if (model.available?)
-    choices = []    
-    model.resources.each do |rsc|
-      # TODO: Add caching layer for data used by UI.complete
+    choices = []
+    icons = {
+      'class'    =&gt; 'Rsc_Class',
+      'property' =&gt; 'Rsc_Prop',
+      'datatype' =&gt; 'Rsc_Datatype'
+    }
+    # TODO: Add caching layer for data used by UI.complete
+    model.resources.sort! do |a,b|
+      # First order by the resource type, then alphabetically by their name
+      [a.attributes['type'], a.attributes['id']] &lt;=&gt; [b.attributes['type'], b.attributes['id']]
+    end.each do |rsc|      
       choices.push({
         "display" =&gt; rsc.attributes['id'].to_s,
-        'image' =&gt; case rsc.attributes['type'].to_s
-                     when 'class' then 'Rsc_Class'
-                     when 'property' then 'Rsc_Prop'
-                     else ''
-                   end
+        'image' =&gt; icons[rsc.attributes['type'].to_s] || 'Unknown'
       })      
     end
     TextMate::UI.complete(choices, :case_insensitive =&gt; false, :initial_filter =&gt; word_frags[1], :extra_chars=&gt;'_-.:\\')
