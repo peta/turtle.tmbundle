@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>fileTypes</key>
+	<array>
+		<string>sparql</string>
+	</array>
+	<key>keyEquivalent</key>
+	<string>^~S</string>
+	<key>name</key>
+	<string>SPARQL</string>
+	<key>patterns</key>
+	<array>
+		<dict>
+			<key>include</key>
+			<string>source.turtle</string>
+		</dict>
+	</array>
+	<key>scopeName</key>
+	<string>source.sparql</string>
+	<key>uuid</key>
+	<string>A66816FF-6EF0-46F7-8F67-438339EF61C9</string>
+</dict>
+</plist>
