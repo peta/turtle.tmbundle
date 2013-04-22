@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/bin/env ruby -wKU
+
+require 'net/http'
+require 'uri'
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
+require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
+require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+
+SECTION_MARKER = "#---\n"
+
+whole_doc = STDIN.read
+DOC_LINES = whole_doc.lines.to_a
+
+# Determine line number where query text starts at
+if ENV['TM_LINE_NUMBER'].nil?  
+  # No line number provided, use Plan B
+  # 8:6-16:7
+  if ENV['TM_SELECTION'] =~ /^(\d+)/
+    current_line = Regexp.last_match[1].to_i
+  else
+    # Can't recover
+    unless ENV['TM_SELECTED_TEXT'].nil?
+      TextMate::UI::alert('error', 'Something weird happened', 'Can\'t determine the line number of where your selection starts')
+      TextMate::exit_discard
+    end
+  end
+else
+  current_line = ENV['TM_LINE_NUMBER'].to_i
+end
+
+# Get query text that should be executed
+if ENV['TM_SELECTED_TEXT'].nil?
+  if whole_doc.index(SECTION_MARKER).nil?
+    # No sections found, use whole document
+    qry = whole_doc
+    strategy = :top_bottom
+  else
+    # Use current section
+    qry = ''
+    from_line = 0
+    to_line = DOC_LINES.count
+    current_line.downto(0) do |no|
+      if DOC_LINES[no] == SECTION_MARKER
+        from_line = no
+        break
+      end
+    end
+    current_line.upto(DOC_LINES.count) do |no|
+      if DOC_LINES[no] == SECTION_MARKER
+        to_line = no
+        break
+      end
+    end
+    qry = DOC_LINES[from_line..to_line].join
+    strategy = :bottom_up
+  end  
+else
+  qry = ENV['TM_SELECTED_TEXT']
+  strategy = :bottom_up
+end
+
+return if qry.strip.empty?
+
+# Determine needed endpoint type
+# TODO: Make it mo bulletproof (e.g. don't match inside strings)
+endpoint_type = (qry =~ /(INSERT|DELETE|LOAD|CLEAR|CREATE|DROP|WITH)/) ? :update : :query
+endpoint = nil
+# First scan selection/document for magic comments
+line_pattern =  /^#(#{endpoint_type.to_s.upcase})\s+&lt;([^&gt;]+)&gt;/
+case strategy
+  when :top_bottom
+    # Scan whole document, start at first line
+    DOC_LINES.each do |line|
+      if line =~ line_pattern
+        endpoint = Regexp.last_match[2]
+        break
+      end
+    end
+  when :bottom_up
+    # Scan only the preceding document part, start at beginning of selection
+    # (there can be multiple magic comments in a doc and we assume that the one
+    # the comes right before the selected query text is meant for the query itself)    
+    current_line.downto(0) do |no|      
+      if DOC_LINES[no] =~ line_pattern
+        endpoint = Regexp.last_match[2]
+        break
+      end
+    end
+end
+# when nothing found, check environment and finally ask user
+if endpoint.nil?
+  # Check if an endpoint is set by an ENV variable
+  if ENV['TM_SPARQL_'+endpoint_type.to_s.upcase]
+    endpoint = ENV['TM_SPARQL_'+endpoint_type.to_s.upcase]
+  # Ask user
+  else
+    endpoint = TextMate::UI::request_string(
+      :title =&gt; 'Choose SPARQL Endpoint',
+      :prompt =&gt; 'Please enter URL of SPARQL '+endpoint_type.to_s.upcase+' Service')    
+  end
+  # Give up
+  puts 'No endpoint found'
+  TextMate::exit_discard if endpoint.to_s.strip.empty?
+end
+
+
+
+
+def html_header(succeeded, code, msg = '')
+  style = succeeded ? 'background-color:#118833;color:#ffffff;' : 'background-color:#cc4444;color:#ffffff;'
+  html = &lt;&lt;-HTML
+  &lt;div style="position:fixed;top:0;left:0;right:0;font-family:\'Lucida Grande\';#{style}"&gt;
+    &lt;p style="font-weight:bold;font-size:30px;float:left;margin: 0 20px 0 0;padding: 15px 0 15px 15px;"&gt;#{code}&lt;/p&gt;
+    &lt;p style="margin: 0 20px 0 0;padding: 23px 0 15px 15px;line-height: 1.1;"&gt;#{msg}&lt;/p&gt;
+    &lt;div style="clear:both;display:inline;"&gt;&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style="height:50px;"&gt;&lt;/div&gt;
+  HTML
+  return html
+end
+
+# Query the SPARQL service and show result to the user
+endpoint_url = URI(endpoint)
+begin
+  Net::HTTP.start(endpoint_url.host, endpoint_url.port) do |http|
+    if endpoint_type == :query
+      url = endpoint_url.to_s + '?query='+URI.encode(qry)
+      request = Net::HTTP::Get.new(url, { 
+        'Accept' =&gt; 'text/html, text/plain'
+      })      
+    else
+      request = Net::HTTP::Post.new(endpoint_url.path, {
+        'Accept' =&gt; 'text/plain'
+      })
+      request.set_form_data({ 'update' =&gt; qry })
+    end
+    resp = http.request(request)
+    puts html_header( (resp.is_a? Net::HTTPSuccess), resp.code, 'Result of SPARQL '+endpoint_type.to_s.upcase+' query to &lt;u&gt;'+endpoint+'&lt;/u&gt;')
+    if resp['Content-Type'].index('text/html')
+      puts resp.body
+    else
+      puts '&lt;pre style="line-height:0.8em;"&gt;'+htmlize(resp.body)+'&lt;/pre&gt;'
+    end
+  end
+rescue
+  TextMate::UI::alert('error', 'Something went wrong', 'No further information available.')
+  TextMate::exit_discard
+end</string>
+	<key>input</key>
+	<string>document</string>
+	<key>inputFormat</key>
+	<string>text</string>
+	<key>keyEquivalent</key>
+	<string>@r</string>
+	<key>name</key>
+	<string>Execute SPARQL Query</string>
+	<key>outputCaret</key>
+	<string>afterOutput</string>
+	<key>outputFormat</key>
+	<string>html</string>
+	<key>outputLocation</key>
+	<string>newWindow</string>
+	<key>scope</key>
+	<string>source.sparql</string>
+	<key>semanticClass</key>
+	<string>process.external.run.sparql.turtle</string>
+	<key>uuid</key>
+	<string>EF6E5E32-54FD-4AE1-B35E-CC16DFE18D13</string>
+	<key>version</key>
+	<integer>2</integer>
+</dict>
+</plist>
