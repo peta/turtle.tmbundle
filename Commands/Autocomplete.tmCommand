@@ -20,7 +20,8 @@ left_scope = (ENV['TM_SCOPE_LEFT'].nil?) ? '' : ENV['TM_SCOPE_LEFT']
 done = false
 
 # Autocompletion @prefix directives
-if not left_scope.index('meta.spec.prefixID.turtle').nil?
+if not left_scope.index('meta.spec.prefixID.turtle').nil? or 
+    not left_scope.index('meta.spec.sparqlPrefix.turtle').nil?
   given_pref = Word::current_word '(\S*)'
   choices = []
   prefixes = Turtle::Prefixes.get_all()
@@ -43,9 +44,9 @@ end
 
 # Autocompletion for prefixed resource QNames
 if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('support.variable.PN_LOCAL.turtle')
-  word = Word::current_word '(\S*):(\S*)(?!\.\b)'
+  word = Word::current_word '(\S*):(\S*)(?!(?:\.|;)\b)'
   # Chop off trailing dot (you got it ... language grammar isn't that solid)
-  word = word[0..-2] if word.end_with? '.'
+  word = word[0..-2] if (word =~ /[.;]$/)
   word_frags = word.split(':')
   # Try to determine the IRI associated with prefix in current document
   iri = Turtle.resolve_URI word_frags[0], ENV['TM_FILEPATH']
@@ -100,11 +101,11 @@ end
 	<key>outputCaret</key>
 	<string>afterOutput</string>
 	<key>outputFormat</key>
-	<string>snippet</string>
+	<string>text</string>
 	<key>outputLocation</key>
 	<string>atCaret</string>
 	<key>scope</key>
-	<string>source.turtle</string>
+	<string>source.turtle, source.sparql</string>
 	<key>uuid</key>
 	<string>5B3DDC52-4AF7-45E5-AC26-837BF81208FE</string>
 	<key>version</key>
