@@ -13,6 +13,9 @@ require 'uri'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
+require ENV['TM_SUPPORT_PATH'] + '/lib/progress'
+
+require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview'
 
 SECTION_MARKER = "#---\n"
 
@@ -114,46 +117,64 @@ end
 
 
 
-def html_header(succeeded, code, msg = '')
+def show_html_header(succeeded, code, msg = '')
+  html_header('SPARQL Query Result')
   style = succeeded ? 'background-color:#118833;color:#ffffff;' : 'background-color:#cc4444;color:#ffffff;'
   html = &lt;&lt;-HTML
-  &lt;div style="position:fixed;top:0;left:0;right:0;font-family:\'Lucida Grande\';#{style}"&gt;
+  &lt;div class="html-header" style="position:absolute;top:27px;left:0;right:0;font-family:\'Lucida Grande\';#{style}"&gt;
     &lt;p style="font-weight:bold;font-size:30px;float:left;margin: 0 20px 0 0;padding: 15px 0 15px 15px;"&gt;#{code}&lt;/p&gt;
     &lt;p style="margin: 0 20px 0 0;padding: 23px 0 15px 15px;line-height: 1.1;"&gt;#{msg}&lt;/p&gt;
     &lt;div style="clear:both;display:inline;"&gt;&lt;/div&gt;
   &lt;/div&gt;
-  &lt;div style="height:50px;"&gt;&lt;/div&gt;
+  &lt;div style="height:50px;"&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;/div&gt;
   HTML
   return html
+end
+
+cancel_proc = Proc.new do
+  raise Exception.new 'Execution was cancelled by the user'
+  Kernel.exit
 end
 
 # Query the SPARQL service and show result to the user
 endpoint_url = URI(endpoint)
 begin
-  Net::HTTP.start(endpoint_url.host, endpoint_url.port) do |http|
-    if endpoint_type == :query
-      url = endpoint_url.to_s + '?query='+URI.encode(qry)
-      request = Net::HTTP::Get.new(url, { 
-        'Accept' =&gt; 'text/html, text/plain'
-      })      
-    else
-      request = Net::HTTP::Post.new(endpoint_url.path, {
-        'Accept' =&gt; 'text/plain'
-      })
-      request.set_form_data({ 'update' =&gt; qry })
-    end
-    resp = http.request(request)
-    puts html_header( (resp.is_a? Net::HTTPSuccess), resp.code, 'Result of SPARQL '+endpoint_type.to_s.upcase+' query to &lt;u&gt;'+endpoint+'&lt;/u&gt;')
-    if resp['Content-Type'].index('text/html')
-      puts resp.body
-    else
-      puts '&lt;pre style="line-height:0.8em;"&gt;'+htmlize(resp.body)+'&lt;/pre&gt;'
+  TextMate.call_with_progress(
+      :title =&gt; 'Executing query',
+      :message =&gt; 'Please wait while the SPARQL query is being executed...',
+      :indeterminate =&gt; true,
+      :cancel =&gt; cancel_proc) do 
+    Net::HTTP.start(endpoint_url.host, endpoint_url.port) do |http|
+      # Remove request timeout limitation (e.g. needed some some DBpedia queries)
+      http.read_timeout = nil
+      if endpoint_type == :query
+        url = endpoint_url.to_s + '?query='+CGI::escape(qry)
+        request = Net::HTTP::Get.new(url, { 
+          'Accept' =&gt; 'text/html, text/plain'
+        })      
+      else
+        request = Net::HTTP::Post.new(endpoint_url.path, {
+          'Accept' =&gt; 'text/plain'
+        })
+        request.set_form_data({ 'update' =&gt; qry })
+      end
+      resp = http.request(request)
+      puts show_html_header( (resp.is_a? Net::HTTPSuccess), resp.code, 'Result of SPARQL '+endpoint_type.to_s.upcase+' query to &lt;u&gt;'+endpoint+'&lt;/u&gt;')
+      if (not resp['Content-Type'].nil?) and resp['Content-Type'].index('text/html')
+        puts resp.body
+      else
+        puts '&lt;pre style="line-height:0.8em;"&gt;'+htmlize(resp.body)+'&lt;/pre&gt;'
+      end
     end
   end
-rescue
-  TextMate::UI::alert('error', 'Something went wrong', 'No further information available.')
+rescue Exception =&gt; exc
+  if exc.message != 'Execution was cancelled by the user'
+    TextMate::UI::alert(:critical, 'Something went wrong', exc.inspect)
+  end
   TextMate::exit_discard
-end</string>
+end
+
+html_footer()</string>
 	<key>input</key>
 	<string>document</string>
 	<key>inputFormat</key>
