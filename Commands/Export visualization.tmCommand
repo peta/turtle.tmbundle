@@ -86,7 +86,7 @@ fi
 	<key>scope</key>
 	<string>source.turtle</string>
 	<key>semanticClass</key>
-	<string>process.external.save</string>
+	<string>process.external.save.turtle</string>
 	<key>uuid</key>
 	<string>C2509D61-BA70-4202-AD5A-9307266295C5</string>
 	<key>version</key>

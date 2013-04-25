@@ -21,7 +21,7 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
     word = word[0..-2] if word.end_with? '.'
     frags = word.split(':')
     # Try to determine the IRI associated with prefix in current document
-    iri = resolve_URI frags[0], ENV['TM_FILEPATH']
+    iri = Turtle.resolve_URI frags[0], ENV['TM_FILEPATH']
     if 2 == frags.length
       model = Turtle::Model.new(frags[0], iri)
       if model.available?
