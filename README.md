@@ -5,11 +5,12 @@ Totally awesome bundle for Turtle – the terse RDF triple language.
 
 It consists of:
 
-+ Language grammar
++ Language grammar for Turtle and SPARQL 1.1
++ Powerful (!) auto-completion (live-aggregated)
++ Documentation for classes and roles/properties at your fingertips (live-aggregated)
++ Interactive SPARQL query scratchpad
 + Some snippets (prefixes and document skeleton)
-+ Powerful (!) auto-completion (Live-aggregated)
-+ Documentation for classes and roles/properties at your fingertips (Live-aggregated)
-+ Solid syntax validation 
++ Solid syntax validation
 + Commands for instant graph visualization of a knowledge base (requires Graphviz and Raptor)
 + Automatic removal of unused prefixes
 + Conversion between all common RDF formats
@@ -20,29 +21,23 @@ See [Screenshots](#screenshots)
 
 The language grammar now covers the official W3C parser spec (as proposed in the latest CR released on Feb 19th 2013). However, there are still one/two particularities that differ, but you shouldn't notice them during your daily work. In the case you notice some weird behaviour (most obvious sign: broken syntax highlighting), please file a bug in the [project's issue tracker](https://github.com/peta/turtle.tmbundle/issues "Here at GitHub").
 
-## Snippets
-
-Right now the following snippets are included:
-
-+ Basic document skeleton
-+ "Smart" prefix/base directives (hit tab to see it work)
-+ A set of basic prefix directives (Boring! The cool kids instead use the fancy auto-completion)
+The language grammar also recognizes keywords and builtin functions from the latest SPAR[QU]L 1.1 language specification. Further there is basic autocompletion (`ALT + ESC`) for the aforementioned.
 
 ## Powerful auto-completion
 
 The Turtle bundle offers auto-completion at two levels:
 
-__NOTE: *When determining IRIs associated with a given QName prefix, local prefix declarations always have precedence over those given by prefix.cc. So when you mess up IRIs in your @prefix directives, auto-completion might not work as expected.*__
+__NOTE: *When determining IRIs associated with a given prefix name, local prefix declarations always have precedence over those given by prefix.cc. So when you mess up IRIs in your @prefix directives, auto-completion might not work as expected.*__
 
-### Auto-completion when declaring prefixes
+### Auto-completion for @prefix directives
 
 When you invoke the `Autocomplete` command (ALT + ESCAPE) within the scope of a prefix directive (right after the `@prefix ` keyword), the Turtle bundle fetches a list of all prefixes registered at [prefix.cc](http://prefix.cc) and displays them nicely in a auto-complete dropdown box. Once you have chosen an and confirmed your selection, the prefix directive is automagically updated with the prefix and its according URI. (Note: the fetched data is locally cached for 24h)
 
 __NOTE: *Auto-completion for prefix declarations is case-insensitive*__
 
-### Auto-completion for prefixed names (a.k.a. resource identifiers)
+### Auto-completion for the local part of prefixed name IRIs
 
-When you invoke the `Autocomplete` command (ALT + ESCAPE) within the scope of a prefixed name (e.g. right after `my:` or at `my:a...`), the Turtle bundle determines the actual URI that is abbreviated by the prefix and checks if there is a machine readable Vocabulary/Ontology document available (currently only RDF/S and OWL documents in the XML serialization format are supported). When one is found, it is live-aggregated and all of its Classes and Roles/Properties are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Autocomplete` command (ALT + ESCAPE) within the scope of a prefixed name (e.g. right after `my:` or at `my:a...`), the Turtle bundle determines the actual URI that is abbreviated by the prefixed namespace and checks if there is a machine readable Vocabulary/Ontology document available (currently only RDF/S and OWL documents in the XML serialization format are supported -- but with known issues). When one is found, it is live-aggregated and all of its Classes and Roles/Properties are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
 
 __NOTE: *Auto-completion for prefixed names is case-sensitive*__
 
@@ -50,9 +45,126 @@ __NOTE: *Auto-completion for prefixed names is case-sensitive*__
 
 For now, the Turtle bundle relies on [prefix.cc](http://prefix.cc) for mapping prefixes to URIs (required for all live-aggregations). The problem however is, that the available listings only contain one IRI per prefix (the one with the highest ranking) and not every IRI offers a machine readable vocabulary/ontology representation, what in turn means that for certain prefixes no auto-completion data is available. You can help to fix this, by visiting the according page at prefix.cc (URL scheme looks like `http://prefix.cc/<THE_PREFIX>`; without angle brackets of course) and up/downvoting the according URIs.
 
+The automatic aggregation of machine-readable vocabulary/ontology descriptions is working in principle but still has some shortcomings. (See the Github issue tracker) I will overwork that part when I have some more spare time and/or the need just arises.  
+
 ## Documentation for classes, roles/properties and individuals
 
-When you invoke the `Documentation for Resource` command (CTRL + H) within the scope of a prefixed QName (e.g. `my:Dog`), the Turtle bundle looks up if there are any informal descriptions available (like description texts, HTTP URLs to human-readable docs, asf.) and if so, displays them to the user. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Documentation for Resource` command (CTRL + H) within the scope of a prefixed name IRI (e.g. `my:Dog`), the Turtle bundle looks up if there are any informal descriptions available (like description texts, HTTP URLs to human-readable docs, asf.) and if so, displays them to the user. (Note: the fetched data is locally cached for 24h)
+
+__NOTE: *That function also suffers from the issues outlined in the previous section.*__
+
+## Interactive SPARQL query scratchpad ##
+
+All (web-based) query forms that crossed by cursor had one thing in common – they suck(ed). Syntax highlighting? Efficient workflows (like trial-error-roundtripping)? Of course NOT. So I decided to add something similar to TextMate. The *Execute SPARQL Query* command may seem self-explaining, but it hides two important features:
+
++ first of all, it supports multiple sections in a single document
++ it is aware of custom magic comments types for specifying different SPARQL Query/Update services (aka *endpoints*)
++ query results are nicely displayed as textual tables (when supported by the SPARQL endpoint) in a preview window
+
+### Multiple sections/snippets syntax
+
+You can have one document contain multiple (independent) sections. This is e.g. useful when developing complex queries where we usually follow an iterative approach. When running the `Execute SPARQL Query` command, it will automatically figure out what your intention is and act accordingly. It assumes that you will always do one of the following tasks:
+
+1. Execute the whole document
+2. Execute your current selection
+3. Execute the section where your cursor is currently positioned in 
+
+A simple document with multiple sections could look like this:
+
+```
+
+	#QUERY  <http://example1.com/ds/query>
+	#UPDATE <http://example1.com/ds/update>
+
+	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+	PREFIX : <urn:example#>
+
+	INSERT DATA { :instanceA rdfs:label 'Human-readable label of instanceA'. }
+
+	#---
+	PREFIX : <urn:example#>
+	SELECT (COUNT(?subj) AS ?n_subjs)
+	WHERE { ?subj a :ClassA }
+
+	#---
+	PREFIX : <urn:example#>
+	SELECT ?g
+	WHERE { GRAPH ?g {} }
+	
+```
+
+As you probably notice, multiple sections are separated with the marker string `#---` written on a separate line.
+
+###  Magic comment syntax for endpoints
+
+These magic comments have the following syntax:
+
++ `#QUERY <http://example.org/sparql` to describe a SPARQL endpoint (read-only)
++ `#UPDATE <http://example.org/update` to describe a SPARUL endpoint (write-only)
+
+You can specify multiple magic comments throughout your document. When executing the query command, it will automatically determine the required endpoint type depending on the SPARQL commands that occur in your query. After that, it scans your document for magic comments where it uses the following strategies:
+
++ _Top-down:_ When the whole document is used as query, it scans every line beginning at the top until it finds a suitable magic comment 
++ _Bottom-up:_ When only the current section/selection is queried, it scans every line from bottom to top beginning at the line where the section/selection starts until it finds a suitable magic comment
+
+When no suitable magic comment was found, the command consults TextMate's environment variables (can be set in the application preferences). More precisely it looks for the following two variables: 
+
++ `TM_SPARQL_QUERY`
++ `TM_SPARQL_UPDATE`
+
+that should contain the HTTP(S) URL to SPAR[QU]L endpoints. When even this fails, YOU (the user) are prompted to enter an endpoint URL. 
+
+Here is an example document with multiple sections and multiple endpoint magic comments:
+
+```
+
+	#QUERY  <http://example.com/ds/query>                 
+	#UPDATE <http://example.com/tbox/update>
+	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \
+	PREFIX : <urn:example#>                               |
+	INSERT DATA {                                         | http://example.com/tbox/update
+	    :ClassB a rdfs:Class;                             |
+	        rdfs:subClassOf :ClassA.                      |
+	}                                                     /
+
+	#---
+	#UPDATE <http://example.com/abox/update>
+	PREFIX : <urn:example#>                               \
+	INSERT DATA {                                         |
+	    :instA a :ClassB;                                 | http://example.com/abox/update
+	        rdfs:label 'Instance of ClassB'.              |
+	}                                                     /
+
+	#---
+	PREFIX : <urn:example#>                               \
+	SELECT (COUNT(?subj) AS ?n_subjs)                     | http://example.com/ds/query
+	WHERE { ?subj a :ClassA }                             /
+
+	#---
+	#QUERY <http://dbpedia.org/sparql>                    
+	SELECT DISTINCT ?s ?label                             \
+	WHERE {                                               | http://dbpedia.org/sparql
+	    ?s <http://dbpedia.org/property/season> ?o .      |
+	    ?s rdfs:label ?label                              |
+	}                                                     /
+
+	#---
+	BASE <http://dbpedia.org/>                            \
+	SELECT DISTINCT ?s ?label                             |
+	WHERE {                                               | http://dbpedia.org/sparql
+	    ?s rdfs:label ?label                              |
+	    FILTER( CONTAINS( STR(?label), 'The Wire') )      |
+	}                                                     /
+	
+```
+
+## Snippets
+
+Right now the following snippets are included:
+
++ Basic document skeleton
++ "Smart" prefix/base directives (hit tab to see it work)
++ A set of basic prefix directives (Boring! The cool kids instead use the fancy auto-completion)
 
 ## Syntax validation
 
@@ -86,6 +198,8 @@ The Turtle bundle is now officially available through the Textate bundle install
 ## Screenshots
 
 ![Screenshot of expanded bundle menu](./Support/img/screenshot-menu.png "Screenshot of expanded bundle menu")
+
+![Screenshot showing SPARQL execution](./Support/img/screenshot-sparql-exec.png "Screenshot showing SPARQL execution")
 
 ![Screenshot editor showing auto-completion for resource identifier and documentation](./Support/img/screenshot-editor.png "Screenshot editor showing auto-completion for resource identifier and documentation")
 
