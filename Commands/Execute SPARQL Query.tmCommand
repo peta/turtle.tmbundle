@@ -39,6 +39,9 @@ else
   current_line = ENV['TM_LINE_NUMBER'].to_i
 end
 
+# Line numbering starts internally at 0
+current_line -= 1
+
 # Get query text that should be executed
 if ENV['TM_SELECTED_TEXT'].nil?
   if whole_doc.index(SECTION_MARKER).nil?
@@ -46,19 +49,19 @@ if ENV['TM_SELECTED_TEXT'].nil?
     qry = whole_doc
     strategy = :top_bottom
   else
-    # Use current section
+    # Use current section    
     qry = ''
     from_line = 0
     to_line = DOC_LINES.count
     current_line.downto(0) do |no|
       if DOC_LINES[no] == SECTION_MARKER
-        from_line = no
+        from_line = (no + 1)
         break
       end
-    end
+    end    
     current_line.upto(DOC_LINES.count) do |no|
       if DOC_LINES[no] == SECTION_MARKER
-        to_line = no
+        to_line = (no - 1)
         break
       end
     end
@@ -131,7 +134,7 @@ def show_html_header(succeeded, code, msg = '')
   return html
 end
 
-cancel_proc = Proc.new do
+cancel_proc = Proc.new do  
   raise Exception.new 'Execution was cancelled by the user'
   Kernel.exit
 end
@@ -149,13 +152,9 @@ begin
       http.read_timeout = nil
       if endpoint_type == :query
         url = endpoint_url.to_s + '?query='+CGI::escape(qry)
-        request = Net::HTTP::Get.new(url, { 
-          'Accept' =&gt; 'text/html, text/plain'
-        })      
+        request = Net::HTTP::Get.new(url, { 'Accept' =&gt; 'text/html, text/plain' })      
       else
-        request = Net::HTTP::Post.new(endpoint_url.path, {
-          'Accept' =&gt; 'text/plain'
-        })
+        request = Net::HTTP::Post.new(endpoint_url.path, { 'Accept' =&gt; 'text/plain' })
         request.set_form_data({ 'update' =&gt; qry })
       end
       resp = http.request(request)
