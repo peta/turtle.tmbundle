@@ -19,7 +19,7 @@ TextMate::require_cmd 'rapper'
 RAPPER_TPL = 'rapper --count -i guess \'%s\' 2&gt;&amp;1'
 FPATH = ENV['TM_FILEPATH']
 FPATH_TOKEN = '&lt;FPATH&gt;'
-FURL = 'file://'+e_url(FPATH)
+FURL = 'file://'+FPATH
 FURL_TOKEN = '&lt;FURL&gt;'
 
 # Helpers
