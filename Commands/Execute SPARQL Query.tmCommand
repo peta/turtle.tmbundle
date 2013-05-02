@@ -129,7 +129,19 @@ def show_html_header(succeeded, code, msg = '')
     &lt;p style="margin: 0 20px 0 0;padding: 23px 0 15px 15px;line-height: 1.1;"&gt;#{msg}&lt;/p&gt;
     &lt;div style="clear:both;display:inline;"&gt;&lt;/div&gt;
   &lt;/div&gt;
-  &lt;div style="height:50px;"&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;/div&gt;
+  HTML
+  return html
+end
+
+def show_query_log(qry)
+  qry = htmlize(qry)
+  html = &lt;&lt;-HTML
+  &lt;div class="query-log" style="margin:100px 20px 0 20px;"&gt;
+    &lt;div style="text-align:right;"&gt;
+        &lt;a href="#" onclick="var q=this.parentNode.nextElementSibling.style;q.display=(q.display=='none')?'block':'none';return false;"&gt;Show/hide the executed query&lt;/a&gt;
+    &lt;/div&gt;    
+    &lt;pre style="display:none;line-height:0.8em;"&gt;#{qry}&lt;/pre&gt;
+  &lt;/div&gt;
   HTML
   return html
 end
@@ -158,6 +170,7 @@ begin
         request.set_form_data({ 'update' =&gt; qry })
       end
       resp = http.request(request)
+      puts show_query_log(qry)
       puts show_html_header( (resp.is_a? Net::HTTPSuccess), resp.code, 'Result of SPARQL '+endpoint_type.to_s.upcase+' query to &lt;u&gt;'+endpoint+'&lt;/u&gt;')
       if (not resp['Content-Type'].nil?) and resp['Content-Type'].index('text/html')
         puts resp.body
