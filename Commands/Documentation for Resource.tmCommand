@@ -49,7 +49,7 @@ end</string>
 	<key>outputLocation</key>
 	<string>discard</string>
 	<key>scope</key>
-	<string>source.turtle meta.spec.PNAME_LN.turtle</string>
+	<string>source.turtle meta.spec.PNAME_LN.turtle, source.sparql meta.spec.PNAME_LN.turtle</string>
 	<key>uuid</key>
 	<string>533BE8C9-42EF-48EF-A1FC-5E831DC46059</string>
 	<key>version</key>
