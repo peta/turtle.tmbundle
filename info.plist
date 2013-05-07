@@ -34,12 +34,13 @@
 			<dict>
 				<key>items</key>
 				<array>
-					<string>8AEC30D0-7C48-435E-A9DB-B5BB3C550905</string>
-					<string>------------------------------------</string>
 					<string>A436E557-CB60-4F4E-8EAA-BE129339E5BA</string>
 					<string>------------------------------------</string>
 					<string>5556B1D0-1E0F-4299-B8F3-15C7C843B61D</string>
 					<string>7EECA379-154D-49A2-9863-BB8F262ADA9F</string>
+					<string>8AEC30D0-7C48-435E-A9DB-B5BB3C550905</string>
+					<string>------------------------------------</string>
+					<string>A33D62D0-B570-11E2-9E96-0800200C9A66</string>
 				</array>
 				<key>name</key>
 				<string>Insert Snippets</string>
@@ -52,6 +53,20 @@
 				</array>
 				<key>name</key>
 				<string>Prefix directives</string>
+			</dict>
+			<key>A33D62D0-B570-11E2-9E96-0800200C9A66</key>
+			<dict>
+				<key>items</key>
+				<array>
+					<string>FC109A81-1B0F-4BB3-A756-26F0D5B98EDE</string>
+					<string>ED8B6D2A-F402-4065-9A8F-5EED93826652</string>
+					<string>------------------------------------</string>
+					<string>AD2225AD-5AF2-437E-9D21-8ACB9C2598D2</string>
+					<string>893B86AF-DD6B-4283-BA11-16955B1FD7A7</string>
+					<string>E2F1DED8-FDF1-4E5E-8CBD-EF5030B2498B</string>
+				</array>
+				<key>name</key>
+				<string>SPARQL</string>
 			</dict>
 		</dict>
 	</dict>

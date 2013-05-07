@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>BASE &lt;${1:http://github.com/peta/turtle.tmbundle#}&gt;$2</string>
+	<key>name</key>
+	<string>BASE</string>
+	<key>scope</key>
+	<string>source.sparql</string>
+	<key>tabTrigger</key>
+	<string>base</string>
+	<key>uuid</key>
+	<string>FC109A81-1B0F-4BB3-A756-26F0D5B98EDE</string>
+</dict>
+</plist>

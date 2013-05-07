@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>SELECT ${1:DISTINCT} { ${2:?s ?p ?o} }$3</string>
+	<key>name</key>
+	<string>SELECT</string>
+	<key>scope</key>
+	<string>source.sparql</string>
+	<key>tabTrigger</key>
+	<string>sel</string>
+	<key>uuid</key>
+	<string>AD2225AD-5AF2-437E-9D21-8ACB9C2598D2</string>
+</dict>
+</plist>

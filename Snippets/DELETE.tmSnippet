@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>DELETE ${1:DATA }{ ${2:?s ?p ?o} }$3</string>
+	<key>name</key>
+	<string>DELETE</string>
+	<key>scope</key>
+	<string>source.sparql</string>
+	<key>tabTrigger</key>
+	<string>del</string>
+	<key>uuid</key>
+	<string>E2F1DED8-FDF1-4E5E-8CBD-EF5030B2498B</string>
+</dict>
+</plist>

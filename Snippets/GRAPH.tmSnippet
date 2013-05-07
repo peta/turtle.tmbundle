@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>GRAPH ${1:?g} {${2: ${3:?s ?p ?o} }}$4</string>
+	<key>name</key>
+	<string>GRAPH</string>
+	<key>scope</key>
+	<string>source.sparql</string>
+	<key>tabTrigger</key>
+	<string>graph</string>
+	<key>uuid</key>
+	<string>893B86AF-DD6B-4283-BA11-16955B1FD7A7</string>
+</dict>
+</plist>
