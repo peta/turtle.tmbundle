@@ -5,7 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -wKU
+	<string>#!/usr/bin/env ruby -KU
 
 require 'net/http'
 require 'uri'
@@ -14,20 +14,22 @@ require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
 require ENV['TM_SUPPORT_PATH'] + '/lib/escape'
 require ENV['TM_SUPPORT_PATH'] + '/lib/progress'
-
 require ENV['TM_SUPPORT_PATH'] + '/lib/web_preview'
 
-SECTION_MARKER = "#---\n"
+require ENV['TM_BUNDLE_SUPPORT']+'/lib/sparql'
 
-whole_doc = STDIN.read
-DOC_LINES = whole_doc.lines.to_a
+
+# TODO: An unsupported edge case is left: when a section contains multiple 
+#   update/query markers, only the first ones are taken into account. Add support
+#   for multiple markers that are chosen in :bottom_up beginning from the line where
+#   an eventual include marker occurs.
 
 # Determine line number where query text starts at
 if ENV['TM_LINE_NUMBER'].nil?  
   # No line number provided, use Plan B
   # 8:6-16:7
   if ENV['TM_SELECTION'] =~ /^(\d+)/
-    current_line = Regexp.last_match[1].to_i
+    curr_line = Regexp.last_match[1].to_i
   else
     # Can't recover
     unless ENV['TM_SELECTED_TEXT'].nil?
@@ -36,115 +38,92 @@ if ENV['TM_LINE_NUMBER'].nil?
     end
   end
 else
-  current_line = ENV['TM_LINE_NUMBER'].to_i
+  curr_line = ENV['TM_LINE_NUMBER'].to_i
 end
 
-# Line numbering starts internally at 0
-current_line -= 1
+# Internally we start counting at zero
+curr_line -= 1
 
-# Get query text that should be executed
-if ENV['TM_SELECTED_TEXT'].nil?
-  if whole_doc.index(SECTION_MARKER).nil?
-    # No sections found, use whole document
-    qry = whole_doc
-    strategy = :top_bottom
-  else
-    # Use current section    
-    qry = ''
-    from_line = 0
-    to_line = DOC_LINES.count
-    current_line.downto(0) do |no|
-      if DOC_LINES[no] == SECTION_MARKER
-        from_line = (no + 1)
-        break
-      end
-    end    
-    current_line.upto(DOC_LINES.count) do |no|
-      if DOC_LINES[no] == SECTION_MARKER
-        to_line = (no - 1)
-        break
-      end
-    end
-    qry = DOC_LINES[from_line..to_line].join
-    strategy = :bottom_up
-  end  
-else
-  qry = ENV['TM_SELECTED_TEXT']
-  strategy = :bottom_up
-end
-
-return if qry.strip.empty?
-
-# Determine needed endpoint type
-# TODO: Make it mo bulletproof (e.g. don't match inside strings)
-endpoint_type = (qry =~ /(INSERT|DELETE|LOAD|CLEAR|CREATE|DROP|WITH)/) ? :update : :query
-endpoint = nil
-# First scan selection/document for magic comments
-line_pattern =  /^#(#{endpoint_type.to_s.upcase})\s+&lt;([^&gt;]+)&gt;/
-case strategy
-  when :top_bottom
-    # Scan whole document, start at first line
-    DOC_LINES.each do |line|
-      if line =~ line_pattern
-        endpoint = Regexp.last_match[2]
-        break
-      end
-    end
-  when :bottom_up
-    # Scan only the preceding document part, start at beginning of selection
-    # (there can be multiple magic comments in a doc and we assume that the one
-    # the comes right before the selected query text is meant for the query itself)    
-    current_line.downto(0) do |no|      
-      if DOC_LINES[no] =~ line_pattern
-        endpoint = Regexp.last_match[2]
-        break
-      end
-    end
-end
-# when nothing found, check environment and finally ask user
-if endpoint.nil?
-  # Check if an endpoint is set by an ENV variable
-  if ENV['TM_SPARQL_'+endpoint_type.to_s.upcase]
-    endpoint = ENV['TM_SPARQL_'+endpoint_type.to_s.upcase]
-  # Ask user
-  else
-    endpoint = TextMate::UI::request_string(
-      :title =&gt; 'Choose SPARQL Endpoint',
-      :prompt =&gt; 'Please enter URL of SPARQL '+endpoint_type.to_s.upcase+' Service')    
-  end
-  # Give up
-  puts 'No endpoint found'
-  TextMate::exit_discard if endpoint.to_s.strip.empty?
-end
-
-
-
-
-def show_html_header(succeeded, code, msg = '')
-  html_header('SPARQL Query Result')
-  style = succeeded ? 'background-color:#118833;color:#ffffff;' : 'background-color:#cc4444;color:#ffffff;'
+$n_query_sections = 0
+def open_query_section(title = nil)
+  $n_query_sections += 1
+  alt = ($n_query_sections % 2 == 0) ? 'even' : 'odd'
   html = &lt;&lt;-HTML
-  &lt;div class="html-header" style="position:absolute;top:27px;left:0;right:0;font-family:\'Lucida Grande\';#{style}"&gt;
-    &lt;p style="font-weight:bold;font-size:30px;float:left;margin: 0 20px 0 0;padding: 15px 0 15px 15px;"&gt;#{code}&lt;/p&gt;
-    &lt;p style="margin: 0 20px 0 0;padding: 23px 0 15px 15px;line-height: 1.1;"&gt;#{msg}&lt;/p&gt;
-    &lt;div style="clear:both;display:inline;"&gt;&lt;/div&gt;
+    &lt;div class="query-section #{alt}"&gt;
+  HTML
+  return html
+end
+
+def close_query_section()
+  '&lt;/div&gt;'
+end
+
+def write_section_header(succeeded, code, msg = '')
+  result = succeeded ? 'success' : 'error'
+  html = &lt;&lt;-HTML
+  &lt;div class="header #{result}"&gt;
+    &lt;p class="code"&gt;#{code}&lt;/p&gt;
+    &lt;p class="message"&gt;#{msg}&lt;/p&gt;
+    &lt;div class="clear"&gt;&lt;/div&gt;
   &lt;/div&gt;
   HTML
   return html
 end
 
-def show_query_log(qry)
+def write_query_log(qry)
   qry = htmlize(qry)
   html = &lt;&lt;-HTML
-  &lt;div class="query-log" style="margin:100px 20px 0 20px;"&gt;
-    &lt;div style="text-align:right;"&gt;
+  &lt;div class="query-log"&gt;
+    &lt;div class="toggler"&gt;
         &lt;a href="#" onclick="var q=this.parentNode.nextElementSibling.style;q.display=(q.display=='none')?'block':'none';return false;"&gt;Show/hide the executed query&lt;/a&gt;
     &lt;/div&gt;    
-    &lt;pre style="display:none;line-height:0.8em;"&gt;#{qry}&lt;/pre&gt;
+    &lt;div class="result" style="display:none;"&gt;&lt;pre&gt;#{qry}&lt;/pre&gt;&lt;/div&gt;
   &lt;/div&gt;
   HTML
   return html
 end
+
+def write_query_result(result)
+  '&lt;div class="result"&gt;'+result+'&lt;/div&gt;'
+end
+
+def execute_query(endpoint_type, endpoint_url, qry)
+  Net::HTTP.start(endpoint_url.host, endpoint_url.port) do |http|
+    # Remove request timeout limitation (e.g. needed some some DBpedia queries)
+    http.read_timeout = nil
+    if endpoint_type == :query
+      url = endpoint_url.to_s + '?query='+CGI::escape(qry)
+      req = Net::HTTP::Get.new(url, { 'Accept' =&gt; 'text/html, text/plain' })      
+    else
+      req = Net::HTTP::Post.new(endpoint_url.path, { 'Accept' =&gt; 'text/plain' })
+      req.set_form_data({ 'update' =&gt; qry })
+    end
+    resp = http.request(req)
+    log_query(endpoint_type, endpoint_url, qry, req, resp)
+  end  
+end
+
+def log_query(endpoint_type, endpoint_url, qry, req, resp)  
+  puts open_query_section
+  puts write_section_header((resp.is_a? Net::HTTPSuccess), resp.code, 'Result of SPARQL '+endpoint_type.to_s.upcase+' query to &lt;u&gt;'+endpoint_url.to_s+'&lt;/u&gt;')
+  puts write_query_log(qry)   
+  if (not resp['Content-Type'].nil?) and resp['Content-Type'].index('text/html')
+    puts write_query_result(resp.body)
+  else
+    puts write_query_result('&lt;pre style="line-height:0.8em;"&gt;'+htmlize(resp.body)+'&lt;/pre&gt;')
+  end  
+  puts close_query_section
+end
+
+html_header('SPARQL Results')
+puts '&lt;link rel="stylesheet" type="text/css" href="file://'+ENV['TM_BUNDLE_SUPPORT']+'/css/sparql-exec-preview.css"/&gt;'
+
+# Create document at get section that should be executed
+doc = Turtle::SPARQL::Document.new(STDIN.read(nil))
+section = doc.section_at_line(curr_line)
+
+Turtle::SPARQL.raise_error(:info, 
+  'Nothing to do', 'There is no section that spans over the given line number') if section.nil?
 
 cancel_proc = Proc.new do  
   raise Exception.new 'Execution was cancelled by the user'
@@ -152,31 +131,24 @@ cancel_proc = Proc.new do
 end
 
 # Query the SPARQL service and show result to the user
-endpoint_url = URI(endpoint)
 begin
   TextMate.call_with_progress(
       :title =&gt; 'Executing query',
       :message =&gt; 'Please wait while the SPARQL query is being executed...',
       :indeterminate =&gt; true,
-      :cancel =&gt; cancel_proc) do 
-    Net::HTTP.start(endpoint_url.host, endpoint_url.port) do |http|
-      # Remove request timeout limitation (e.g. needed some some DBpedia queries)
-      http.read_timeout = nil
-      if endpoint_type == :query
-        url = endpoint_url.to_s + '?query='+CGI::escape(qry)
-        request = Net::HTTP::Get.new(url, { 'Accept' =&gt; 'text/html, text/plain' })      
-      else
-        request = Net::HTTP::Post.new(endpoint_url.path, { 'Accept' =&gt; 'text/plain' })
-        request.set_form_data({ 'update' =&gt; qry })
+      :cancel =&gt; cancel_proc) do    
+    known_eps = {}
+    section.each_query do |qry|
+      ep_type = Turtle::SPARQL.which_type? qry    
+      # Make sure we have an appropriate endpoint
+      unless known_eps.include? ep_type
+        new_ep = Turtle::SPARQL.get_endpoint ep_type, section
+        Turtle::SPARQL.raise_error(:warning,
+          'No endpoint found', 'No suitable endpoint marker found') if false #new_ep.nil?
+        known_eps[ep_type] = URI(new_ep)
       end
-      resp = http.request(request)
-      puts show_query_log(qry)
-      puts show_html_header( (resp.is_a? Net::HTTPSuccess), resp.code, 'Result of SPARQL '+endpoint_type.to_s.upcase+' query to &lt;u&gt;'+endpoint+'&lt;/u&gt;')
-      if (not resp['Content-Type'].nil?) and resp['Content-Type'].index('text/html')
-        puts resp.body
-      else
-        puts '&lt;pre style="line-height:0.8em;"&gt;'+htmlize(resp.body)+'&lt;/pre&gt;'
-      end
+      # Execute
+      execute_query(ep_type, known_eps[ep_type], qry)
     end
   end
 rescue Exception =&gt; exc
@@ -186,7 +158,13 @@ rescue Exception =&gt; exc
   TextMate::exit_discard
 end
 
-html_footer()</string>
+html_footer()
+
+
+
+
+
+</string>
 	<key>input</key>
 	<string>document</string>
 	<key>inputFormat</key>
