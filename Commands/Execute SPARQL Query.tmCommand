@@ -89,19 +89,27 @@ def write_query_result(result)
 end
 
 def execute_query(endpoint_type, endpoint_url, qry)
-  Net::HTTP.start(endpoint_url.host, endpoint_url.port) do |http|
-    # Remove request timeout limitation (e.g. needed some some DBpedia queries)
-    http.read_timeout = nil
-    if endpoint_type == :query
-      url = endpoint_url.to_s + '?query='+CGI::escape(qry)
-      req = Net::HTTP::Get.new(url, { 'Accept' =&gt; 'text/html, text/plain' })      
-    else
-      req = Net::HTTP::Post.new(endpoint_url.path, { 'Accept' =&gt; 'text/plain' })
-      req.set_form_data({ 'update' =&gt; qry })
-    end
-    resp = http.request(req)
-    log_query(endpoint_type, endpoint_url, qry, req, resp)
-  end  
+  begin
+    Net::HTTP.start(endpoint_url.host, endpoint_url.port || 80) do |http|
+      # Remove request timeout limitation (e.g. needed some some DBpedia queries)
+      http.read_timeout = nil
+      if endpoint_type == :query
+        url = endpoint_url.to_s + '?query='+CGI::escape(qry)
+        req = Net::HTTP::Get.new(url, { 'Accept' =&gt; 'text/html, text/plain' })      
+      else
+        req = Net::HTTP::Post.new(endpoint_url.path, { 'Accept' =&gt; 'text/plain' })
+        req.set_form_data({ 'update' =&gt; qry })
+      end
+      resp = http.request(req)
+      log_query(endpoint_type, endpoint_url, qry, req, resp)
+    end  
+  rescue Errno::EHOSTUNREACH
+    msg = (endpoint_url.host == 'dbpedia.org') ?
+      'Relax. DBpedia seems to be down.' :
+      "Looks like there is no server connected to the hostname '#{endpoint_url.host}'"
+    Turtle::SPARQL.raise_error :critical, 'Host not found', msg, false
+    raise Exception.new 'quiet'
+  end
 end
 
 def log_query(endpoint_type, endpoint_url, qry, req, resp)  
@@ -154,11 +162,12 @@ begin
         known_eps[ep_type] = ep_url
       end
       # Execute
+      puts known_eps[ep_type]
       execute_query(ep_type, known_eps[ep_type], qry)
     end
   end
 rescue Exception =&gt; exc
-  if exc.message != 'Execution was cancelled by the user'
+  if not ['quiet', 'Execution was cancelled by the user'].include?(exc.message)
     TextMate::UI::alert(:critical, 'Something went wrong', exc.inspect)
   end
   TextMate::exit_discard
