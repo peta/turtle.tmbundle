@@ -2,9 +2,6 @@
 
 require "net/http"
 require "uri"
-require "yaml"
-require "rexml/document"
-include REXML
 
 require ENV['TM_SUPPORT_PATH'] + '/lib/osx/plist'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
