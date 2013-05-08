@@ -55,11 +55,15 @@ __NOTE: *That function also suffers from the issues outlined in the previous sec
 
 ## Interactive SPARQL query scratchpad ##
 
-All (web-based) query forms that crossed by cursor had one thing in common – they suck(ed). Syntax highlighting? Efficient workflows (like trial-error-roundtripping)? Of course NOT. So I decided to add something similar to TextMate. The *Execute SPARQL Query* command may seem self-explaining, but it hides two important features:
+All (web-based) query forms that crossed by cursor had one thing in common – they suck(ed). Syntax highlighting? Efficient workflows (like trial-error-roundtripping)? Of course NOT. So I decided to add something similar to TextMate. The *Execute SPARQL Query* command may seem self-explaining, but it hides some important features:
 
 + first of all, it supports multiple sections in a single document
-+ it is aware of custom magic comments types for specifying different SPARQL Query/Update services (aka *endpoints*)
-+ query results are nicely displayed as textual tables (when supported by the SPARQL endpoint) in a preview window
++ it is aware of custom magic comments types (called "markers") for 
+	+ specifying different SPARQL Query/Update services (aka *endpoints*)
+	+ including/calling other section from within the same document
++ query results are nicely displayed together with the query log in a preview window
+
+Just press `CMD + R` and your query will be executed.
 
 ### Multiple sections/snippets syntax
 
@@ -72,7 +76,6 @@ You can have one document contain multiple (independent) sections. This is e.g. 
 A simple document with multiple sections could look like this:
 
 ```
-
 	#QUERY  <http://example1.com/ds/query>
 	#UPDATE <http://example1.com/ds/update>
 
@@ -90,7 +93,6 @@ A simple document with multiple sections could look like this:
 	PREFIX : <urn:example#>
 	SELECT ?g
 	WHERE { GRAPH ?g {} }
-	
 ```
 
 As you probably notice, multiple sections are separated with the marker string `#---` written on a separate line.
@@ -105,19 +107,18 @@ These magic comments have the following syntax:
 You can specify multiple magic comments throughout your document. When executing the query command, it will automatically determine the required endpoint type depending on the SPARQL commands that occur in your query. After that, it scans your document for magic comments where it uses the following strategies:
 
 + _Top-down:_ When the whole document is used as query, it scans every line beginning at the top until it finds a suitable magic comment 
-+ _Bottom-up:_ When only the current section/selection is queried, it scans every line from bottom to top beginning at the line where the section/selection starts until it finds a suitable magic comment
++ _Bottom-up:_ When only the current/selected section is queried, it first checks if that section contains the required endpoints, and, when not the case, it then scans every line from bottom to top beginning at the line where the section/selection starts until it finds a suitable magic comment
 
 When no suitable magic comment was found, the command consults TextMate's environment variables (can be set in the application preferences). More precisely it looks for the following two variables: 
 
 + `TM_SPARQL_QUERY`
 + `TM_SPARQL_UPDATE`
 
-that should contain the HTTP(S) URL to SPAR[QU]L endpoints. When even this fails, YOU (the user) are prompted to enter an endpoint URL. 
+that should contain the HTTP(S) URL to SPAR[QU]L endpoints. When even this fails, YOU (the user) are prompted to enter an endpoint URL. If you cancel, the execution is aborted and a puppy dies.
 
-Here is an example document with multiple sections and multiple endpoint magic comments:
+Here is an example document with multiple sections and multiple magic comments for endpoints:
 
 ```
-
 	#QUERY  <http://example.com/ds/query>                 
 	#UPDATE <http://example.com/tbox/update>
 	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \
@@ -155,8 +156,66 @@ Here is an example document with multiple sections and multiple endpoint magic c
 	    ?s rdfs:label ?label                              |
 	    FILTER( CONTAINS( STR(?label), 'The Wire') )      |
 	}                                                     /
-	
 ```
+
+### Additional magic comment types
+
+#### Name your sections
+
+You can create a named section by adding a `#name= my-section` marker. Named sections can be included from other sections within your document. For more details see the next section:   
+
+#### #INCLUDE <section-name>
+
+By using Includes, you can reuse named sections all over the place. This way, it is possible to write typically used snippets once, and then just "call" them from anywhere else when needed. This is especially helpful for SPARQL beginners or when iteratively developing complex queries where one wants to see the effect of a previous query immediately.
+
+When executed, every included snippet is listed separately in the web preview window of TextMate. That way it is easy to track down issues with intermediate states (and not just only after all queries have finished).
+
+The order in which sections appear and are included in your document doesn't matter. So an included section doesn't have to be defined before the section it is included from. The following example shows a simple use-case:
+
+```
+	#INCLUDE <drop-all>
+	#INCLUDE <insert-some-bnode>
+	#INCLUDE <select-all-bnodes>
+	DELETE { ?s ?p ?o }
+	WHERE { 
+		[] ?p ?o . 
+		?s <urn:example#label> ?o . 
+		?s ?p 'bnode 2' . 
+		FILTER( isBLANK( ?s ) )
+	}
+	#INCLUDE <select-all-bnodes>
+	
+	#---
+	#name= insert-some-bnode
+	PREFIX : <urn:example#>
+	INSERT DATA {
+		[ a :MyClass ] :label 'bnode 1' .
+		[ a :MyClass ] :label 'bnode 2' .
+		[ a :MyClass ] :label 'bnode 3' .
+	}
+	
+	#---
+	#name= drop-all
+	#descr= Drop all graphs – both, the default graph and all named ones
+	DROP ALL
+	
+	#---
+	#name= select-all-bnodes
+	#descr= Selects all bnodes in the default graph
+	SELECT DISTINCT *
+	WHERE {
+		?s ?p ?o 
+		FILTER isBLANK(?s)
+	}
+```
+
+![Screenshot of SPARQL result preview window](./Support/img/screenshot-sparql.png "Screenshot of SPARQL result preview window")
+
+#### Notes
+
+There is also basic support for simple metadata properties in the following form: `#propname= some prop value`. It's kind of pendant to jsdoc or phpdoc comments. However, beside section names an description texts I have no idea how this could be used. Do you?
+
+I have the vague idea of a pastebin for SPARQL in mind, where one can host reusable SPARQL snippets with support for parametrized SPARQL calls. What do you think about it?    
 
 ## Snippets
 
