@@ -26,8 +26,8 @@ module Turtle
     # @return [String, NilClass]
     def self.get_endpoint(type, section)
       new_ep = section.first_endpoint(type)
-      new_ep = section.parent.first_endpoint(section.from_line, :bottom_up, type) if new_ep.nil?
-      # when nothing found, check environment and finally ask user
+      new_ep = section.parent.first_endpoint(section.from_line, :bottom_up, type) if new_ep.nil?      
+      # nothing found, check environment and finally ask user
       if new_ep.nil?
         # Check if an endpoint is set by an ENV variable
         if ENV['TM_SPARQL_'+type.to_s.upcase]
@@ -39,6 +39,8 @@ module Turtle
             :prompt => 'Please enter URL of SPARQL '+type.to_s.upcase+' Service')    
         end
         new_ep = (new_ep.to_s.strip.empty?) ? nil : new_ep
+      else
+        new_ep = new_ep.value
       end
       new_ep
     end
