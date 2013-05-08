@@ -162,7 +162,6 @@ begin
         known_eps[ep_type] = ep_url
       end
       # Execute
-      puts known_eps[ep_type]
       execute_query(ep_type, known_eps[ep_type], qry)
     end
   end
