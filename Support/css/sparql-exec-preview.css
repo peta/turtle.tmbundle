@@ -1,82 +1,69 @@
+/**
+ * Stylesheet for web preview of 'Execute SPARQL Query' output
+ * 
+ * @author Peter Geil
+ */
+#tm_webpreview_content {
+  margin: 28px 0 0 0 !important;
+  counter-reset: qry-section; }
 
-    div#tm_webpreview_content {
-      margin: 28px 0 0 0 !important;
-     counter-reset: qry-section;
-    }
-    .query-section:before {
-      counter-increment: qry-section;
-      content: counter(qry-section);
-      font-family: "Helvetica Neue";
-      font-weight: lighter;
-      font-size: 78px;
-      position: absolute;
-      margin-top: 59px;
-      right: 15px;
-      color: rgba(0,0,0,0.1);
-      z-index: 999;
-      pointer-events: none;
-      -webkit-user-select: none;
-    }
-    .query-section {
-      background-color: #fff;
-      margin-bottom: 25px;
-    }
-    .query-section.odd {
-
-    }
-    .query-section .result {
-      margin: 0 75px 0 14px;
-    }
-    .query-section .header {
-      font-family: "Lucida Grande";
-    }
+.query-section {
+  background-color: #fff;
+  margin-bottom: 25px; }
+  .query-section:before {
+    counter-increment: qry-section;
+    content: counter(qry-section);
+    font-family: "Helvetica Neue";
+    font-weight: lighter;
+    font-size: 78px;
+    position: absolute;
+    margin-top: 59px;
+    right: 15px;
+    color: rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    pointer-events: none;
+    -webkit-user-select: none; }
+  .query-section .result {
+    margin: 0 75px 0 14px; }
+  .query-section .header {
+    font-family: "Lucida Grande"; }
     .query-section .header .code {
       font-weight: bold;
       font-size: 21px;
       float: left;
       margin: 0 20px 0 0;
-      padding: 10px 0 10px 15px;
-    }
+      padding: 10px 0 10px 15px; }
     .query-section .header .message {
       margin: 0 20px 0 0;
       padding: 15px 0 0 15px;
       line-height: 1.1;
-      color: #ddd;
-    }
+      color: #ddd; }
     .query-section .header .clear {
       clear: both;
       display: block;
       content: " ";
       width: 1px;
-      height: 1px;
-    }
+      height: 1px; }
     .query-section .header.success {
-      background-color:#009262;
-      color:#ffffff;
-    }
+      background-color: #009262;
+      color: #ffffff; }
     .query-section .header.error {
-      background-color:#cc4444;
-      color:#ffffff;
-    }
-    .query-section .query-log {
-      margin: 0 0 12px 0;
-      background-color: #ffffcc;
-    }
+      background-color: #cc4444;
+      color: #ffffff; }
+  .query-section .query-log {
+    margin: 0 0 12px 0;
+    background-color: #ffffcc; }
     .query-section .query-log .result {
-      padding-bottom: 7px;
-    }
-    .query-section .query-log .result pre {
-      line-height: 0.6em;
-      background-color: #fff;
-      padding: 11px;
-      border-left: 5px solid #ddd;
-    }
+      padding-bottom: 7px; }
+      .query-section .query-log .result pre {
+        line-height: 0.6em;
+        background-color: #fff;
+        padding: 11px;
+        border-left: 5px solid #ddd; }
     .query-section .query-log .toggler {
-      text-align:right;
-      background-color:  #ffffcc;
-    }
-    .query-section .query-log .toggler a {
-      display: inline-block;
-      padding: 4px 11px 6px 11px;
-      border-bottom-left-radius: 6px;
-    }
+      text-align: right;
+      background-color: #ffffcc; }
+      .query-section .query-log .toggler a {
+        display: inline-block;
+        padding: 4px 11px 6px 11px;
+        border-bottom-left-radius: 6px; }

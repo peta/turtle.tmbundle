@@ -1,0 +1,86 @@
+/**
+ * Stylesheet for web preview of 'Execute SPARQL Query' output
+ * 
+ * @author Peter Geil
+ */
+#tm_webpreview_content {
+	margin: 28px 0 0 0 !important;
+	counter-reset: qry-section;
+}
+
+.query-section {
+	background-color: #fff;
+	margin-bottom: 25px;
+	
+	&:before {
+		counter-increment: qry-section;
+		content: counter(qry-section);
+		font-family: "Helvetica Neue";
+		font-weight: lighter;
+		font-size: 78px;
+		position: absolute;
+		margin-top: 59px;
+		right: 15px;
+		color: rgba(0, 0, 0, 0.1);
+		z-index: 999;
+		pointer-events: none;
+		-webkit-user-select: none;
+	}	
+	&.odd! {}
+	.result {
+		margin: 0 75px 0 14px;
+	}
+	.header {
+		font-family: "Lucida Grande";
+		.code {
+			font-weight: bold;
+			font-size: 21px;
+			float: left;
+			margin: 0 20px 0 0;
+			padding: 10px 0 10px 15px;
+		}
+		.message {
+			margin: 0 20px 0 0;
+			padding: 15px 0 0 15px;
+			line-height: 1.1;
+			color: #ddd;
+		}
+		.clear {
+			clear: both;
+			display: block;
+			content: " ";
+			width: 1px;
+			height: 1px;
+		}
+		&.success {
+			background-color: #009262;
+			color: #ffffff;
+		}
+		&.error {
+			background-color: #cc4444;
+			color: #ffffff;
+		}
+	}
+	.query-log {
+		margin: 0 0 12px 0;
+		background-color: #ffffcc;
+		.result {
+			padding-bottom: 7px;
+			pre {
+				line-height: 0.6em;
+				background-color: #fff;
+				padding: 11px;
+				border-left: 5px solid #ddd;
+			}
+		}
+		.toggler {
+			text-align: right;
+			background-color: #ffffcc;
+			a {
+				display: inline-block;
+				padding: 4px 11px 6px 11px;
+				border-bottom-left-radius: 6px;
+			}
+		}
+	}
+}
