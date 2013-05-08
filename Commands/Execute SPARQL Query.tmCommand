@@ -33,8 +33,9 @@ if ENV['TM_LINE_NUMBER'].nil?
   else
     # Can't recover
     unless ENV['TM_SELECTED_TEXT'].nil?
-      TextMate::UI::alert('error', 'Something weird happened', 'Can\'t determine the line number of where your selection starts')
-      TextMate::exit_discard
+      Turtle::SPARQL.raise_error(:warning,
+        'Something weird happened',
+        'Can\'t determine the line number of where your selection starts')
     end
   end
 else
@@ -144,8 +145,13 @@ begin
       unless known_eps.include? ep_type
         new_ep = Turtle::SPARQL.get_endpoint ep_type, section
         Turtle::SPARQL.raise_error(:warning,
-          'No endpoint found', 'No suitable endpoint marker found') if false #new_ep.nil?
-        known_eps[ep_type] = URI(new_ep)
+          'No endpoint found',
+          'No suitable endpoint marker found') if new_ep.nil?
+        ep_url = URI(new_ep)
+        Turtle::SPARQL.raise_error(:critical,
+          'Invalid endpoint URL',
+          'Only HTTP/S URLs are allowed') unless ep_url.is_a? URI::HTTP
+        known_eps[ep_type] = ep_url
       end
       # Execute
       execute_query(ep_type, known_eps[ep_type], qry)
