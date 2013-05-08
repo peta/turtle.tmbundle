@@ -76,7 +76,7 @@ def write_query_log(qry)
   html = &lt;&lt;-HTML
   &lt;div class="query-log"&gt;
     &lt;div class="toggler"&gt;
-        &lt;a href="#" onclick="var q=this.parentNode.nextElementSibling.style;q.display=(q.display=='none')?'block':'none';return false;"&gt;Show/hide the executed query&lt;/a&gt;
+        &lt;a href="#" title="Hold shift pressed for toggling all query logs" onclick="var collapse=function(logEl){var s=logEl.style;s.display=(s.display=='none')?'block':'none';};if(arguments[0].shiftKey){var logEls=document.querySelectorAll('.query-log .result');for(var i=0,j=logEls.length; i &lt; j; collapse(logEls.item(i++)));}else{collapse(this.parentNode.nextElementSibling)};return false;"&gt;Show/hide the executed query&lt;/a&gt;
     &lt;/div&gt;    
     &lt;div class="result" style="display:none;"&gt;&lt;pre&gt;#{qry}&lt;/pre&gt;&lt;/div&gt;
   &lt;/div&gt;
