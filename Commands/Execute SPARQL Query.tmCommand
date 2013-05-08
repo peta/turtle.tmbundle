@@ -124,15 +124,18 @@ def log_query(endpoint_type, endpoint_url, qry, req, resp)
   puts close_query_section
 end
 
-html_header('SPARQL Results')
-puts '&lt;link rel="stylesheet" type="text/css" href="file://'+ENV['TM_BUNDLE_SUPPORT']+'/css/sparql-exec-preview.css"/&gt;'
-
 # Create document at get section that should be executed
 doc = Turtle::SPARQL::Document.new(STDIN.read)
 section = doc.section_at_line(curr_line)
 
 Turtle::SPARQL.raise_error(:info, 
   'Nothing to do', 'There is no section that spans over the given line number') if section.nil?
+
+# Prepare preview window
+n_queries = section.each_query.count
+title_info = (n_queries &lt;= 1) ? '' : "(#{n_queries} queries)"
+html_header("SPARQL Results #{title_info}")
+puts '&lt;link rel="stylesheet" type="text/css" href="file://'+ENV['TM_BUNDLE_SUPPORT']+'/css/sparql-exec-preview.css"/&gt;'
 
 cancel_proc = Proc.new do  
   raise Exception.new 'Execution was cancelled by the user'
