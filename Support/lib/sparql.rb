@@ -39,8 +39,6 @@ module Turtle
             :prompt => 'Please enter URL of SPARQL '+type.to_s.upcase+' Service')    
         end
         new_ep = (new_ep.to_s.strip.empty?) ? nil : new_ep
-      else
-        new_ep = new_ep.value
       end
       new_ep
     end
@@ -132,7 +130,7 @@ module Turtle
         # And scan it
         range.each do |idx|
           ep_marker = @sections.at(idx).first_endpoint(type)
-          return ep_marker.value if (type.nil? or not ep_marker.nil?)
+          return ep_marker if (type.nil? or not ep_marker.nil?)
         end
       end
       
@@ -303,7 +301,7 @@ module Turtle
       # Iterates over all endpoint +Markers+ contained in current section
       def first_endpoint(type = nil)        
         @queries.each do |q|
-          return q if q.is_a?(Marker) and (type.nil? or q.type_of?(type))
+          return q.value if q.is_a?(Marker) and (type.nil? or q.type_of?(type))
         end
         nil
       end
