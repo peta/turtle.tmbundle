@@ -128,7 +128,7 @@ html_header('SPARQL Results')
 puts '&lt;link rel="stylesheet" type="text/css" href="file://'+ENV['TM_BUNDLE_SUPPORT']+'/css/sparql-exec-preview.css"/&gt;'
 
 # Create document at get section that should be executed
-doc = Turtle::SPARQL::Document.new(STDIN.read(nil))
+doc = Turtle::SPARQL::Document.new(STDIN.read)
 section = doc.section_at_line(curr_line)
 
 Turtle::SPARQL.raise_error(:info, 

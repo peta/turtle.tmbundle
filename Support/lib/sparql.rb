@@ -81,6 +81,7 @@ module Turtle
         @sections.each do |s|
           return true if s.name == name
         end
+        false
       end
       
       # Returns document section with given name
@@ -148,7 +149,7 @@ module Turtle
         return unless @state === :idle
         @state = :in_doc
         # Begin document parsing
-        doc_lines = doc_str.lines.map(&:chomp!)
+        doc_lines = doc_str.lines.map(&:chomp)
         doc_lines.each_with_index do |line,no|
           case @state
             when :in_doc
@@ -259,10 +260,10 @@ module Turtle
             # Add marker and new array for ordinary lines of text
             @queries << marker
             @queries << []
-            next
-          end
-          # Add line to current query
-          @queries[-1] << line unless line.strip.empty?
+          else
+            # Add line to current query
+            @queries[-1] << line unless line.strip.empty?
+          end          
         end
         unless @queries[-1].is_a? Marker
           # Flatten last query and clean up
