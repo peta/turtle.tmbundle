@@ -8,6 +8,8 @@
 	<string>source.turtle</string>
 	<key>settings</key>
 	<dict>
+		<key>disableIndentCorrections</key>
+		<integer>1</integer>
 		<key>foldingStartMarker</key>
 		<string>\s*([\[\(\{]|^(\s*\w*:\w|\&lt;[^\&gt;]+\&gt;)(?=\b|\s*))</string>
 		<key>foldingStopMarker</key>
@@ -58,8 +60,6 @@
 				<string>&gt;</string>
 			</array>
 		</array>
-		<key>zeroIndentPattern</key>
-		<string>(?i)^(@|\#|PREFIX|BASE|\w*:)</string>
 	</dict>
 	<key>uuid</key>
 	<string>4DCE5FA1-8BBE-4A24-8507-A21AAD9E03BD</string>
