@@ -23,17 +23,7 @@ ICONS = {
   "Rsc_Class" => "#{IMG_DIR}/item-icons/upper_c_green.png",
   "Rsc_Prop" => "#{IMG_DIR}/item-icons/upper_p_purple.png",
   "Rsc_Datatype" => "#{IMG_DIR}/item-icons/upper_d_red.png",
-  "Unknown" => "#{IMG_DIR}/item-icons/empty_gray.png",
-=begin
-  "M"      => "#{IMG_DIR}/item-icons/Macros.png",
-  "L"      => "#{IMG_DIR}/item-icons/Languages.png",
-  "Doc"    => "#{IMG_DIR}/item-icons/Template Files.png",
-  "T"      => "#{IMG_DIR}/item-icons/Templates.png",
-  "S"      => "#{IMG_DIR}/item-icons/Snippets.png",
-  "P"      => "#{IMG_DIR}/item-icons/Preferences.png",
-  "D"      => "#{IMG_DIR}/item-icons/Drag Commands.png",
-  "C"      => "#{IMG_DIR}/item-icons/Commands.png"
-=end
+  "Unknown" => "#{IMG_DIR}/item-icons/empty_gray.png"
 }
 
 def Turtle.resolve_URI(of_prefix, fpath)
