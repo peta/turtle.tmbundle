@@ -5,9 +5,11 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -wKU
+		<string>#!/usr/bin/env ruby
+# encoding: UTF-8
 
-# My first Ruby scripts, so don't blame me
+$VERBOSE = true                         # -w
+$KCODE   = "U" if RUBY_VERSION &lt; "1.9"  # -KU
 
 require ENV['TM_BUNDLE_SUPPORT']+'/lib/turtle'
 require ENV['TM_SUPPORT_PATH'] + '/lib/exit_codes'
