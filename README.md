@@ -6,7 +6,7 @@ Totally awesome bundle for Turtle – the terse RDF triple language.
 It consists of:
 
 + Language grammar for Turtle and SPARQL 1.1
-+ Powerful (!) auto-completion (live-aggregated)
++ Powerful auto-completion (live-aggregated)
 + Documentation for classes and roles/properties at your fingertips (live-aggregated)
 + Interactive SPARQL query scratchpad
 + Some snippets (prefixes and document skeleton)
@@ -17,11 +17,13 @@ It consists of:
 
 See [Screenshots](#screenshots)
 
+__NOTE: If the HTML output of this GitHub-flavored Markdown document looks broken, please visit [https://github.com/peta/turtle.tmbundle/blob/master/README.md] to read the original version__
+
 ## Language grammar 
 
 The language grammar now covers the official W3C parser spec (as proposed in the latest CR released on Feb 19th 2013). However, there are still one/two particularities that differ, but you shouldn't notice them during your daily work. In the case you notice some weird behaviour (most obvious sign: broken syntax highlighting), please file a bug in the [project's issue tracker](https://github.com/peta/turtle.tmbundle/issues "Here at GitHub").
 
-The language grammar also recognizes keywords and builtin functions from the latest SPAR[QU]L 1.1 language specification. Further there is basic autocompletion (`ALT + ESC`) for the aforementioned.
+The language grammar also recognizes keywords and builtin functions from the latest SPAR[QU]L 1.1 language specification. Further there is basic autocompletion (`⌥ + ⎋`) for the aforementioned.
 
 ## Powerful auto-completion
 
@@ -43,7 +45,7 @@ __NOTE: *Auto-completion for prefixed names is case-sensitive*__
 
 ### Known issues
 
-For now, the Turtle bundle relies on [prefix.cc](http://prefix.cc) for mapping prefixes to URIs (required for all live-aggregations). The problem however is, that the available listings only contains one IRI per prefix (the one with the highest ranking) and not every IRI offers a machine readable vocabulary/ontology representation, what in turn means that for certain prefixes no auto-completion data is available. You can help to fix this, by visiting the according page at prefix.cc (URL scheme looks like `http://prefix.cc/<THE_PREFIX>`; without angle brackets of course) and up/downvoting the according URIs.
+For now, the Turtle bundle relies on [prefix.cc](http://prefix.cc) for mapping prefixes to URIs (required for all live-aggregations). The problem however is, that the available listings contain only one IRI per prefix (the one with the highest ranking) and not every IRI offers a machine readable vocabulary/ontology representation, what in turn means that for certain prefixes no auto-completion data might be available. You can help to fix this, by visiting the according page at prefix.cc (URL scheme looks like `http://prefix.cc/<THE_PREFIX>`; without angle brackets ofc) and up/downvoting the according URIs.
 
 The automatic aggregation of machine-readable vocabulary/ontology descriptions is working in principle but still has some shortcomings. (See the Github issue tracker) I will overwork that part when I have some more spare time and/or the need just arises. When you're told that data for a given prefix was fetched (green tooltip after a few seconds of freeze) but you will see no autocompletion dropdown later on, it probably means that the aggregator script failed and/or the IRI could not redirect to resource in a compatible format.
 
