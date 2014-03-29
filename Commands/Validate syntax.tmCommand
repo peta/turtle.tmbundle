@@ -49,7 +49,7 @@ def is_intro?(line)
   line =~ /^Parsing URI &lt;FURL&gt; with parser (\w+)$/
 end
 def is_summary?(line)
-  0 == (line =~ /^Parsing returned (\d+) triples$/).nil? ? nil : $~[1].to_i  
+  0 == (line =~ /^Parsing returned (\d+) triples?$/).nil? ? nil : $~[1].to_i  
 end
 
 # Extractors
