@@ -93,6 +93,7 @@ module Turtle
         end        
       end
       
+      undef []
       def [](line_no)
         return if line_no.nil?
         line_no = line_no.to_i
