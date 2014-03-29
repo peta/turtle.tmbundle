@@ -64,7 +64,7 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
       [a.attributes['type'], a.attributes['id']] &lt;=&gt; [b.attributes['type'], b.attributes['id']]
     end.each do |rsc|      
       choices.push({
-        "display" =&gt; rsc.attributes['id'].to_s,
+        "display" =&gt; rsc.attributes['id'].to_s + '     ',
         'image' =&gt; icons[rsc.attributes['type'].to_s] || 'Unknown'
       })      
     end
