@@ -5,11 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-		<string>#!/usr/bin/env ruby
+	<string>#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -wKU
 # encoding: UTF-8
-
-$VERBOSE = true                         # -w
-$KCODE   = "U" if RUBY_VERSION &lt; "1.9"  # -KU
 
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
 
