@@ -5,7 +5,8 @@
 	<key>beforeRunningCommand</key>
 	<string>saveActiveFile</string>
 	<key>command</key>
-	<string>#!/usr/bin/env ruby -wKU
+	<string>#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -wKU
+# encoding: UTF-8
 
 require ENV['TM_SUPPORT_PATH'] + '/lib/textmate'
 require ENV['TM_SUPPORT_PATH'] + '/lib/ui'
@@ -45,10 +46,10 @@ def msg(type, msg, plain = true)
 end
 
 def is_intro?(line)
-  line =~ /^Parsing URI &lt;FURL&gt; with parser (\w+)$/
+  line =~ /^Parsing URI &lt;FURL&gt; with parser ([\w%]+)$/
 end
 def is_summary?(line)
-  0 == (line =~ /^Parsing returned (\d+) triples$/).nil? ? nil : $~[1].to_i  
+  0 == (line =~ /^Parsing returned (\d+) triples?$/).nil? ? nil : $~[1].to_i  
 end
 
 # Extractors
@@ -91,7 +92,7 @@ lines = output.
 if $?.to_i.equal? 0
   # Raptor didn't report errors, now find out what he wants to tell us
   if lines.length.equal? 2
-    if is_intro? lines[0] and is_summary? lines[1]      
+    if is_intro? lines[0] and is_summary? lines[1]
       msg('succ', 'Syntax OK ('+n_triples_parsed(lines).to_s+' triples parsed)')
     end    
   end

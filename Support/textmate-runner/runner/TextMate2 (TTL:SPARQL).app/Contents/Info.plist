@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleDisplayName</key>
+	<string>TextMate2 (TTL/SPARQL)</string>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>Turtle</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ttl</string>
+				<string>turtle</string>
+			</array>
+			<key>CFBundleTypeOSTypes</key>
+			<array/>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>Turtle RDF document</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeIconFile</key>
+			<string>SPARQL</string>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sparql</string>
+			</array>
+			<key>CFBundleTypeOSTypes</key>
+			<array/>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleTypeName</key>
+			<string>SPARQL source file</string>
+		</dict>
+	</array>
+	<key>CFBundleExecutable</key>
+	<string>TextMate Proxy</string>
+	<key>CFBundleIdentifier</key>
+	<string>name.petergeil.TextMateProxyRunner</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>TextMate2 (TTL/SPARQL)</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>LSMinimumSystemVersion</key>
+	<string>10.5.0</string>
+	<key>LSUIElement</key>
+	<false/>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2013 Peter Geil</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>SPARQL query URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>sparql</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleIconFile</key>
+	<string>Application</string>
+</dict>
+</plist>

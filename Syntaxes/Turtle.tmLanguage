@@ -550,42 +550,121 @@
 			<key>name</key>
 			<string>string.quoted.triple.turtle</string>
 		</dict>
+		<key>sparqlClausedKeywords</key>
+		<dict>
+			<key>begin</key>
+			<string>(?x)(
+				(?# Special case because FILTER can have clauses what makes the lexer dizzy)
+				FILTER
+			)\s*(\((?=\s*))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>keyword.control.sparql.turtle</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.sparqlKeyword.turtle</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\s*(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.sparqlKeyword.turtle</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#sparqlVars</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#sparqlFilterFns</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#sparqlLangConsts</string>
+				</dict>
+			</array>
+		</dict>
 		<key>sparqlFilterFns</key>
 		<dict>
-			<key>match</key>
+			<key>begin</key>
 			<string>(?x)(
+				(?# Special case because FILTER can have clauses what makes the lexer dizzy)
+				FILTER|
 				(?# Builtin callables )
 				STR|LANG|LANGMATCHES|DATATYPE|BOUND|IRI|URI|BNODE|RAND|ABS|CEIL|FLOOR|ROUND|CONCAT|STRLEN|UCASE|LCASE|ENCODE_FOR_URI|CONTAINS|STRSTARTS|STRENDS|STRBEFORE|STRAFTER|YEAR|MONTH|DAY|HOURS|MINUTES|SECONDS|TIMEZONE|TZ|NOW|UUID|STRUUID|MD5|SHA1|SHA256|SHA384|SHA512|COALESCE|IF|STRLANG|STRDT|sameTerm|isIRI|isURI|isBLANK|isLITERAL|isNUMERIC|COUNT|SUM|MIN|MAX|AVG|SAMPLE|GROUP_CONCAT|
 				BOUND|COALESCE|NOT EXISTS|EXISTS|REGEX|SUBSTR|REPLACE
-			)</string>
-			<key>name</key>
-			<string>support.function.sparql.turtle</string>
+			)\s*(\((?=\s*))</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>support.function.sparql.turtle</string>
+				</dict>
+				<key>2</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.sparqlFunc.turtle</string>
+				</dict>
+			</dict>
+			<key>end</key>
+			<string>\s*(\))</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>1</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.terminator.sparqlFunc.turtle</string>
+				</dict>
+			</dict>
+			<key>patterns</key>
+			<array>
+				<dict>
+					<key>include</key>
+					<string>#sparqlVars</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#sparqlFilterFns</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#sparqlLangConsts</string>
+				</dict>
+			</array>
 		</dict>
 		<key>sparqlKeywords</key>
 		<dict>
 			<key>match</key>
 			<string>(?x)(
 					(?# SPARQL )
-					SELECT|ASK|CONSTRUCT|DESCRIBE|FROM[ ]+NAMED|FROM|WHERE|GRAPH|
-					DISTINCT|REDUCED|AS|GROUP|BY|ASC|DESC|LIMIT|
+					SELECT|ASK|CONSTRUCT|DESCRIBE|FROM|NAMED|WHERE|GRAPH|AS|
 					UNION|FILTER|HAVING|VALUES|
 					OPTIONAL|SERVICE|			 
-					(?# SPARUL )					
+					(?# SPARUL )
+					SILENT|DATA|					
 					ADD|MOVE|COPY|
-					INSERT[ ]+DATA|INSERT|
-					DELETE[ ]+DATA|DELETE|
-					LOAD[ ]+SILENT|LOAD|
-					INTO[ ]+GRAPH|
-					CLEAR[ ]+SILENT[ ]+GRAPH|[ ]+GRAPH|
-					CLEAR[ ]+SILENT[ ]+DEFAULT|CLEAR[ ]+DEFAULT|
-					CLEAR[ ]+SILENT[ ]+NAMED|CLEAR[ ]+NAMED|
-					CLEAR[ ]+SILENT[ ]+ALL|CLEAR[ ]+ALL|
-					CREATE[ ]+SILENT[ ]+GRAPH|CREATE[ ]+GRAPH|
-					DROP[ ]+SILENT[ ]+GRAPH|DROP[ ]+GRAPH|
-					DROP[ ]+SILENT[ ]+DEFAULT|DROP[ ]+DEFAULT|
-					DROP[ ]+SILENT[ ]+NAMED|DROP[ ]+NAMED|
-					DROP[ ]+SILENT[ ]+ALL|DROP[ ]+ALL|
-					WITH|USING
+					INSERT|DELETE|
+					LOAD|INTO|
+					GRAPH|ALL|DEFAULT|					
+					CLEAR|CREATE|DROP|
+					WITH|USING|
+					(?# Solution sequence modifiers )
+					DISTINCT|REDUCED|
+					ORDER|ASC|DESC|OFFSET|LIMITED|REDUCED|
+					GROUP|BY|LIMIT					
 				)</string>
 			<key>name</key>
 			<string>keyword.control.sparql.turtle</string>
@@ -596,6 +675,15 @@
 			<string>(true|false)</string>
 			<key>name</key>
 			<string>constant.language.sparql.turtle</string>
+		</dict>
+		<key>sparqlVars</key>
+		<dict>
+			<key>comment</key>
+			<string>Argh!</string>
+			<key>match</key>
+			<string>(\?\w+|\*)</string>
+			<key>name</key>
+			<string>constant.variable.sparql.turtle</string>
 		</dict>
 		<key>triples</key>
 		<dict>
@@ -652,12 +740,12 @@
 					<string>#literal</string>
 				</dict>
 				<dict>
-					<key>comment</key>
-					<string>Argh!</string>
-					<key>match</key>
-					<string>(\?\w+|\*)</string>
-					<key>name</key>
-					<string>constant.variable.sparql.turtle</string>
+					<key>include</key>
+					<string>#sparqlVars</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#sparqlClausedKeywords</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -727,6 +815,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#sparqlClausedKeywords</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#sparqlKeywords</string>
 				</dict>
 				<dict>
@@ -738,12 +830,8 @@
 					<string>#sparqlLangConsts</string>
 				</dict>
 				<dict>
-					<key>comment</key>
-					<string>Argh!</string>
-					<key>match</key>
-					<string>(\?\w+|\*)</string>
-					<key>name</key>
-					<string>constant.variable.sparql.turtle</string>
+					<key>include</key>
+					<string>#sparqlVars</string>
 				</dict>
 				<dict>
 					<key>include</key>

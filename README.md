@@ -6,7 +6,7 @@ Totally awesome bundle for Turtle – the terse RDF triple language.
 It consists of:
 
 + Language grammar for Turtle and SPARQL 1.1
-+ Powerful (!) auto-completion (live-aggregated)
++ Powerful auto-completion (live-aggregated)
 + Documentation for classes and roles/properties at your fingertips (live-aggregated)
 + Interactive SPARQL query scratchpad
 + Some snippets (prefixes and document skeleton)
@@ -17,11 +17,13 @@ It consists of:
 
 See [Screenshots](#screenshots)
 
+__NOTE: If the HTML output of this GitHub-flavored Markdown document looks broken, please visit [https://github.com/peta/turtle.tmbundle/blob/master/README.md] to read the original version__
+
 ## Language grammar 
 
 The language grammar now covers the official W3C parser spec (as proposed in the latest CR released on Feb 19th 2013). However, there are still one/two particularities that differ, but you shouldn't notice them during your daily work. In the case you notice some weird behaviour (most obvious sign: broken syntax highlighting), please file a bug in the [project's issue tracker](https://github.com/peta/turtle.tmbundle/issues "Here at GitHub").
 
-The language grammar also recognizes keywords and builtin functions from the latest SPAR[QU]L 1.1 language specification. Further there is basic autocompletion (`ALT + ESC`) for the aforementioned.
+The language grammar also recognizes keywords and builtin functions from the latest SPAR[QU]L 1.1 language specification. Further there is basic autocompletion (`⌥ + ⎋`) for the aforementioned.
 
 ## Powerful auto-completion
 
@@ -29,27 +31,27 @@ The Turtle bundle offers auto-completion at two levels:
 
 __NOTE: *When determining IRIs associated with a given prefix name, local prefix declarations always have precedence over those given by prefix.cc. So when you mess up IRIs in your @prefix directives, auto-completion might not work as expected.*__
 
-### Auto-completion for @prefix directives
+### Auto-completion for prefix directives
 
-When you invoke the `Autocomplete` command (ALT + ESCAPE) within the scope of a prefix directive (right after the `@prefix ` keyword), the Turtle bundle fetches a list of all prefixes registered at [prefix.cc](http://prefix.cc) and displays them nicely in a auto-complete dropdown box. Once you have chosen an and confirmed your selection, the prefix directive is automagically updated with the prefix and its according URI. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Autocomplete` command (`⌥ + ⎋`) within the scope of a prefix directive (right after `@prefix` or `PREFIX`), the Turtle bundle fetches a list of all prefixes registered at [prefix.cc](http://prefix.cc) and displays them nicely in a auto-complete dropdown box. Once you have chosen an and confirmed your selection, the prefix directive is automagically updated with the prefix and its according URI. (Note: the fetched data is locally cached for 24h)
 
 __NOTE: *Auto-completion for prefix declarations is case-insensitive*__
 
 ### Auto-completion for the local part of prefixed name IRIs
 
-When you invoke the `Autocomplete` command (ALT + ESCAPE) within the scope of a prefixed name (e.g. right after `my:` or at `my:a...`), the Turtle bundle determines the actual URI that is abbreviated by the prefixed namespace and checks if there is a machine readable Vocabulary/Ontology document available (currently only RDF/S and OWL documents in the XML serialization format are supported -- but with known issues). When one is found, it is live-aggregated and all of its Classes and Roles/Properties are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Autocomplete` command (`⌥ + ⎋`) within the scope of a prefixed name (e.g. right after `my:` or at `my:a...`), the Turtle bundle determines the actual URI that is abbreviated by the prefixed namespace and checks if there is a machine readable Vocabulary/Ontology document available (currently only RDF/S and OWL documents in the XML serialization format are supported -- but with known issues). When one is found, it is live-aggregated and all of its Classes and Roles/Properties are extracted (along with their documentation) and nicely presented in a auto-complete dropdown box. (Note: the fetched data is locally cached for 24h)
 
 __NOTE: *Auto-completion for prefixed names is case-sensitive*__
 
 ### Known issues
 
-For now, the Turtle bundle relies on [prefix.cc](http://prefix.cc) for mapping prefixes to URIs (required for all live-aggregations). The problem however is, that the available listings only contain one IRI per prefix (the one with the highest ranking) and not every IRI offers a machine readable vocabulary/ontology representation, what in turn means that for certain prefixes no auto-completion data is available. You can help to fix this, by visiting the according page at prefix.cc (URL scheme looks like `http://prefix.cc/<THE_PREFIX>`; without angle brackets of course) and up/downvoting the according URIs.
+For now, the Turtle bundle relies on [prefix.cc](http://prefix.cc) for mapping prefixes to URIs (required for all live-aggregations). The problem however is, that the available listings contain only one IRI per prefix (the one with the highest ranking) and not every IRI offers a machine readable vocabulary/ontology representation, what in turn means that for certain prefixes no auto-completion data might be available. You can help to fix this, by visiting the according page at prefix.cc (URL scheme looks like `http://prefix.cc/<THE_PREFIX>`; without angle brackets ofc) and up/downvoting the according URIs.
 
-The automatic aggregation of machine-readable vocabulary/ontology descriptions is working in principle but still has some shortcomings. (See the Github issue tracker) I will overwork that part when I have some more spare time and/or the need just arises.  
+The automatic aggregation of machine-readable vocabulary/ontology descriptions is working in principle but still has some shortcomings. (See the Github issue tracker) I will overwork that part when I have some more spare time and/or the need just arises. When you're told that data for a given prefix was fetched (green tooltip after a few seconds of freeze) but you will see no autocompletion dropdown later on, it probably means that the aggregator script failed and/or the IRI could not redirect to resource in a compatible format.
 
 ## Documentation for classes, roles/properties and individuals
 
-When you invoke the `Documentation for Resource` command (CTRL + H) within the scope of a prefixed name IRI (e.g. `my:Dog`), the Turtle bundle looks up if there are any informal descriptions available (like description texts, HTTP URLs to human-readable docs, asf.) and if so, displays them to the user. (Note: the fetched data is locally cached for 24h)
+When you invoke the `Documentation for Resource` command (`⌃ + H`) within the scope of a prefixed name IRI (e.g. `my:Dog`), the Turtle bundle looks up if there are any informal descriptions available (like description texts, HTTP URLs to human-readable docs, asf.) and if so, displays them to the user. (Note: the fetched data is locally cached for 24h)
 
 __NOTE: *That function also suffers from the issues outlined in the previous section.*__
 
@@ -63,7 +65,7 @@ All (web-based) query forms that crossed by cursor had one thing in common – t
 	+ including/calling other section from within the same document
 + query results are nicely displayed together with the query log in a preview window
 
-Just press `CMD + R` and your query will be executed.
+Just press `⌘ + R` and your query will be executed.
 
 ### Multiple sections/snippets syntax
 
@@ -76,23 +78,23 @@ You can have one document contain multiple (independent) sections. This is e.g. 
 A simple document with multiple sections could look like this:
 
 ```
-	#QUERY  <http://example1.com/ds/query>
-	#UPDATE <http://example1.com/ds/update>
+#QUERY  <http://example1.com/ds/query>
+#UPDATE <http://example1.com/ds/update>
 
-	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-	PREFIX : <urn:example#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX : <urn:example#>
 
-	INSERT DATA { :instanceA rdfs:label 'Human-readable label of instanceA'. }
+INSERT DATA { :instanceA rdfs:label 'Human-readable label of instanceA'. }
 
-	#---
-	PREFIX : <urn:example#>
-	SELECT (COUNT(?subj) AS ?n_subjs)
-	WHERE { ?subj a :ClassA }
+#---
+PREFIX : <urn:example#>
+SELECT (COUNT(?subj) AS ?n_subjs)
+WHERE { ?subj a :ClassA }
 
-	#---
-	PREFIX : <urn:example#>
-	SELECT ?g
-	WHERE { GRAPH ?g {} }
+#---
+PREFIX : <urn:example#>
+SELECT ?g
+WHERE { GRAPH ?g {} }
 ```
 
 As you probably notice, multiple sections are separated with the marker string `#---` written on a separate line.
@@ -119,43 +121,43 @@ that should contain the HTTP(S) URL to SPAR[QU]L endpoints. When even this fails
 Here is an example document with multiple sections and multiple magic comments for endpoints:
 
 ```
-	#QUERY  <http://example.com/ds/query>                 
-	#UPDATE <http://example.com/tbox/update>
-	PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \
-	PREFIX : <urn:example#>                               |
-	INSERT DATA {                                         | http://example.com/tbox/update
-	    :ClassB a rdfs:Class;                             |
-	        rdfs:subClassOf :ClassA.                      |
-	}                                                     /
+#QUERY  <http://example.com/ds/query>                 
+#UPDATE <http://example.com/tbox/update>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>  \
+PREFIX : <urn:example#>                               |
+INSERT DATA {                                         | http://example.com/tbox/update
+    :ClassB a rdfs:Class;                             |
+        rdfs:subClassOf :ClassA.                      |
+}                                                     /
 
-	#---
-	#UPDATE <http://example.com/abox/update>
-	PREFIX : <urn:example#>                               \
-	INSERT DATA {                                         |
-	    :instA a :ClassB;                                 | http://example.com/abox/update
-	        rdfs:label 'Instance of ClassB'.              |
-	}                                                     /
+#---
+#UPDATE <http://example.com/abox/update>
+PREFIX : <urn:example#>                               \
+INSERT DATA {                                         |
+    :instA a :ClassB;                                 | http://example.com/abox/update
+        rdfs:label 'Instance of ClassB'.              |
+}                                                     /
 
-	#---
-	PREFIX : <urn:example#>                               \
-	SELECT (COUNT(?subj) AS ?n_subjs)                     | http://example.com/ds/query
-	WHERE { ?subj a :ClassA }                             /
+#---
+PREFIX : <urn:example#>                               \
+SELECT (COUNT(?subj) AS ?n_subjs)                     | http://example.com/ds/query
+WHERE { ?subj a :ClassA }                             /
 
-	#---
-	#QUERY <http://dbpedia.org/sparql>                    
-	SELECT DISTINCT ?s ?label                             \
-	WHERE {                                               | http://dbpedia.org/sparql
-	    ?s <http://dbpedia.org/property/season> ?o .      |
-	    ?s rdfs:label ?label                              |
-	}                                                     /
+#---
+#QUERY <http://dbpedia.org/sparql>                    
+SELECT DISTINCT ?s ?label                             \
+WHERE {                                               | http://dbpedia.org/sparql
+    ?s <http://dbpedia.org/property/season> ?o .      |
+    ?s rdfs:label ?label                              |
+}                                                     /
 
-	#---
-	BASE <http://dbpedia.org/>                            \
-	SELECT DISTINCT ?s ?label                             |
-	WHERE {                                               | http://dbpedia.org/sparql
-	    ?s rdfs:label ?label                              |
-	    FILTER( CONTAINS( STR(?label), 'The Wire') )      |
-	}                                                     /
+#---
+BASE <http://dbpedia.org/>                            \
+SELECT DISTINCT ?s ?label                             |
+WHERE {                                               | http://dbpedia.org/sparql
+    ?s rdfs:label ?label                              |
+    FILTER( CONTAINS( STR(?label), 'The Wire') )      |
+}                                                     /
 ```
 
 ### Additional magic comment types
@@ -173,47 +175,47 @@ When executed, every included snippet is listed separately in the web preview wi
 The order in which sections appear and are included in your document doesn't matter. So an included section doesn't have to be defined before the section it is included from. The following example shows a simple use-case:
 
 ```
-	#INCLUDE <drop-all>
-	#INCLUDE <insert-some-bnode>
-	#INCLUDE <select-all-bnodes>
-	DELETE { ?s ?p ?o }
-	WHERE { 
-		[] ?p ?o . 
-		?s <urn:example#label> ?o . 
-		?s ?p 'bnode 2' . 
-		FILTER( isBLANK( ?s ) )
-	}
-	#INCLUDE <select-all-bnodes>
-	
-	#---
-	#name= insert-some-bnode
-	PREFIX : <urn:example#>
-	INSERT DATA {
-		[ a :MyClass ] :label 'bnode 1' .
-		[ a :MyClass ] :label 'bnode 2' .
-		[ a :MyClass ] :label 'bnode 3' .
-	}
-	
-	#---
-	#name= drop-all
-	#descr= Drop all graphs – both, the default graph and all named ones
-	DROP ALL
-	
-	#---
-	#name= select-all-bnodes
-	#descr= Selects all bnodes in the default graph
-	SELECT DISTINCT *
-	WHERE {
-		?s ?p ?o 
-		FILTER isBLANK(?s)
-	}
+#INCLUDE <drop-all>
+#INCLUDE <insert-some-bnode>
+#INCLUDE <select-all-bnodes>
+DELETE { ?s ?p ?o }
+WHERE { 
+	[] ?p ?o . 
+	?s <urn:example#label> ?o . 
+	?s ?p 'bnode 2' . 
+	FILTER( isBLANK( ?s ) )
+}
+#INCLUDE <select-all-bnodes>
+
+#---
+#name= insert-some-bnode
+PREFIX : <urn:example#>
+INSERT DATA {
+	[ a :MyClass ] :label 'bnode 1' .
+	[ a :MyClass ] :label 'bnode 2' .
+	[ a :MyClass ] :label 'bnode 3' .
+}
+
+#---
+#name= drop-all
+#descr= Drop all graphs – both, the default graph and all named ones
+DROP ALL
+
+#---
+#name= select-all-bnodes
+#descr= Selects all bnodes in the default graph
+SELECT DISTINCT *
+WHERE {
+	?s ?p ?o 
+	FILTER isBLANK(?s)
+}
 ```
 
 ![Screenshot of SPARQL result preview window](./Support/img/screenshot-sparql.png "Screenshot of SPARQL result preview window")
 
 #### Notes
 
-There is also basic support for simple metadata properties in the following form: `#propname= some prop value`. It's kind of pendant to jsdoc or phpdoc comments. However, beside section names an description texts I have no idea how this could be used. Do you?
+There is also basic support for simple metadata properties in the following form: `#propname= some prop value`. It's the SPARQL pendant to jsdoc or phpdoc comments. However, beside section names an description texts I have no idea how this could be used. Do you?
 
 I have the vague idea of a pastebin for SPARQL in mind, where one can host reusable SPARQL snippets with support for parametrized SPARQL calls. What do you think about it?    
 
@@ -235,7 +237,7 @@ You can trigger a syntax validation of your Turtle by pressing `CTRL + SHIFT + V
 
 ## Graph visualization
 
-In order to use this functionality you must have a working installation of [Graphviz](http://graphviz.org) (especially the dot command) and the [Raptor RDF syntax library](http://librdf.org/raptor/). When properly installed (locatable through PATHs) everything should work fine ootb. However, in some cases you must explicitly tell Textmate where to find them. You can do this by introducing two configuration variables (Textmate -> Preferences -> Variables):
+In order to use this functionality you need a working installation of [Graphviz](http://graphviz.org) (especially the dot command) and the [Raptor RDF syntax library](http://librdf.org/raptor/). When properly installed (locatable through PATHs) everything should work fine ootb. However, in some cases you must explicitly tell Textmate where to find them. You can do this by introducing two configuration variables (Textmate -> Preferences -> Variables):
 
 + `TM_DOT` absolute path to the dot binary (part of Graphviz)  
 + `TM_RAPPER` absoluter path to the rapper binary (part of Raptor)
@@ -246,13 +248,13 @@ By hitting `SHIFT + ALT + CMD + S` the active TTL document will be visualized an
 
 ## Conversion between all common RDF formats
 
-In order to make use of the converter functionality, you must a have a working installation of the [Raptor RDF syntax library](http://librdf.org/raptor/). For detailed instructions about wiring up Raptor with Textmate, see the [#graph-visualization](section above).
+In order to make use of the converter functionality, you must need a working installation of the [Raptor RDF syntax library](http://librdf.org/raptor/). For detailed instructions about wiring up Raptor with Textmate, see the [#graph-visualization](section above).
 
 ![Screenshot showing list of available target formats the user may choose from](./Support/img/screenshot-converter.png "Screenshot showing list of available target formats the user may choose from")
 
 ## Installation
 
-The Turtle bundle is now officially available through the Textate bundle installer (Textmate -> Preferences -> Bundles). However, it usually takes a few days until new releases are available through the bundle installer (make sure that you enabled 'Keep bundles updated' in the application preferences). If you know what you do, you can also install bundles (like Turtle) by hand. Just download/clone this repository, and place its root directory at `~/Library/Application Support/Avian/Bundles/Turtle.tmbundle`. That way it's kept distinct from bundles installed through the bundle installer. Textmate should notice the new bundle automatically; but when in doubt, just restart Textmate (`CTRL + CMD + Q`). 
+The Turtle bundle is now officially available through the Textate bundle installer (_Textmate -> Preferences -> Bundles_). However, it usually takes a few days until new releases are available through the bundle installer (make sure that you enabled 'Keep bundles updated' in the application preferences). If you know what you do, you can also install bundles (like Turtle) by hand. Just download/clone this repository, and place its root directory at `~/Library/Application Support/Avian/Bundles/Turtle.tmbundle`. That way it's kept distinct from bundles installed through the bundle installer. Textmate should notice the new bundle automatically; but when in doubt, just restart Textmate (`⌃ + ⌘ + Q`). 
 
 ## Screenshots
 
@@ -282,3 +284,4 @@ One of the features EVERY user could greatly benefit from, is a more powerful au
 + Convert RDF/S and OWL documents from XML into Turtle and "link" resource identifiers to them, so that users can jump/navigate across all involved documents
 + To be fixed
 	+ Fix PN_LOCAL pattern so that semicolons inside POLs are marked up as terminators
++ Rewrite Turtle.tmBundle as nodejs module and publish as plugin for web-based code editors like Cloud9 and Atom 

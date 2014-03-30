@@ -115,6 +115,58 @@
 			<string>SUBSTR</string>
 			<string>REPLACE</string>
 		</array>
+		<key>disableIndentCorrections</key>
+		<integer>1</integer>
+		<key>foldingStartMarker</key>
+		<string>[ \t]*([\[\(\{]|^(\s*\w*:\w|\&lt;[^\&gt;]+\&gt;)(?=\b|\s*)|^#---$)</string>
+		<key>foldingStopMarker</key>
+		<string>[ \t]*([\]\)\}]|[.]\s*$|^\#/.*$)</string>
+		<key>highlightPairs</key>
+		<array>
+			<array>
+				<string>[</string>
+				<string>]</string>
+			</array>
+			<array>
+				<string>(</string>
+				<string>)</string>
+			</array>
+			<array>
+				<string>"</string>
+				<string>"</string>
+			</array>
+			<array>
+				<string>{</string>
+				<string>}</string>
+			</array>
+			<array>
+				<string>&lt;</string>
+				<string>&gt;</string>
+			</array>
+		</array>
+		<key>smartTypingPairs</key>
+		<array>
+			<array>
+				<string>[</string>
+				<string>]</string>
+			</array>
+			<array>
+				<string>(</string>
+				<string>)</string>
+			</array>
+			<array>
+				<string>"</string>
+				<string>"</string>
+			</array>
+			<array>
+				<string>{</string>
+				<string>}</string>
+			</array>
+			<array>
+				<string>&lt;</string>
+				<string>&gt;</string>
+			</array>
+		</array>
 	</dict>
 	<key>uuid</key>
 	<string>45C1C859-C069-4DEA-A1DF-2F9FB8E650A1</string>

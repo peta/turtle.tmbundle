@@ -8,7 +8,6 @@
   counter-reset: qry-section; }
 
 .query-section {
-  background-color: #fff;
   margin-bottom: 25px; }
   .query-section:before {
     counter-increment: qry-section;

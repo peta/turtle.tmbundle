@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AcceptsFiles</key>
+	<true/>
+	<key>AcceptsText</key>
+	<false/>
+	<key>Creator</key>
+	<string>Peter Geil</string>
+	<key>DropSuffixes</key>
+	<array>
+		<string>ttl</string>
+		<string>sparql</string>
+	</array>
+	<key>DropTypes</key>
+	<array/>
+	<key>Droppable</key>
+	<true/>
+	<key>InterpreterArgs</key>
+	<array>
+		<string>-l</string>
+	</array>
+	<key>OutputType</key>
+	<string>None</string>
+	<key>RemainRunningAfterCompletion</key>
+	<false/>
+	<key>RequiresAdminPrivileges</key>
+	<false/>
+	<key>ScriptArgs</key>
+	<array/>
+	<key>ScriptInterpreter</key>
+	<string>/bin/bash</string>
+	<key>Secure</key>
+	<false/>
+</dict>
+</plist>
