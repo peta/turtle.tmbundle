@@ -237,7 +237,7 @@ You can trigger a syntax validation of your Turtle by pressing `CTRL + SHIFT + V
 
 ## Graph visualization
 
-In order to use this functionality you must have a working installation of [Graphviz](http://graphviz.org) (especially the dot command) and the [Raptor RDF syntax library](http://librdf.org/raptor/). When properly installed (locatable through PATHs) everything should work fine ootb. However, in some cases you must explicitly tell Textmate where to find them. You can do this by introducing two configuration variables (Textmate -> Preferences -> Variables):
+In order to use this functionality you need a working installation of [Graphviz](http://graphviz.org) (especially the dot command) and the [Raptor RDF syntax library](http://librdf.org/raptor/). When properly installed (locatable through PATHs) everything should work fine ootb. However, in some cases you must explicitly tell Textmate where to find them. You can do this by introducing two configuration variables (Textmate -> Preferences -> Variables):
 
 + `TM_DOT` absolute path to the dot binary (part of Graphviz)  
 + `TM_RAPPER` absoluter path to the rapper binary (part of Raptor)
@@ -248,7 +248,7 @@ By hitting `SHIFT + ALT + CMD + S` the active TTL document will be visualized an
 
 ## Conversion between all common RDF formats
 
-In order to make use of the converter functionality, you must a have a working installation of the [Raptor RDF syntax library](http://librdf.org/raptor/). For detailed instructions about wiring up Raptor with Textmate, see the [#graph-visualization](section above).
+In order to make use of the converter functionality, you must need a working installation of the [Raptor RDF syntax library](http://librdf.org/raptor/). For detailed instructions about wiring up Raptor with Textmate, see the [#graph-visualization](section above).
 
 ![Screenshot showing list of available target formats the user may choose from](./Support/img/screenshot-converter.png "Screenshot showing list of available target formats the user may choose from")
 
@@ -284,3 +284,4 @@ One of the features EVERY user could greatly benefit from, is a more powerful au
 + Convert RDF/S and OWL documents from XML into Turtle and "link" resource identifiers to them, so that users can jump/navigate across all involved documents
 + To be fixed
 	+ Fix PN_LOCAL pattern so that semicolons inside POLs are marked up as terminators
++ Rewrite Turtle.tmBundle as nodejs module and publish as plugin for web-based code editors like Cloud9 and Atom 
