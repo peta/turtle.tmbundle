@@ -18,6 +18,38 @@ scope = ENV['TM_SCOPE']
 left_scope = (ENV['TM_SCOPE_LEFT'].nil?) ? '' : ENV['TM_SCOPE_LEFT']
 done = false
 
+# Control display of list items
+icons = {
+  'class'              =&gt; 'Rsc_Class',
+  'property'           =&gt; 'Rsc_Prop',
+  'datatype'           =&gt; 'Rsc_Datatype',
+  'instance'           =&gt; 'Rsc_Instance',
+  'datatypeproperty'   =&gt; 'Rsc_Prop',
+  'objectproperty'     =&gt; 'Rsc_Prop',
+  'annotationproperty' =&gt; 'Rsc_Prop',
+  'transitiveproperty' =&gt; 'Rsc_Prop',
+  'symmetricproperty'  =&gt; 'Rsc_Prop',
+  'functionalproperty' =&gt; 'Rsc_Prop',
+  'inversefunctionalproperty' =&gt; 'Rsc_Prop',
+  'equivalentproperty' =&gt; 'Rsc_Prop',
+}
+icons.default = 'Rsc_Unknown'
+sort_dict = {
+  'class'              =&gt; 'class',
+  'datatype'           =&gt; 'datatype',
+  'instance'           =&gt; 'instance',
+  'property'           =&gt; 'property',
+  'datatypeproperty'   =&gt; 'property',
+  'objectproperty'     =&gt; 'property',
+  'annotationproperty' =&gt; 'property',
+  'transitiveproperty' =&gt; 'property',
+  'symmetricproperty'  =&gt; 'property',
+  'functionalproperty' =&gt; 'property',
+  'inversefunctionalproperty' =&gt; 'property',
+  'equivalentproperty' =&gt; 'property'
+}
+sort_dict.default = 'unknown'
+
 # Autocompletion @prefix directives
 if not left_scope.index('meta.spec.prefixID.turtle').nil? or 
     not left_scope.index('meta.spec.sparqlPrefix.turtle').nil?
@@ -48,20 +80,20 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
   word = word[0..-2] if (word =~ /[.;]$/)
   word_frags = word.split(':')
   # Try to determine the IRI associated with prefix in current document
-  iri = Turtle.resolve_URI word_frags[0], ENV['TM_FILEPATH']
-  # Build model and query it
+  iri = Turtle.resolve_URI word_frags[0], ENV['TM_FILEPATH']  
+  # Build model and query it  
   model = Turtle::Model.new(word_frags[0], iri)
   if (model.available?)
-    choices = []
-    icons = {
-      'class'    =&gt; 'Rsc_Class',
-      'property' =&gt; 'Rsc_Prop',
-      'datatype' =&gt; 'Rsc_Datatype'
-    }
+    choices = []    
     # TODO: Add caching layer for data used by UI.complete
     model.resources.sort! do |a,b|
       # First order by the resource type, then alphabetically by their name
-      [a.attributes['type'], a.attributes['id']] &lt;=&gt; [b.attributes['type'], b.attributes['id']]
+      [ sort_dict[a.attributes['type']],
+        a.attributes['id']
+      ] &lt;=&gt; [
+        sort_dict[b.attributes['type']],
+        b.attributes['id']
+      ]
     end.each do |rsc|      
       choices.push({
         "display" =&gt; rsc.attributes['id'].to_s + '     ',

@@ -22,7 +22,9 @@ ICONS = {
   "Prefix" => "#{IMG_DIR}/item-icons/p_red.png",
   "Rsc_Class" => "#{IMG_DIR}/item-icons/upper_c_green.png",
   "Rsc_Prop" => "#{IMG_DIR}/item-icons/upper_p_purple.png",
+  "Rsc_Instance" => "#{IMG_DIR}/item-icons/upper_i_blue.png",
   "Rsc_Datatype" => "#{IMG_DIR}/item-icons/upper_d_red.png",
+  "Rsc_Unknown" => "#{IMG_DIR}/item-icons/question_gray.png",
   "Unknown" => "#{IMG_DIR}/item-icons/empty_gray.png"
 }
 
