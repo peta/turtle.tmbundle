@@ -96,10 +96,13 @@ if left_scope.index('variable.other.PNAME_NS.turtle') or left_scope.index('suppo
       ]
     end.each do |rsc|      
       choices.push({
-        "display" =&gt; rsc.attributes['id'].to_s + '     ',
-        'image' =&gt; icons[rsc.attributes['type'].to_s] || 'Unknown'
+        'display' =&gt; rsc.attributes['id'].to_s + '      ',
+        'match' =&gt; rsc.attributes['id'].to_s,
+        'insert' =&gt; '',
+        'image' =&gt; icons[rsc.attributes['type'].to_s]
       })      
     end
+    
     TextMate::UI.complete(choices, :case_insensitive =&gt; false, :initial_filter =&gt; word_frags[1], :extra_chars=&gt;'_-.:\\')
     TextMate::exit_discard
   end
