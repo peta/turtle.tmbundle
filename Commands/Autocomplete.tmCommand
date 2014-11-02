@@ -5,8 +5,7 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/System/Library/Frameworks/Ruby.framework/Versions/1.8/usr/bin/ruby -wKU
-# encoding: UTF-8
+	<string>#!/usr/bin/env ruby18 -wKU
 
 # Prevent that input data causes trouble in shell commands
 STDIN.read(nil)
